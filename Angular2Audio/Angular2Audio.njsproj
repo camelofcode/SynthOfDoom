@@ -30,6 +30,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="gulpfile.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="public\javascripts\systemjs.config.js">
       <SubType>Code</SubType>
     </Compile>
