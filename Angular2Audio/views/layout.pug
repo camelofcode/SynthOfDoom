@@ -1,0 +1,17 @@
+﻿doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/main.css')
+    <!-- Polyfill(s) for older browsers -->
+    script(src="javascripts/lib/shim.min.js")
+
+    script(src="javascripts/lib/zone.js")
+    script(src="javascripts/lib/system.src.js")
+
+    script(src="javascripts/systemjs.config.js")
+    script
+        | System.import('javascripts/main.js').catch(function(err){ console.error(err); });
+
+  body
+    block content

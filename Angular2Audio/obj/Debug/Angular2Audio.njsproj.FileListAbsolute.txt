@@ -1,0 +1,2 @@
+C:\Git\Angular2Audio\Angular2Audio\obj\Debug\Angular2Audio.njsprojResolveAssemblyReference.cache
+C:\Git\Angular2Audio\Angular2Audio\bin\Microsoft.NodejsTools.WebRole.dll
