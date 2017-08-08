@@ -1,10 +1,10 @@
-import { Component, OnInit, HostListener, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 @Component({
     selector: 'my-app',
     template: `<h1>Hello {{name}}</h1>`
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
 
     private audioContext: AudioContext;
 
@@ -163,6 +163,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        if (navigator['requestMIDIAccess'])
+            navigator['requestMIDIAccess']().then(this.onMidiInit, this.onMidiReject);
+        else
+            alert("No MIDI support present in your browser.  You're gonna have a bad time.");
+
         this.audioContext = new AudioContext();
         
         this.oscillator = this.audioContext.createOscillator();
@@ -174,12 +179,5 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.envelope.connect(this.audioContext.destination);
         this.envelope.gain.value = 0.0;
         this.oscillator.start();
-    }
-
-    ngAfterViewInit(): void {
-        if (navigator['requestMIDIAccess'])
-            navigator['requestMIDIAccess']().then(this.onMidiInit, this.onMidiReject);
-        else
-            alert("No MIDI support present in your browser.  You're gonna have a bad time.");
     }
 }

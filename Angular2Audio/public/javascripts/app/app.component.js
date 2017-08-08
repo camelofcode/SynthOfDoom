@@ -144,6 +144,10 @@ var AppComponent = (function () {
         };
     }
     AppComponent.prototype.ngOnInit = function () {
+        if (navigator['requestMIDIAccess'])
+            navigator['requestMIDIAccess']().then(this.onMidiInit, this.onMidiReject);
+        else
+            alert("No MIDI support present in your browser.  You're gonna have a bad time.");
         this.audioContext = new AudioContext();
         this.oscillator = this.audioContext.createOscillator();
         this.oscillator.type = 'sawtooth';
@@ -152,12 +156,6 @@ var AppComponent = (function () {
         this.envelope.connect(this.audioContext.destination);
         this.envelope.gain.value = 0.0;
         this.oscillator.start();
-    };
-    AppComponent.prototype.ngAfterViewInit = function () {
-        if (navigator['requestMIDIAccess'])
-            navigator['requestMIDIAccess']().then(this.onMidiInit, this.onMidiReject);
-        else
-            alert("No MIDI support present in your browser.  You're gonna have a bad time.");
     };
     return AppComponent;
 }());
