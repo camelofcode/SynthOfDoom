@@ -11,7 +11,48 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var AppComponent = (function () {
     function AppComponent() {
+        var _this = this;
         this.name = 'Angular';
+        this.onMIDIInit = function (midi) {
+            _this.midiAccess = midi;
+            var haveAtLeastOneDevice = false;
+            var inputs = _this.midiAccess.inputs.values();
+            for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
+                input.value.onmidimessage = _this.MIDIMessageEventHandler;
+                haveAtLeastOneDevice = true;
+            }
+            if (!haveAtLeastOneDevice)
+                alert("No MIDI input devices present.  You're gonna have a bad time.");
+        };
+        this.onMIDIReject = function (err) {
+            alert("The MIDI system failed to start.  You're gonna have a bad time.");
+        };
+        this.MIDIMessageEventHandler = function (event) {
+            // Mask off the lower nibble (MIDI channel, which we don't care about)
+            switch (event.data[0] & 0xf0) {
+                case 0x90:
+                    if (event.data[2] != 0) {
+                        _this.noteOn(event.data[1]);
+                        return;
+                    }
+                // if velocity == 0, fall thru: it's a note-off.  MIDI's weird, y'all.
+                case 0x80:
+                    _this.noteOff(event.data[1]);
+                    return;
+            }
+        };
+        this.frequencyFromNoteNumber = function (note) {
+            return 440 * Math.pow(2, (note - 69) / 12);
+        };
+        this.noteOn = function (noteNumber) {
+            console.log("midi on " + noteNumber);
+            _this.oscillator.frequency.value = _this.frequencyFromNoteNumber(noteNumber);
+            _this.oscillator.connect(_this.audioContext.destination);
+        };
+        this.noteOff = function (noteNumber) {
+            console.log("midi off " + noteNumber);
+            _this.oscillator.disconnect(_this.audioContext.destination);
+        };
     }
     AppComponent.prototype.onKeyDown = function ($event) {
         var freq = 0;
@@ -86,9 +127,15 @@ var AppComponent = (function () {
     AppComponent.prototype.ngOnInit = function () {
         this.audioContext = new AudioContext();
         this.oscillator = this.audioContext.createOscillator();
-        this.oscillator.type = 'sine';
+        this.oscillator.type = 'sawtooth';
         this.oscillator.frequency.value = 261.63; //C
         this.oscillator.start();
+    };
+    AppComponent.prototype.ngAfterViewInit = function () {
+        if (navigator["requestMIDIAccess"])
+            navigator["requestMIDIAccess"]().then(this.onMIDIInit, this.onMIDIReject);
+        else
+            alert("No MIDI support present in your browser.  You're gonna have a bad time.");
     };
     return AppComponent;
 }());
