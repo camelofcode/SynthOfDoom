@@ -7,6 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
+var input_service_1 = require("./services/input.service");
+var midi_input_service_1 = require("./services/midi.input.service");
+var keyboard_input_service_1 = require("./services/keyboard.input.service");
 var app_component_1 = require("./app.component");
 var AppModule = (function () {
     function AppModule() {
@@ -17,7 +20,8 @@ AppModule = __decorate([
     core_1.NgModule({
         imports: [platform_browser_1.BrowserModule],
         declarations: [app_component_1.AppComponent],
-        bootstrap: [app_component_1.AppComponent]
+        bootstrap: [app_component_1.AppComponent],
+        providers: [input_service_1.InputService, midi_input_service_1.MidiInputService, keyboard_input_service_1.KeyboardInputService]
     })
 ], AppModule);
 exports.AppModule = AppModule;

@@ -1,10 +1,15 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { InputService } from './services/input.service';
+
+import { NoteOnMessage } from './models/noteOnMessage';
+import { NoteOffMessage } from './models/noteOffMessage';
 
 @Component({
     selector: 'my-app',
     template: `<h1>Hello {{name}}</h1>`
 })
 export class AppComponent implements OnInit {
+    private readonly inputService: InputService;
 
     private audioContext: AudioContext;
 
@@ -13,118 +18,20 @@ export class AppComponent implements OnInit {
     private attack = 0.5;
     private release = 0.5;
     private portamento = 0.05;
-    private midiAccess: any;
     private activeNotes: number[] = new Array();
 
-    //@HostListener('window:keydown', ['$event'])
-    //onKeyDown($event: any) {
-    //    let freq = 0;
-    //    switch ($event.key) {
-    //        case 'q':
-    //            {
-    //                freq = 261.63; //C
-    //                break;
-    //            }
-    //        case '2':
-    //            {
-    //                freq = 277.18; //C#
-    //                break;
-    //            }
-    //        case 'w':
-    //            {
-    //                freq = 293.66; //D
-    //                break;
-    //            }
-    //        case '3':
-    //            {
-    //                freq = 311.13; //D#
-    //                break;
-    //            }
-    //        case 'e':
-    //            {
-    //                freq = 329.63; //E
-    //                break;
-    //            }
-    //        case 'r':
-    //            {
-    //                freq = 349.23; //F
-    //                break;
-    //            }
-    //        case '5':
-    //            {
-    //                freq = 369.99; //F#
-    //                break;
-    //            }
-    //        case 't':
-    //            {
-    //                freq = 392.00; //G
-    //                break;
-    //            }
-    //        case '6':
-    //            {
-    //                freq = 415.30; //G#
-    //                break;
-    //            }
-    //        case 'y':
-    //            {
-    //                freq = 440.00; //A
-    //                break;
-    //            }
-    //        case '7':
-    //            {
-    //                freq = 466.16; //A#
-    //                break;
-    //            }
-    //        case 'u':
-    //            {
-    //                freq = 493.88; //B
-    //                break;
-    //            }
-    //    }
+    name = 'Angular'; 
 
-    //    this.oscillator.frequency.value = freq;
+    constructor(inputService: InputService) {
+        this.inputService = inputService;
 
+        this.inputService.noteOn$.subscribe((message: NoteOnMessage) => {
+            this.noteOn(message.number, message.velocity);
+        });
 
-    //    this.oscillator.connect(this.audioContext.destination);
-    //}
-
-    //@HostListener('window:keyup', ['$event'])
-    //onKeyUp($event: any) {
-    //    this.oscillator.disconnect(this.audioContext.destination);
-    //}
-
-    name = 'Angular';
-
-    private onMidiInit = (midi: any) => {
-        this.midiAccess = midi;
-
-        var haveAtLeastOneDevice = false;
-        var inputs = this.midiAccess.inputs.values();
-        for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
-            input.value.onmidimessage = this.midiMessageEventHandler;
-            haveAtLeastOneDevice = true;
-        }
-        if (!haveAtLeastOneDevice)
-            alert('No MIDI input devices present.  You\'re gonna have a bad time.');
-    }
-
-    private onMidiReject = (err: any) => {
-        alert('The MIDI system failed to start.  You\'re gonna have a bad time.');
-    }
-
-    private midiMessageEventHandler = (event: any) => {
-        // Mask off the lower nibble (MIDI channel, which we don't care about)
-        switch (event.data[0] & 0xf0) {
-        case 0x90:
-            if (event.data[2] !== 0) {  // if velocity != 0, this is a note-on message
-                this.noteOn(event.data[1], event.data[2]);
-                return;
-            }
-        // if velocity == 0, fall thru: it's a note-off.  MIDI's weird, y'all.
-        case 0x80:
-            this.noteOff(event.data[1]);
-            return;
-        }
+        this.inputService.noteOff$.subscribe((message: NoteOffMessage) => {
+            this.noteOff(message.number);
+        });
     }
 
     private frequencyFromNoteNumber = (note: number) => {
@@ -136,7 +43,6 @@ export class AppComponent implements OnInit {
     }
 
     private noteOn = (noteNumber: number, velocity: number) => {
-        console.log(velocity);
         this.activeNotes.push(noteNumber);
         this.oscillator.frequency.cancelScheduledValues(0);
         this.oscillator.frequency.setTargetAtTime(this.frequencyFromNoteNumber(noteNumber), 0, this.portamento);
@@ -163,11 +69,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (navigator['requestMIDIAccess'])
-            navigator['requestMIDIAccess']().then(this.onMidiInit, this.onMidiReject);
-        else
-            alert("No MIDI support present in your browser.  You're gonna have a bad time.");
-
         this.audioContext = new AudioContext();
         
         this.oscillator = this.audioContext.createOscillator();

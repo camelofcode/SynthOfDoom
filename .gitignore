@@ -60,3 +60,5 @@ internal/
 yarn.lock
 package-lock.json
 npm-debug.log
+obj/
+bin/
