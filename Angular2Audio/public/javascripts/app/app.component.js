@@ -19,6 +19,7 @@ var AppComponent = (function () {
     }
     AppComponent.prototype.ngOnInit = function () {
         this.oscillator1.node().connect(this.envelope1.node());
+        this.oscillator2.node().connect(this.envelope1.node());
         this.envelope1.node().connect(this.filter.node());
         this.filter.node().connect(this.audioContext.destination);
     };
@@ -28,6 +29,10 @@ __decorate([
     core_1.ViewChild('oscillator1'),
     __metadata("design:type", Object)
 ], AppComponent.prototype, "oscillator1", void 0);
+__decorate([
+    core_1.ViewChild('oscillator2'),
+    __metadata("design:type", Object)
+], AppComponent.prototype, "oscillator2", void 0);
 __decorate([
     core_1.ViewChild('envelope1'),
     __metadata("design:type", Object)
@@ -39,7 +44,7 @@ __decorate([
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: "<h1>Hello {{name}}</h1><oscillator #oscillator1></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>"
+        template: "<h1>Hello {{name}}</h1><oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], AppComponent);

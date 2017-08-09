@@ -3,7 +3,7 @@ import { AudioContextService } from './services/audioContext.service';
 
 @Component({
     selector: 'my-app',
-    template: `<h1>Hello {{name}}</h1><oscillator #oscillator1></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>`
+    template: `<h1>Hello {{name}}</h1><oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>`
 })
 export class AppComponent implements OnInit {
     private readonly audioContextService: AudioContextService;
@@ -14,6 +14,9 @@ export class AppComponent implements OnInit {
 
     @ViewChild('oscillator1')
     private oscillator1: IAudioNodeComponent;
+
+    @ViewChild('oscillator2')
+    private oscillator2: IAudioNodeComponent;
 
     @ViewChild('envelope1')
     private envelope1: IAudioNodeComponent;
@@ -28,6 +31,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.oscillator1.node().connect(this.envelope1.node());
+        this.oscillator2.node().connect(this.envelope1.node());
         this.envelope1.node().connect(this.filter.node());
         this.filter.node().connect(this.audioContext.destination);
     }

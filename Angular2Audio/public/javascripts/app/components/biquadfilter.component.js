@@ -19,12 +19,18 @@ var BiquadFilterComponent = (function () {
     BiquadFilterComponent.prototype.node = function () {
         return this.filter;
     };
+    BiquadFilterComponent.prototype.updateFrequency = function (value) {
+        this.filter.frequency.setValueAtTime(value, 0);
+    };
+    BiquadFilterComponent.prototype.updateQ = function (value) {
+        this.filter.Q.setValueAtTime(value, 0);
+    };
     return BiquadFilterComponent;
 }());
 BiquadFilterComponent = __decorate([
     core_1.Component({
         selector: 'biquad-filter',
-        template: "<p>Yo dawg this is a biquad filter component</p>"
+        template: "<p>Yo dawg this is a biquad filter component</p>\n<label>Cutoff</label>\n<input type=\"range\" min=\"50\" max=\"2000\" step=\"1\" #frequencyRange (input)=\"updateFrequency(frequencyRange.value)\"/>\n<label>Resonance</label>\n<input type=\"range\" min=\"0.1\" max=\"32\" step=\"0.1\" #qRange (input)=\"updateQ(qRange.value)\"/>\n"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], BiquadFilterComponent);
