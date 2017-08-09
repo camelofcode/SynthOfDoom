@@ -1,0 +1,3 @@
+﻿interface IAudioNodeComponent {
+    node(): AudioNode;
+}

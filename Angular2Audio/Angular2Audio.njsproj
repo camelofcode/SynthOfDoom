@@ -60,15 +60,30 @@
     <Folder Include="routes\" />
     <Folder Include="typescript\" />
     <Folder Include="typescript\app\" />
+    <Folder Include="typescript\app\components\interfaces\" />
     <Folder Include="typescript\app\models\" />
+    <Folder Include="typescript\app\components\" />
     <Folder Include="typescript\app\services\" />
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="typescript\app\app.component.ts" />
     <TypeScriptCompile Include="typescript\app\app.module.ts" />
+    <TypeScriptCompile Include="typescript\app\components\biquadfilter.component.ts" />
+    <TypeScriptCompile Include="typescript\app\components\envelope.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\components\interfaces\IAudioNodeComponent.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\components\oscillator.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\models\noteOffMessage.ts" />
     <TypeScriptCompile Include="typescript\app\models\noteOnMessage.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\services\audioContext.service.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\services\input.service.ts">

@@ -10,68 +10,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var input_service_1 = require("./services/input.service");
+var audioContext_service_1 = require("./services/audioContext.service");
 var AppComponent = (function () {
-    function AppComponent(inputService) {
-        var _this = this;
-        this.attack = 0.5;
-        this.release = 0.5;
-        this.portamento = 0.05;
+    function AppComponent(audioContextService) {
         this.name = 'Angular';
-        this.frequencyFromNoteNumber = function (note) {
-            return 440 * Math.pow(2, (note - 69) / 12);
-        };
-        this.velocityToGain = function (velocity) {
-            return velocity / 127.0;
-        };
-        this.noteOn = function (number) {
-            _this.oscillator.frequency.cancelScheduledValues(0);
-            _this.oscillator.frequency.setTargetAtTime(_this.frequencyFromNoteNumber(number), 0, _this.portamento);
-        };
-        this.velocityOn = function (velocity) {
-            _this.envelope.gain.cancelScheduledValues(0);
-            _this.envelope.gain.setTargetAtTime(_this.velocityToGain(velocity), 0, _this.attack);
-        };
-        this.noteOff = function (number) {
-            _this.oscillator.frequency.cancelScheduledValues(0);
-            _this.oscillator.frequency.setTargetAtTime(_this.frequencyFromNoteNumber(number), 0, _this.portamento);
-        };
-        this.velocityOff = function () {
-            _this.envelope.gain.cancelScheduledValues(0);
-            _this.envelope.gain.setTargetAtTime(0.0, 0, _this.release);
-        };
-        this.inputService = inputService;
-        this.inputService.noteOn$.subscribe(function (number) {
-            _this.noteOn(number);
-        });
-        this.inputService.velocityOn$.subscribe(function (velocity) {
-            _this.velocityOn(velocity);
-        });
-        this.inputService.noteOff$.subscribe(function (number) {
-            _this.noteOff(number);
-        });
-        this.inputService.velocityOff$.subscribe(function () {
-            _this.velocityOff();
-        });
+        this.audioContextService = audioContextService;
+        this.audioContext = this.audioContextService.context();
     }
     AppComponent.prototype.ngOnInit = function () {
-        this.audioContext = new AudioContext();
-        this.oscillator = this.audioContext.createOscillator();
-        this.oscillator.type = 'sawtooth';
-        this.envelope = this.audioContext.createGain();
-        this.oscillator.connect(this.envelope);
-        this.envelope.connect(this.audioContext.destination);
-        this.envelope.gain.value = 0.0;
-        this.oscillator.start();
+        this.oscillator1.node().connect(this.envelope1.node());
+        this.envelope1.node().connect(this.filter.node());
+        this.filter.node().connect(this.audioContext.destination);
     };
     return AppComponent;
 }());
+__decorate([
+    core_1.ViewChild('oscillator1'),
+    __metadata("design:type", Object)
+], AppComponent.prototype, "oscillator1", void 0);
+__decorate([
+    core_1.ViewChild('envelope1'),
+    __metadata("design:type", Object)
+], AppComponent.prototype, "envelope1", void 0);
+__decorate([
+    core_1.ViewChild('filter1'),
+    __metadata("design:type", Object)
+], AppComponent.prototype, "filter", void 0);
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: "<h1>Hello {{name}}</h1>"
+        template: "<h1>Hello {{name}}</h1><oscillator #oscillator1></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>"
     }),
-    __metadata("design:paramtypes", [input_service_1.InputService])
+    __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map
