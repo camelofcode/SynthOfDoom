@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var input_service_1 = require("./services/input.service");
 var AppComponent = (function () {
@@ -16,7 +17,6 @@ var AppComponent = (function () {
         this.attack = 0.5;
         this.release = 0.5;
         this.portamento = 0.05;
-        this.activeNotes = new Array();
         this.name = 'Angular';
         this.frequencyFromNoteNumber = function (note) {
             return 440 * Math.pow(2, (note - 69) / 12);
@@ -24,33 +24,34 @@ var AppComponent = (function () {
         this.velocityToGain = function (velocity) {
             return velocity / 127.0;
         };
-        this.noteOn = function (noteNumber, velocity) {
-            _this.activeNotes.push(noteNumber);
+        this.noteOn = function (number) {
             _this.oscillator.frequency.cancelScheduledValues(0);
-            _this.oscillator.frequency.setTargetAtTime(_this.frequencyFromNoteNumber(noteNumber), 0, _this.portamento);
+            _this.oscillator.frequency.setTargetAtTime(_this.frequencyFromNoteNumber(number), 0, _this.portamento);
+        };
+        this.velocityOn = function (velocity) {
             _this.envelope.gain.cancelScheduledValues(0);
             _this.envelope.gain.setTargetAtTime(_this.velocityToGain(velocity), 0, _this.attack);
         };
-        this.noteOff = function (noteNumber) {
-            var position = _this.activeNotes.indexOf(noteNumber);
-            if (position > -1) {
-                _this.activeNotes.splice(position, 1);
-            }
-            if (_this.activeNotes.length < 1) {
-                _this.envelope.gain.cancelScheduledValues(0);
-                _this.envelope.gain.setTargetAtTime(0.0, 0, _this.release);
-            }
-            else {
-                _this.oscillator.frequency.cancelScheduledValues(0);
-                _this.oscillator.frequency.setTargetAtTime(_this.frequencyFromNoteNumber(_this.activeNotes[_this.activeNotes.length - 1]), 0, _this.portamento);
-            }
+        this.noteOff = function (number) {
+            _this.oscillator.frequency.cancelScheduledValues(0);
+            _this.oscillator.frequency.setTargetAtTime(_this.frequencyFromNoteNumber(number), 0, _this.portamento);
+        };
+        this.velocityOff = function () {
+            _this.envelope.gain.cancelScheduledValues(0);
+            _this.envelope.gain.setTargetAtTime(0.0, 0, _this.release);
         };
         this.inputService = inputService;
-        this.inputService.noteOn$.subscribe(function (message) {
-            _this.noteOn(message.number, message.velocity);
+        this.inputService.noteOn$.subscribe(function (number) {
+            _this.noteOn(number);
         });
-        this.inputService.noteOff$.subscribe(function (message) {
-            _this.noteOff(message.number);
+        this.inputService.velocityOn$.subscribe(function (velocity) {
+            _this.velocityOn(velocity);
+        });
+        this.inputService.noteOff$.subscribe(function (number) {
+            _this.noteOff(number);
+        });
+        this.inputService.velocityOff$.subscribe(function () {
+            _this.velocityOff();
         });
     }
     AppComponent.prototype.ngOnInit = function () {

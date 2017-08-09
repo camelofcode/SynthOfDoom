@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Subject_1 = require("rxjs/Subject");
 var keyboard_input_service_1 = require("./keyboard.input.service");
@@ -17,22 +18,47 @@ var InputService = (function () {
         var _this = this;
         this.noteOnSource = new Subject_1.Subject();
         this.noteOffSource = new Subject_1.Subject();
+        this.velocityOnSource = new Subject_1.Subject();
+        this.velocityOffSource = new Subject_1.Subject();
+        this.activeNotes = new Array();
         this.noteOn$ = this.noteOnSource.asObservable();
         this.noteOff$ = this.noteOffSource.asObservable();
+        this.velocityOn$ = this.velocityOnSource.asObservable();
+        this.velocityOff$ = this.velocityOffSource.asObservable();
+        this.noteOn = function (noteNumber, velocity) {
+            if (_this.activeNotes.indexOf(noteNumber) > -1) {
+                return;
+            }
+            _this.activeNotes.push(noteNumber);
+            _this.noteOnSource.next(noteNumber);
+            _this.velocityOnSource.next(velocity);
+        };
+        this.noteOff = function (noteNumber) {
+            var position = _this.activeNotes.indexOf(noteNumber);
+            if (position > -1) {
+                _this.activeNotes.splice(position, 1);
+            }
+            if (_this.activeNotes.length < 1) {
+                _this.velocityOffSource.next();
+            }
+            else {
+                _this.noteOffSource.next(_this.activeNotes[_this.activeNotes.length - 1]);
+            }
+        };
         this.keyboardInputService = keyboardInputService;
         this.midiInputService = midiInputService;
         this.midiInputService.ngOnInit();
         this.midiInputService.noteOn$.subscribe(function (message) {
-            _this.noteOnSource.next(message);
+            _this.noteOn(message.number, message.velocity);
         });
         this.midiInputService.noteOff$.subscribe(function (message) {
-            _this.noteOffSource.next(message);
+            _this.noteOff(message.number);
         });
         this.keyboardInputService.noteOn$.subscribe(function (message) {
-            _this.noteOnSource.next(message);
+            _this.noteOn(message.number, message.velocity);
         });
         this.keyboardInputService.noteOff$.subscribe(function (message) {
-            _this.noteOffSource.next(message);
+            _this.noteOff(message.number);
         });
     }
     return InputService;
