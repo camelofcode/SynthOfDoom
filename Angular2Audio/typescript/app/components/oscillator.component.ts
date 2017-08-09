@@ -15,32 +15,27 @@ import { AudioContextService } from '../services/audioContext.service';
 `
 })
 export class OscillatorComponent implements IAudioNodeComponent {
-
-    node(): AudioNode {
-        return this.oscillator;
-    }
-
     private readonly inputService: InputService;
     private readonly audioContext: AudioContextService;
+    private readonly oscillator: OscillatorNode;
 
-    private oscillator: OscillatorNode;
     private portamento = 0.05;
 
     constructor(audioContext: AudioContextService, inputService: InputService) {
         this.audioContext = audioContext;
         this.inputService = inputService;
 
-        this.inputService.noteOn$.subscribe((number: number) => {
-            this.noteOn(number);
-        });
-
-        this.inputService.noteOff$.subscribe((number: number) => {
-            this.noteOff(number);
+        this.inputService.noteChange$.subscribe((number: number) => {
+            this.noteChange(number);
         });
 
         this.oscillator = this.audioContext.context().createOscillator();
         this.oscillator.type = 'sine';
         this.oscillator.start();
+    }
+
+    node(): AudioNode {
+        return this.oscillator;
     }
 
     updateType(type: string) {
@@ -51,16 +46,8 @@ export class OscillatorComponent implements IAudioNodeComponent {
         return 440 * Math.pow(2, (note - 69) / 12);
     }
 
-    private noteOn = (number: number) => {
+    private noteChange = (number: number) => {
         this.oscillator.frequency.cancelScheduledValues(0);
         this.oscillator.frequency.setTargetAtTime(this.frequencyFromNoteNumber(number), 0, this.portamento);
-    }
-
-    private noteOff = (number: number) => {
-        this.oscillator.frequency.cancelScheduledValues(0);
-        this.oscillator.frequency.setTargetAtTime(
-            this.frequencyFromNoteNumber(number),
-            0,
-            this.portamento);
     }
 }

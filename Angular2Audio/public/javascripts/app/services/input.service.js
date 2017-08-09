@@ -16,13 +16,11 @@ var midi_input_service_1 = require("./midi.input.service");
 var InputService = (function () {
     function InputService(keyboardInputService, midiInputService) {
         var _this = this;
-        this.noteOnSource = new Subject_1.Subject();
-        this.noteOffSource = new Subject_1.Subject();
+        this.noteChangeSource = new Subject_1.Subject();
         this.velocityOnSource = new Subject_1.Subject();
         this.velocityOffSource = new Subject_1.Subject();
         this.activeNotes = new Array();
-        this.noteOn$ = this.noteOnSource.asObservable();
-        this.noteOff$ = this.noteOffSource.asObservable();
+        this.noteChange$ = this.noteChangeSource.asObservable();
         this.velocityOn$ = this.velocityOnSource.asObservable();
         this.velocityOff$ = this.velocityOffSource.asObservable();
         this.noteOn = function (noteNumber, velocity) {
@@ -30,7 +28,7 @@ var InputService = (function () {
                 return;
             }
             _this.activeNotes.push(noteNumber);
-            _this.noteOnSource.next(noteNumber);
+            _this.noteChangeSource.next(noteNumber);
             _this.velocityOnSource.next(velocity);
         };
         this.noteOff = function (noteNumber) {
@@ -42,7 +40,7 @@ var InputService = (function () {
                 _this.velocityOffSource.next();
             }
             else {
-                _this.noteOffSource.next(_this.activeNotes[_this.activeNotes.length - 1]);
+                _this.noteChangeSource.next(_this.activeNotes[_this.activeNotes.length - 1]);
             }
         };
         this.keyboardInputService = keyboardInputService;

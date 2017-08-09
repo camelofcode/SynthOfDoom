@@ -13,7 +13,6 @@ var core_1 = require("@angular/core");
 var audioContext_service_1 = require("./services/audioContext.service");
 var AppComponent = (function () {
     function AppComponent(audioContextService) {
-        this.name = 'Angular';
         this.audioContextService = audioContextService;
         this.audioContext = this.audioContextService.context();
     }
@@ -44,7 +43,7 @@ __decorate([
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: "<h1>Hello {{name}}</h1><oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>"
+        template: "<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], AppComponent);

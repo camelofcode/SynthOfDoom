@@ -19,21 +19,14 @@ var OscillatorComponent = (function () {
         this.frequencyFromNoteNumber = function (note) {
             return 440 * Math.pow(2, (note - 69) / 12);
         };
-        this.noteOn = function (number) {
-            _this.oscillator.frequency.cancelScheduledValues(0);
-            _this.oscillator.frequency.setTargetAtTime(_this.frequencyFromNoteNumber(number), 0, _this.portamento);
-        };
-        this.noteOff = function (number) {
+        this.noteChange = function (number) {
             _this.oscillator.frequency.cancelScheduledValues(0);
             _this.oscillator.frequency.setTargetAtTime(_this.frequencyFromNoteNumber(number), 0, _this.portamento);
         };
         this.audioContext = audioContext;
         this.inputService = inputService;
-        this.inputService.noteOn$.subscribe(function (number) {
-            _this.noteOn(number);
-        });
-        this.inputService.noteOff$.subscribe(function (number) {
-            _this.noteOff(number);
+        this.inputService.noteChange$.subscribe(function (number) {
+            _this.noteChange(number);
         });
         this.oscillator = this.audioContext.context().createOscillator();
         this.oscillator.type = 'sine';

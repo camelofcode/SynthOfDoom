@@ -3,14 +3,11 @@ import { AudioContextService } from './services/audioContext.service';
 
 @Component({
     selector: 'my-app',
-    template: `<h1>Hello {{name}}</h1><oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>`
+    template: `<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>`
 })
 export class AppComponent implements OnInit {
     private readonly audioContextService: AudioContextService;
-
-    private audioContext: AudioContext;
-
-    name = 'Angular';
+    private readonly audioContext: AudioContext;
 
     @ViewChild('oscillator1')
     private oscillator1: IAudioNodeComponent;

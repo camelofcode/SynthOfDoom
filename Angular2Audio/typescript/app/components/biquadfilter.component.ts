@@ -11,19 +11,17 @@ import { AudioContextService } from '../services/audioContext.service';
 `
 })
 export class BiquadFilterComponent implements IAudioNodeComponent {
-
-    node(): AudioNode {
-        return this.filter;
-    }
-
     private readonly audioContext: AudioContextService;
-
-    private filter: BiquadFilterNode;
+    private readonly filter: BiquadFilterNode;
 
     constructor(audioContext: AudioContextService) {
         this.audioContext = audioContext;
 
         this.filter = this.audioContext.context().createBiquadFilter();
+    }
+
+    node(): AudioNode {
+        return this.filter;
     }
 
     updateFrequency(value: number) {

@@ -7,15 +7,10 @@ import { AudioContextService } from '../services/audioContext.service';
     template: `<p>Yo dawg this is an envelope component</p>`
 })
 export class EnvelopeComponent implements IAudioNodeComponent {
-
-    node(): AudioNode {
-         return this.envelope;
-    }
-
     private readonly inputService: InputService;
     private readonly audioContext: AudioContextService;
+    private readonly envelope: GainNode;
 
-    private envelope: GainNode;
     private attack = 0.5;
     private release = 0.5;
 
@@ -33,6 +28,10 @@ export class EnvelopeComponent implements IAudioNodeComponent {
 
         this.envelope = this.audioContext.context().createGain();
         this.envelope.gain.value = 0.0;
+    }
+
+    node(): AudioNode {
+        return this.envelope;
     }
 
     private velocityToGain = (velocity: number) => {

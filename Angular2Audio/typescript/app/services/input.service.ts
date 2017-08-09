@@ -11,15 +11,12 @@ export class InputService {
     private readonly keyboardInputService: KeyboardInputService;
     private readonly midiInputService: MidiInputService;
 
-    private noteOnSource = new Subject<number>();
-    private noteOffSource = new Subject<number>();
+    private noteChangeSource = new Subject<number>();
     private velocityOnSource = new Subject<number>();
     private velocityOffSource = new Subject();
-
     private activeNotes: number[] = new Array();
 
-    noteOn$ = this.noteOnSource.asObservable();
-    noteOff$ = this.noteOffSource.asObservable();
+    noteChange$ = this.noteChangeSource.asObservable();
     velocityOn$ = this.velocityOnSource.asObservable();
     velocityOff$ = this.velocityOffSource.asObservable();
 
@@ -53,7 +50,7 @@ export class InputService {
 
         this.activeNotes.push(noteNumber);
 
-        this.noteOnSource.next(noteNumber);
+        this.noteChangeSource.next(noteNumber);
         this.velocityOnSource.next(velocity);
     }
 
@@ -66,7 +63,7 @@ export class InputService {
         if (this.activeNotes.length < 1) {
             this.velocityOffSource.next();
         } else {
-            this.noteOffSource.next(this.activeNotes[this.activeNotes.length - 1]);
+            this.noteChangeSource.next(this.activeNotes[this.activeNotes.length - 1]);
         }
     }
 }
