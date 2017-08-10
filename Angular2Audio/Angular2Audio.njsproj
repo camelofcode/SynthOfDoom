@@ -73,7 +73,11 @@
     <TypeScriptCompile Include="typescript\app\components\envelope.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="TypeScript\app\components\interfaces\IMultiInputAudioNodeComponent.ts" />
     <TypeScriptCompile Include="typescript\app\components\interfaces\IAudioNodeComponent.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\components\mixer.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\components\oscillator.component.ts">

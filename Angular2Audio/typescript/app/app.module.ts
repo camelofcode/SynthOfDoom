@@ -10,10 +10,11 @@ import { AppComponent }  from './app.component';
 import { EnvelopeComponent } from './components/envelope.component';
 import { OscillatorComponent } from './components/oscillator.component';
 import { BiquadFilterComponent } from './components/biquadfilter.component';
+import { MixerComponent } from './components/mixer.component';
 
 @NgModule({
   imports:      [ BrowserModule ],
-  declarations: [ AppComponent, EnvelopeComponent, OscillatorComponent, BiquadFilterComponent ],
+  declarations: [ AppComponent, EnvelopeComponent, OscillatorComponent, BiquadFilterComponent, MixerComponent ],
   bootstrap:    [ AppComponent ],
   providers:    [ InputService, MidiInputService, KeyboardInputService, AudioContextService ]
 })

@@ -17,9 +17,11 @@ var AppComponent = (function () {
         this.audioContext = this.audioContextService.context();
     }
     AppComponent.prototype.ngOnInit = function () {
-        this.oscillator1.node().connect(this.envelope1.node());
-        this.oscillator2.node().connect(this.envelope1.node());
-        this.envelope1.node().connect(this.filter.node());
+        this.oscillator1.node().connect(this.mixer.inputs()[0]);
+        this.oscillator2.node().connect(this.mixer.inputs()[1]);
+        this.oscillator3.node().connect(this.mixer.inputs()[2]);
+        this.mixer.output().connect(this.envelope.node());
+        this.envelope.node().connect(this.filter.node());
         this.filter.node().connect(this.audioContext.destination);
     };
     return AppComponent;
@@ -33,17 +35,25 @@ __decorate([
     __metadata("design:type", Object)
 ], AppComponent.prototype, "oscillator2", void 0);
 __decorate([
-    core_1.ViewChild('envelope1'),
+    core_1.ViewChild('oscillator3'),
     __metadata("design:type", Object)
-], AppComponent.prototype, "envelope1", void 0);
+], AppComponent.prototype, "oscillator3", void 0);
 __decorate([
-    core_1.ViewChild('filter1'),
+    core_1.ViewChild('envelope'),
+    __metadata("design:type", Object)
+], AppComponent.prototype, "envelope", void 0);
+__decorate([
+    core_1.ViewChild('filter'),
     __metadata("design:type", Object)
 ], AppComponent.prototype, "filter", void 0);
+__decorate([
+    core_1.ViewChild('mixer'),
+    __metadata("design:type", Object)
+], AppComponent.prototype, "mixer", void 0);
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: "<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>"
+        template: "<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><oscillator #oscillator3></oscillator><mixer #mixer></mixer><envelope #envelope></envelope><biquad-filter #filter></biquad-filter>"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], AppComponent);

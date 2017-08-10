@@ -3,7 +3,7 @@ import { AudioContextService } from './services/audioContext.service';
 
 @Component({
     selector: 'my-app',
-    template: `<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><envelope #envelope1></envelope><biquad-filter #filter1></biquad-filter>`
+    template: `<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><oscillator #oscillator3></oscillator><mixer #mixer></mixer><envelope #envelope></envelope><biquad-filter #filter></biquad-filter>`
 })
 export class AppComponent implements OnInit {
     private readonly audioContextService: AudioContextService;
@@ -15,11 +15,17 @@ export class AppComponent implements OnInit {
     @ViewChild('oscillator2')
     private oscillator2: IAudioNodeComponent;
 
-    @ViewChild('envelope1')
-    private envelope1: IAudioNodeComponent;
+    @ViewChild('oscillator3')
+    private oscillator3: IAudioNodeComponent;
 
-    @ViewChild('filter1')
+    @ViewChild('envelope')
+    private envelope: IAudioNodeComponent;
+
+    @ViewChild('filter')
     private filter: IAudioNodeComponent;
+
+    @ViewChild('mixer')
+    private mixer: IMultiInputAudioNodeComponent;
 
     constructor(audioContextService: AudioContextService) {
         this.audioContextService = audioContextService;
@@ -27,9 +33,12 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.oscillator1.node().connect(this.envelope1.node());
-        this.oscillator2.node().connect(this.envelope1.node());
-        this.envelope1.node().connect(this.filter.node());
+        this.oscillator1.node().connect(this.mixer.inputs()[0]);
+        this.oscillator2.node().connect(this.mixer.inputs()[1]);
+        this.oscillator3.node().connect(this.mixer.inputs()[2]);
+
+        this.mixer.output().connect(this.envelope.node());
+        this.envelope.node().connect(this.filter.node());
         this.filter.node().connect(this.audioContext.destination);
     }
 }

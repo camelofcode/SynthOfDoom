@@ -16,6 +16,7 @@ var app_component_1 = require("./app.component");
 var envelope_component_1 = require("./components/envelope.component");
 var oscillator_component_1 = require("./components/oscillator.component");
 var biquadfilter_component_1 = require("./components/biquadfilter.component");
+var mixer_component_1 = require("./components/mixer.component");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -24,7 +25,7 @@ var AppModule = (function () {
 AppModule = __decorate([
     core_1.NgModule({
         imports: [platform_browser_1.BrowserModule],
-        declarations: [app_component_1.AppComponent, envelope_component_1.EnvelopeComponent, oscillator_component_1.OscillatorComponent, biquadfilter_component_1.BiquadFilterComponent],
+        declarations: [app_component_1.AppComponent, envelope_component_1.EnvelopeComponent, oscillator_component_1.OscillatorComponent, biquadfilter_component_1.BiquadFilterComponent, mixer_component_1.MixerComponent],
         bootstrap: [app_component_1.AppComponent],
         providers: [input_service_1.InputService, midi_input_service_1.MidiInputService, keyboard_input_service_1.KeyboardInputService, audioContext_service_1.AudioContextService]
     })
