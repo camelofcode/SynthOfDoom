@@ -44,6 +44,10 @@
     <Compile Include="typescript\systemjs.config.extras.js" />
     <Compile Include="typescript\systemjs.config.js" />
     <Content Include="package.json" />
+    <Content Include="public\skins\skin1_front.svg" />
+    <Content Include="public\skins\skin1_back.svg">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
     <Content Include="typescript\tsconfig.json" />
@@ -56,11 +60,13 @@
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
     <Folder Include="public\javascripts\lib\" />
+    <Folder Include="public\skins\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
     <Folder Include="typescript\" />
     <Folder Include="typescript\app\" />
     <Folder Include="typescript\app\components\interfaces\" />
+    <Folder Include="typescript\app\components\ui\" />
     <Folder Include="typescript\app\models\" />
     <Folder Include="typescript\app\components\" />
     <Folder Include="typescript\app\services\" />
@@ -81,6 +87,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\components\oscillator.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\components\ui\knob.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\models\noteOffMessage.ts" />

@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("./services/audioContext.service");
 var AppComponent = (function () {
@@ -53,7 +52,7 @@ __decorate([
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: "<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><oscillator #oscillator3></oscillator><mixer #mixer></mixer><envelope #envelope></envelope><biquad-filter #filter></biquad-filter>"
+        template: "<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><oscillator #oscillator3></oscillator><mixer #mixer></mixer><envelope #envelope></envelope><biquad-filter #filter></biquad-filter>",
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], AppComponent);

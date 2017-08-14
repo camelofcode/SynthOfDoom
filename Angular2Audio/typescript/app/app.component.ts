@@ -3,7 +3,7 @@ import { AudioContextService } from './services/audioContext.service';
 
 @Component({
     selector: 'my-app',
-    template: `<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><oscillator #oscillator3></oscillator><mixer #mixer></mixer><envelope #envelope></envelope><biquad-filter #filter></biquad-filter>`
+    template: `<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><oscillator #oscillator3></oscillator><mixer #mixer></mixer><envelope #envelope></envelope><biquad-filter #filter></biquad-filter>`,
 })
 export class AppComponent implements OnInit {
     private readonly audioContextService: AudioContextService;
