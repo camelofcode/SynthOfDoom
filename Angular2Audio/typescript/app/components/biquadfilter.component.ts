@@ -4,11 +4,9 @@ import { KnobComponent } from './ui/knob.component';
 
 @Component({
     selector: 'biquad-filter',
-    template: `<p>Yo dawg this is a biquad filter component</p>
-<label>Cutoff</label>
-<knob #knobFrequency class="skin1" [min]="50" [max]="2000" [value]="1000" [startDegree]="200"  [endDegree]="120" (change)="updateFrequency($event)"></knob>
-<label>Resonance</label>
-<knob #knobQ class="skin1" [min]="1" [max]="32" [value]="2" [startDegree]="200"  [endDegree]="120" (change)="updateQ($event)"></knob>
+    template: `<h4>Filter</h4>
+<knob label="Cut Off" #knobFrequency [min]="50" [max]="2000" [value]="1000" [startDegree]="200"  [endDegree]="120" (change)="updateFrequency($event)"></knob>
+<knob label="Resonance" #knobQ [min]="1" [max]="32" [value]="2" [startDegree]="200"  [endDegree]="120" (change)="updateQ($event)"></knob>
 `
 })
 export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {

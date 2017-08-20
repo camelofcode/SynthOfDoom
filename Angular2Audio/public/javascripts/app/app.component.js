@@ -52,7 +52,7 @@ __decorate([
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: "<oscillator #oscillator1></oscillator><oscillator #oscillator2></oscillator><oscillator #oscillator3></oscillator><mixer #mixer></mixer><envelope #envelope></envelope><biquad-filter #filter></biquad-filter>",
+        template: "<oscillator class=\"section\" #oscillator1></oscillator><oscillator class=\"section\" #oscillator2></oscillator><oscillator class=\"section\" #oscillator3></oscillator><mixer class=\"section\" #mixer></mixer><envelope class=\"section\" #envelope></envelope><biquad-filter class=\"section\" #filter></biquad-filter>",
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], AppComponent);

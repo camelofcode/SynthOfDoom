@@ -12,18 +12,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var KnobComponent = (function () {
     function KnobComponent() {
+        this.meterRotation = 0;
+        this.tempMeterRotation = 0;
+        this.startX = 0;
+        this.startY = 0;
+        this.maxDistance = 0;
         this.min = 0;
         this.max = 0;
         this.meterValue = 0;
         this.startDegree = 200;
         this.endDegree = 120;
         this.intensive = true;
+        this.label = 'label';
         this.change = new core_1.EventEmitter(false);
-        this.meterRotation = 0;
-        this.tmpMeterRotation = 0;
-        this.startX = 0;
-        this.startY = 0;
-        this.maxDistance = 0;
         this.maxDistance = document.body.clientHeight;
         if (document.body.clientWidth > this.maxDistance) {
             this.maxDistance = document.body.clientWidth;
@@ -57,15 +58,6 @@ var KnobComponent = (function () {
         this.meterValue = value;
         this.calculateInitialValue();
     };
-    KnobComponent.prototype.calculateInitialValue = function () {
-        var norm = this.meterValue - this.min;
-        var percent = norm * 100 / (this.max - this.min);
-        var maxdeg = this.getMaxDegrees();
-        var rot = percent * maxdeg / 100;
-        this.meterRotation = rot % 360;
-        rot = rot + this.startDegree;
-        this.knobDiv.nativeElement.style.transform = 'rotate(' + (rot) + 'deg)';
-    };
     KnobComponent.prototype.calculateChange = function (mousePositionChange) {
         var maxDegrees = this.getMaxDegrees();
         var newValue = mousePositionChange * maxDegrees / this.maxDistance;
@@ -76,8 +68,8 @@ var KnobComponent = (function () {
         else if (newValue > maxDegrees) {
             newValue = maxDegrees;
         }
-        this.tmpMeterRotation = newValue;
-        this.knobDiv.nativeElement.style.transform = 'rotate(' + (newValue + this.startDegree) + 'deg)';
+        this.tempMeterRotation = newValue;
+        this.knobDiv.nativeElement.style.transform = "rotate(" + (newValue + this.startDegree) + "deg)";
         this.meterValue = (100 * newValue) / maxDegrees;
         var norm = this.max - this.min;
         this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
@@ -130,7 +122,7 @@ var KnobComponent = (function () {
             }
             _this.startX = 0;
             _this.startY = 0;
-            _this.meterRotation = _this.tmpMeterRotation;
+            _this.meterRotation = _this.tempMeterRotation;
             document.removeEventListener('mousemove', funcMove);
             document.removeEventListener('touchmove', funcMove);
             document.removeEventListener('mouseup', funcRemove);
@@ -140,6 +132,15 @@ var KnobComponent = (function () {
         document.addEventListener('touchmove', funcMove, false);
         document.addEventListener('mouseup', funcRemove, false);
         document.addEventListener('touchend', funcRemove, false);
+    };
+    KnobComponent.prototype.calculateInitialValue = function () {
+        var norm = this.meterValue - this.min;
+        var percent = norm * 100 / (this.max - this.min);
+        var maxdeg = this.getMaxDegrees();
+        var rot = percent * maxdeg / 100;
+        this.meterRotation = rot % 360;
+        rot = rot + this.startDegree;
+        this.knobDiv.nativeElement.style.transform = "rotate(" + rot + "deg)";
     };
     return KnobComponent;
 }());
@@ -168,6 +169,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], KnobComponent.prototype, "intensive", void 0);
 __decorate([
+    core_1.Input('label'),
+    __metadata("design:type", String)
+], KnobComponent.prototype, "label", void 0);
+__decorate([
     core_1.Output('change'),
     __metadata("design:type", core_1.EventEmitter)
 ], KnobComponent.prototype, "change", void 0);
@@ -177,9 +182,9 @@ __decorate([
 ], KnobComponent.prototype, "knobDiv", void 0);
 KnobComponent = __decorate([
     core_1.Component({
-        template: "\n<div #knob class=\"knob\"></div>\n",
-        styles: ["\n    .knob{\n        width:100%;\n        height:100%;\n        background-size: contain;\n        cursor:pointer;\n    }\n"],
-        selector: 'knob'
+        selector: 'knob',
+        template: "\n<div class=\"knob-background\">\n    <div #knob class=\"knob-handle\"></div>\n</div>\n<label class=\"knob-label\">{{label}}</label>\n",
+        styles: ["\n.knob-background{\n    background:url('/skins/skin1_back.svg');    \n    background-size: contain;\n    background-repeat: no-repeat;\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n}\n.knob-handle{\n    background:url('/skins/skin1_front.svg');\n    background-size: contain;    \n    background-repeat: no-repeat;\n    width: 100%;\n    height: 100%;\n    cursor:pointer;\n}\n.knob-label{\n    font-size: 10px;\n    display: block;\n}\n"]
     }),
     __metadata("design:paramtypes", [])
 ], KnobComponent);

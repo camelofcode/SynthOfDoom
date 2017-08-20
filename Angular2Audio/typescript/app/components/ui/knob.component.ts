@@ -2,35 +2,70 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
+    selector: 'knob',
     template: `
-<div #knob class="knob"></div>
+<div class="knob-background">
+    <div #knob class="knob-handle"></div>
+</div>
+<label class="knob-label">{{label}}</label>
 `,
     styles: [`
-    .knob{
-        width:100%;
-        height:100%;
-        background-size: contain;
-        cursor:pointer;
-    }
-`],
-    selector: 'knob'
+.knob-background{
+    background:url('/skins/skin1_back.svg');    
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+.knob-handle{
+    background:url('/skins/skin1_front.svg');
+    background-size: contain;    
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    cursor:pointer;
+}
+.knob-label{
+    font-size: 10px;
+    display: block;
+}
+`]
 })
 
 export class KnobComponent {
-    @Input('min') min: number = 0;
-    @Input('max') max: number = 0;
-    @Input('value') meterValue: number = 0;
-    @Input('startDegree') startDegree: number = 200;
-    @Input('endDegree') endDegree: number = 120;
-    @Input('intensive') intensive: boolean = true;
-    @Output('change') change: EventEmitter<number> = new EventEmitter<number>(false);
-    @ViewChild('knob') knobDiv: ElementRef;
-
     private meterRotation: number = 0;
-    private tmpMeterRotation: number = 0;
+    private tempMeterRotation: number = 0;
     private startX: number = 0;
     private startY: number = 0;
     private maxDistance: number = 0;
+
+    @Input('min')
+    min: number = 0;
+
+    @Input('max')
+    max: number = 0;
+
+    @Input('value')
+    meterValue: number = 0;
+
+    @Input('startDegree')
+    startDegree: number = 200;
+
+    @Input('endDegree')
+    endDegree: number = 120;
+
+    @Input('intensive')
+    intensive: boolean = true;
+
+    @Input('label')
+    label: string = 'label';
+
+    @Output('change')
+    change: EventEmitter<number> = new EventEmitter<number>(false);
+
+    @ViewChild('knob')
+    knobDiv: ElementRef;
 
     constructor() {
         this.maxDistance = document.body.clientHeight;
@@ -63,19 +98,9 @@ export class KnobComponent {
         }
     }
 
-    public setInitialValue(value: number) {
+    setInitialValue(value: number) {
         this.meterValue = value;
         this.calculateInitialValue();
-    }
-
-    private calculateInitialValue() {
-        const norm: number = this.meterValue - this.min;
-        const percent = norm * 100 / (this.max - this.min);
-        const maxdeg = this.getMaxDegrees();
-        let rot = percent * maxdeg / 100;
-        this.meterRotation = rot % 360;
-        rot = rot + this.startDegree;
-        this.knobDiv.nativeElement.style.transform = 'rotate(' + (rot) + 'deg)';
     }
 
     calculateChange(mousePositionChange: number) {
@@ -88,9 +113,9 @@ export class KnobComponent {
         } else if (newValue > maxDegrees) {
             newValue = maxDegrees;
         }
-        this.tmpMeterRotation = newValue;
+        this.tempMeterRotation = newValue;
 
-        this.knobDiv.nativeElement.style.transform = 'rotate(' + (newValue + this.startDegree) + 'deg)';
+        this.knobDiv.nativeElement.style.transform = `rotate(${newValue + this.startDegree}deg)`;
 
         this.meterValue = (100 * newValue) / maxDegrees;
         const norm = this.max - this.min;
@@ -129,7 +154,7 @@ export class KnobComponent {
                 e.stopPropagation();
             }
             if (e.preventDefault) {
-                 e.preventDefault();
+                e.preventDefault();
             }
             var change = this.getMouseDifference(e);
             this.calculateChange(change);
@@ -147,7 +172,7 @@ export class KnobComponent {
             }
             this.startX = 0;
             this.startY = 0;
-            this.meterRotation = this.tmpMeterRotation;
+            this.meterRotation = this.tempMeterRotation;
             document.removeEventListener('mousemove', funcMove);
             document.removeEventListener('touchmove', funcMove);
             document.removeEventListener('mouseup', funcRemove);
@@ -158,5 +183,15 @@ export class KnobComponent {
         document.addEventListener('touchmove', funcMove, false);
         document.addEventListener('mouseup', funcRemove, false);
         document.addEventListener('touchend', funcRemove, false);
+    }
+
+    private calculateInitialValue() {
+        const norm: number = this.meterValue - this.min;
+        const percent = norm * 100 / (this.max - this.min);
+        const maxdeg = this.getMaxDegrees();
+        let rot = percent * maxdeg / 100;
+        this.meterRotation = rot % 360;
+        rot = rot + this.startDegree;
+        this.knobDiv.nativeElement.style.transform = `rotate(${rot}deg)`;
     }
 }
