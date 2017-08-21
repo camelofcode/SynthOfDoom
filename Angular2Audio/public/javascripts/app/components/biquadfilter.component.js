@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
@@ -16,7 +15,7 @@ var utilities_1 = require("../supporting/utilities");
 var BiquadFilterComponent = (function () {
     function BiquadFilterComponent(audioContext) {
         this.minFrequency = 30;
-        this.maxFrequency = 10000;
+        this.maxFrequency = 5000;
         this.minQ = 1;
         this.maxQ = 16;
         this.audioContext = audioContext;

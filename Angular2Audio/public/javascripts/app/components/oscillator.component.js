@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var input_service_1 = require("../services/input.service");
 var audioContext_service_1 = require("../services/audioContext.service");
@@ -29,8 +28,8 @@ var OscillatorComponent = (function () {
             _this.noteChange(number);
         });
         this.oscillator = this.audioContext.context().createOscillator();
-        this.oscillator.type = 'sine';
         this.oscillator.start();
+        this.oscillator.type = 'sawtooth';
     }
     OscillatorComponent.prototype.node = function () {
         return this.oscillator;
@@ -43,7 +42,7 @@ var OscillatorComponent = (function () {
 OscillatorComponent = __decorate([
     core_1.Component({
         selector: 'oscillator',
-        template: "<p>Yo dawg this is an oscillator component</p>\n<label>Waveform</label>\n<select (change)=\"updateType($event.target.value)\">\n    <option value=\"sine\">Sine</option>\n    <option value=\"sawtooth\">Sawtooth</option>\n    <option value=\"square\">Square</option>\n    <option value=\"triangle\">Triangle</option>\n</select>\n"
+        template: "<p>Yo dawg this is an oscillator component</p>\n<label>Waveform</label>\n<select (change)=\"updateType($event.target.value)\">\n    <option value=\"sawtooth\">Sawtooth</option>    \n    <option value=\"sine\">Sine</option>\n    <option value=\"square\">Square</option>\n    <option value=\"triangle\">Triangle</option>\n</select>\n"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
 ], OscillatorComponent);

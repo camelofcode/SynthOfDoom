@@ -7,8 +7,8 @@ import { AudioContextService } from '../services/audioContext.service';
     template: `<p>Yo dawg this is an oscillator component</p>
 <label>Waveform</label>
 <select (change)="updateType($event.target.value)">
+    <option value="sawtooth">Sawtooth</option>    
     <option value="sine">Sine</option>
-    <option value="sawtooth">Sawtooth</option>
     <option value="square">Square</option>
     <option value="triangle">Triangle</option>
 </select>
@@ -30,8 +30,8 @@ export class OscillatorComponent implements IAudioNodeComponent {
         });
 
         this.oscillator = this.audioContext.context().createOscillator();
-        this.oscillator.type = 'sine';
         this.oscillator.start();
+        this.oscillator.type = 'sawtooth';
     }
 
     node(): AudioNode {

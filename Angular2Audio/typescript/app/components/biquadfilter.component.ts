@@ -15,7 +15,7 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
     private readonly filter: BiquadFilterNode;
 
     private readonly minFrequency: number = 30;
-    private readonly maxFrequency: number = 10000;
+    private readonly maxFrequency: number = 5000;
     private readonly minQ: number = 1;
     private readonly maxQ: number = 16;
 
