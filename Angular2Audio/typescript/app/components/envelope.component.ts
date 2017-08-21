@@ -2,12 +2,13 @@
 import { InputService } from '../services/input.service';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
+import Utilities from '../supporting/utilities';
 
 @Component({
     selector: 'envelope',
     template: `<h4>Envelope</h4>
-<knob label="Attack" #knobAttack [min]="0" [max]="100" [value]="50" [startDegree]="200"  [endDegree]="120" (change)="updateAttack($event)"></knob>
-<knob label="Release" #knobRelease [min]="0" [max]="100" [value]="50" [startDegree]="200"  [endDegree]="120" (change)="updateRelease($event)"></knob>
+<knob #knobAttack label="Attack" (change)="updateAttack($event)"></knob>
+<knob #knobRelease label="Release" (change)="updateRelease($event)"></knob>
 `
 })
 export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
@@ -17,6 +18,10 @@ export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
 
     private attack = 0.5;
     private release = 0.5;
+    private readonly minAttack: number = 0;
+    private readonly maxAttack: number = 1;
+    private readonly minRelease: number = 0;
+    private readonly maxRelease: number = 1;
 
     @ViewChild('knobAttack')
     private knobAttack: KnobComponent;
@@ -41,20 +46,20 @@ export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
     }
 
     ngOnInit(): void {
-         this.knobAttack.setInitialValue(this.attack * 100);
-         this.knobRelease.setInitialValue(this.release * 100);
+        this.knobAttack.setInitialValue(Utilities.scaleToPercent(this.attack, this.minAttack, this.maxAttack));
+        this.knobRelease.setInitialValue(Utilities.scaleToPercent(this.release, this.minRelease, this.maxRelease));
     }
 
     node(): AudioNode {
         return this.envelope;
     }
 
-    updateAttack(value: any) {
-        this.attack = value / 100.0;
+    updateAttack(value: number) {
+        this.attack = Utilities.scaleFromPercent(value, this.minAttack, this.maxAttack);
     }
 
-    updateRelease(value: any) {
-        this.release = value / 100.0;
+    updateRelease(value: number) {
+        this.release = Utilities.scaleFromPercent(value, this.minRelease, this.maxRelease);
     }
 
     private velocityToGain = (velocity: number) => {

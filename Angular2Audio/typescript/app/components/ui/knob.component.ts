@@ -40,23 +40,12 @@ export class KnobComponent {
     private startY: number = 0;
     private maxDistance: number = 0;
 
-    @Input('min')
-    min: number = 0;
-
-    @Input('max')
-    max: number = 0;
-
-    @Input('value')
-    meterValue: number = 0;
-
-    @Input('startDegree')
-    startDegree: number = 200;
-
-    @Input('endDegree')
-    endDegree: number = 120;
-
-    @Input('intensive')
-    intensive: boolean = true;
+    private min: number = 0;
+    private max: number = 100;
+    private meterValue: number = 50;
+    private startDegree: number = 200;
+    private endDegree: number = 120;
+    private intensive: boolean = true;
 
     @Input('label')
     label: string = 'label';

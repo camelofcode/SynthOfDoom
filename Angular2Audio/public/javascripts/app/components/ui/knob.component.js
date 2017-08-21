@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 //Based On https://github.com/spheras/knob
 var core_1 = require("@angular/core");
 var KnobComponent = (function () {
@@ -18,8 +19,8 @@ var KnobComponent = (function () {
         this.startY = 0;
         this.maxDistance = 0;
         this.min = 0;
-        this.max = 0;
-        this.meterValue = 0;
+        this.max = 100;
+        this.meterValue = 50;
         this.startDegree = 200;
         this.endDegree = 120;
         this.intensive = true;
@@ -144,30 +145,6 @@ var KnobComponent = (function () {
     };
     return KnobComponent;
 }());
-__decorate([
-    core_1.Input('min'),
-    __metadata("design:type", Number)
-], KnobComponent.prototype, "min", void 0);
-__decorate([
-    core_1.Input('max'),
-    __metadata("design:type", Number)
-], KnobComponent.prototype, "max", void 0);
-__decorate([
-    core_1.Input('value'),
-    __metadata("design:type", Number)
-], KnobComponent.prototype, "meterValue", void 0);
-__decorate([
-    core_1.Input('startDegree'),
-    __metadata("design:type", Number)
-], KnobComponent.prototype, "startDegree", void 0);
-__decorate([
-    core_1.Input('endDegree'),
-    __metadata("design:type", Number)
-], KnobComponent.prototype, "endDegree", void 0);
-__decorate([
-    core_1.Input('intensive'),
-    __metadata("design:type", Boolean)
-], KnobComponent.prototype, "intensive", void 0);
 __decorate([
     core_1.Input('label'),
     __metadata("design:type", String)

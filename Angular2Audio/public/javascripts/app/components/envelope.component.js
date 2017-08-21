@@ -8,15 +8,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var input_service_1 = require("../services/input.service");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
+var utilities_1 = require("../supporting/utilities");
 var EnvelopeComponent = (function () {
     function EnvelopeComponent(audioContext, inputService) {
         var _this = this;
         this.attack = 0.5;
         this.release = 0.5;
+        this.minAttack = 0;
+        this.maxAttack = 1;
+        this.minRelease = 0;
+        this.maxRelease = 1;
         this.velocityToGain = function (velocity) {
             return velocity / 127.0;
         };
@@ -40,17 +46,17 @@ var EnvelopeComponent = (function () {
         this.envelope.gain.value = 0.0;
     }
     EnvelopeComponent.prototype.ngOnInit = function () {
-        this.knobAttack.setInitialValue(this.attack * 100);
-        this.knobRelease.setInitialValue(this.release * 100);
+        this.knobAttack.setInitialValue(utilities_1.default.scaleToPercent(this.attack, this.minAttack, this.maxAttack));
+        this.knobRelease.setInitialValue(utilities_1.default.scaleToPercent(this.release, this.minRelease, this.maxRelease));
     };
     EnvelopeComponent.prototype.node = function () {
         return this.envelope;
     };
     EnvelopeComponent.prototype.updateAttack = function (value) {
-        this.attack = value / 100.0;
+        this.attack = utilities_1.default.scaleFromPercent(value, this.minAttack, this.maxAttack);
     };
     EnvelopeComponent.prototype.updateRelease = function (value) {
-        this.release = value / 100.0;
+        this.release = utilities_1.default.scaleFromPercent(value, this.minRelease, this.maxRelease);
     };
     return EnvelopeComponent;
 }());
@@ -65,7 +71,7 @@ __decorate([
 EnvelopeComponent = __decorate([
     core_1.Component({
         selector: 'envelope',
-        template: "<h4>Envelope</h4>\n<knob label=\"Attack\" #knobAttack [min]=\"0\" [max]=\"100\" [value]=\"50\" [startDegree]=\"200\"  [endDegree]=\"120\" (change)=\"updateAttack($event)\"></knob>\n<knob label=\"Release\" #knobRelease [min]=\"0\" [max]=\"100\" [value]=\"50\" [startDegree]=\"200\"  [endDegree]=\"120\" (change)=\"updateRelease($event)\"></knob>\n"
+        template: "<h4>Envelope</h4>\n<knob #knobAttack label=\"Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobRelease label=\"Release\" (change)=\"updateRelease($event)\"></knob>\n"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
 ], EnvelopeComponent);
