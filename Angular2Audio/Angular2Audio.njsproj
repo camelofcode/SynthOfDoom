@@ -87,6 +87,9 @@
     <TypeScriptCompile Include="typescript\app\components\mixer.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\components\noise.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\components\oscillator.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

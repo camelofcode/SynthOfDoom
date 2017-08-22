@@ -8,6 +8,7 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@
     <div #knob class="knob-handle"></div>
 </div>
 <label class="knob-label">{{label}}</label>
+<label class="knob-label">{{meterValue | number:'1.0-0'}}%</label>
 `,
     styles: [`
 .knob-background{

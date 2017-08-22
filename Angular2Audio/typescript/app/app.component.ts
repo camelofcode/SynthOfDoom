@@ -3,7 +3,15 @@ import { AudioContextService } from './services/audioContext.service';
 
 @Component({
     selector: 'my-app',
-    template: `<oscillator class="section" #oscillator1></oscillator><oscillator class="section" #oscillator2></oscillator><oscillator class="section" #oscillator3></oscillator><mixer class="section" #mixer></mixer><envelope class="section" #envelope></envelope><biquad-filter class="section" #filter></biquad-filter>`,
+    template: `
+<oscillator name="Oscillator 1" class="section" #oscillator1></oscillator>
+<oscillator name="Oscillator 2" class="section" #oscillator2></oscillator>
+<oscillator name="Oscillator 3" class="section" #oscillator3></oscillator>
+<noise class="section" #noise></noise>
+<mixer class="section" #mixer></mixer>
+<envelope class="section" #envelope></envelope>
+<biquad-filter class="section" #filter></biquad-filter>
+`
 })
 export class AppComponent implements OnInit {
     private readonly audioContextService: AudioContextService;
@@ -17,6 +25,9 @@ export class AppComponent implements OnInit {
 
     @ViewChild('oscillator3')
     private oscillator3: IAudioNodeComponent;
+
+    @ViewChild('noise')
+    private noise: IAudioNodeComponent;
 
     @ViewChild('envelope')
     private envelope: IAudioNodeComponent;
@@ -36,6 +47,7 @@ export class AppComponent implements OnInit {
         this.mixer.addChannel(this.oscillator1.node(), 'Oscillator 1');
         this.mixer.addChannel(this.oscillator2.node(), 'Oscillator 2');
         this.mixer.addChannel(this.oscillator3.node(), 'Oscillator 3');
+        this.mixer.addChannel(this.noise.node(), 'Noise');
 
         this.mixer.output().connect(this.envelope.node());
 

@@ -1,4 +1,5 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { InputService } from './services/input.service';
@@ -10,13 +11,14 @@ import { AppComponent }  from './app.component';
 import { EnvelopeComponent } from './components/envelope.component';
 import { OscillatorComponent } from './components/oscillator.component';
 import { BiquadFilterComponent } from './components/biquadfilter.component';
+import { NoiseComponent } from './components/noise.component';
 
 import { MixerComponent } from './components/mixer.component';
 import { KnobComponent } from './components/ui/knob.component';
 
 @NgModule({
   imports:      [ BrowserModule ],
-  declarations: [ AppComponent, EnvelopeComponent, OscillatorComponent, BiquadFilterComponent, MixerComponent, KnobComponent ],
+  declarations: [ AppComponent, EnvelopeComponent, OscillatorComponent, BiquadFilterComponent, NoiseComponent, MixerComponent, KnobComponent ],
   bootstrap:    [ AppComponent ],
   providers:    [ InputService, MidiInputService, KeyboardInputService, AudioContextService ]
 })

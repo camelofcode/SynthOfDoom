@@ -8,13 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
 var utilities_1 = require("../supporting/utilities");
 var MixerComponent = (function () {
-    function MixerComponent(audioContext) {
+    function MixerComponent(changeDetector, audioContext) {
+        this.changeDetector = changeDetector;
         this.minGain = 0;
         this.maxGain = 1;
         this.audioContext = audioContext;
@@ -27,6 +27,7 @@ var MixerComponent = (function () {
         for (var i = 0; i < this.inputNodes.length; i++) {
             this.gainKnobs.toArray()[i].setInitialValue(utilities_1.default.scaleToPercent(this.inputNodes[i].gain.value, this.minGain, this.maxGain));
             this.gainKnobs.toArray()[i].label = this.labels[i];
+            this.changeDetector.detectChanges();
         }
     };
     MixerComponent.prototype.addChannel = function (node, label) {
@@ -56,7 +57,7 @@ MixerComponent = __decorate([
         selector: 'mixer',
         template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n    <knob (change)=\"updateOscillator($event, i)\"></knob>\n</ng-template>\n"
     }),
-    __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
+    __metadata("design:paramtypes", [core_1.ChangeDetectorRef, audioContext_service_1.AudioContextService])
 ], MixerComponent);
 exports.MixerComponent = MixerComponent;
 //# sourceMappingURL=mixer.component.js.map

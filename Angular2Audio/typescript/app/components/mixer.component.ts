@@ -1,4 +1,4 @@
-﻿import { Component, QueryList, ViewChildren, AfterViewInit } from '@angular/core';
+﻿import { Component, QueryList, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
 import Utilities from '../supporting/utilities';
@@ -24,7 +24,7 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
     @ViewChildren(KnobComponent) 
     gainKnobs: QueryList<KnobComponent>;
 
-    constructor(audioContext: AudioContextService) {
+    constructor(private changeDetector: ChangeDetectorRef, audioContext: AudioContextService) {
         this.audioContext = audioContext;
 
         this.inputNodes = new Array<GainNode>();
@@ -38,6 +38,7 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
         for (let i = 0; i < this.inputNodes.length; i++) {
             this.gainKnobs.toArray()[i].setInitialValue(Utilities.scaleToPercent(this.inputNodes[i].gain.value, this.minGain, this.maxGain));
             this.gainKnobs.toArray()[i].label = this.labels[i];
+            this.changeDetector.detectChanges();
         }
     }
 
