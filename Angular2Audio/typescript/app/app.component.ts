@@ -33,12 +33,14 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.oscillator1.node().connect(this.mixer.inputs()[0]);
-        this.oscillator2.node().connect(this.mixer.inputs()[1]);
-        this.oscillator3.node().connect(this.mixer.inputs()[2]);
+        this.mixer.addChannel(this.oscillator1.node(), 'Oscillator 1');
+        this.mixer.addChannel(this.oscillator2.node(), 'Oscillator 2');
+        this.mixer.addChannel(this.oscillator3.node(), 'Oscillator 3');
 
         this.mixer.output().connect(this.envelope.node());
+
         this.envelope.node().connect(this.filter.node());
+
         this.filter.node().connect(this.audioContext.destination);
     }
 }

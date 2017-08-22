@@ -1,4 +1,4 @@
 ﻿interface IMultiInputAudioNodeComponent {
-    inputs(): Array<AudioNode>;
+    addChannel(node: AudioNode, label: String): void;
     output(): AudioNode;
 }

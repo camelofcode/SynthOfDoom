@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Utilities = (function () {
     function Utilities() {
     }
@@ -10,6 +11,5 @@ var Utilities = (function () {
     };
     return Utilities;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Utilities;
 //# sourceMappingURL=utilities.js.map

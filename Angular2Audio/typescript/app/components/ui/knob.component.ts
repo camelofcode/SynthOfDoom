@@ -48,7 +48,7 @@ export class KnobComponent {
     private intensive: boolean = true;
 
     @Input('label')
-    label: string = 'label';
+    label: String = 'label';
 
     @Output('change')
     change: EventEmitter<number> = new EventEmitter<number>(false);
