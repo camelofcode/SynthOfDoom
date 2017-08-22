@@ -7,7 +7,7 @@ import Utilities from '../supporting/utilities';
     selector: 'mixer',
     template: `<h4>Mixer</h4>
 <ng-template ngFor let-item [ngForOf]="inputNodes" let-currentIndex="index + 1" let-i="index">
-    <knob (change)="updateOscillator($event, i)"></knob>
+    <knob (change)="updateChannelGain($event, i)"></knob>
 </ng-template>
 `
 })
@@ -58,7 +58,7 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
         return this.outputNode;
     }
 
-    updateOscillator(value: number, target: number) {
+    updateChannelGain(value: number, target: number) {
         this.inputNodes[target].gain.setValueAtTime(Utilities.scaleFromPercent(value, this.minGain, this.maxGain), 0);
     }
 }
