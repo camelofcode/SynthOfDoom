@@ -11,26 +11,92 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("../services/audioContext.service");
 var NoiseComponent = (function () {
-    //https://noisehack.com/generate-noise-web-audio-api/
-    function NoiseComponent(audioContext) {
-        this.audioContext = audioContext;
-        var context = this.audioContext.context();
-        var bufferSize = 2 * context.sampleRate;
-        var noiseBuffer = context.createBuffer(1, bufferSize, context.sampleRate);
-        var output = noiseBuffer.getChannelData(0);
-        for (var i = 0; i < bufferSize; i++) {
-            output[i] = Math.random() * 2 - 1;
-        }
-        this.noiseGenerator = context.createBufferSource();
-        this.noiseGenerator.buffer = noiseBuffer;
-        this.noiseGenerator.loop = true;
-        this.noiseGenerator.start(0);
+    function NoiseComponent(audioContextService) {
+        this.audioContextService = audioContextService;
+        this.context = audioContextService.context();
+        this.output = this.context.createGain();
+        this.output.gain.value = 1.0;
+        this.initWhiteNoise();
+        this.initPinkNoise();
+        this.initBrownNoise();
+        this.currentGenerator = this.whiteNoiseSource;
+        this.currentGenerator.connect(this.output);
     }
+    NoiseComponent.prototype.initWhiteNoise = function () {
+        this.whiteNoiseSource = this.context.createBufferSource();
+        this.initNoise(this.whiteNoiseSource, function (output, bufferSize) {
+            //https://noisehack.com/generate-noise-web-audio-api/
+            for (var i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+        });
+    };
+    NoiseComponent.prototype.initPinkNoise = function () {
+        this.pinkNoiseSource = this.context.createBufferSource();
+        this.initNoise(this.pinkNoiseSource, function (output, bufferSize) {
+            //https://noisehack.com/generate-noise-web-audio-api/
+            var b0, b1, b2, b3, b4, b5, b6;
+            b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+            for (var i = 0; i < bufferSize; i++) {
+                var white = Math.random() * 2 - 1;
+                b0 = 0.99886 * b0 + white * 0.0555179;
+                b1 = 0.99332 * b1 + white * 0.0750759;
+                b2 = 0.96900 * b2 + white * 0.1538520;
+                b3 = 0.86650 * b3 + white * 0.3104856;
+                b4 = 0.55000 * b4 + white * 0.5329522;
+                b5 = -0.7616 * b5 - white * 0.0168980;
+                output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                output[i] *= 0.11;
+                b6 = white * 0.115926;
+            }
+        });
+    };
+    NoiseComponent.prototype.initBrownNoise = function () {
+        this.brownNoiseSource = this.context.createBufferSource();
+        this.initNoise(this.brownNoiseSource, function (output, bufferSize) {
+            //https://noisehack.com/generate-noise-web-audio-api/
+            var lastOut = 0.0;
+            for (var i = 0; i < bufferSize; i++) {
+                var white = Math.random() * 2 - 1;
+                output[i] = (lastOut + (0.02 * white)) / 1.02;
+                lastOut = output[i];
+                output[i] *= 3.5;
+            }
+        });
+    };
+    NoiseComponent.prototype.initNoise = function (source, generator) {
+        var bufferSize = 2 * this.context.sampleRate;
+        var noiseBuffer = this.context.createBuffer(1, bufferSize, this.context.sampleRate);
+        var output = noiseBuffer.getChannelData(0);
+        generator(output, bufferSize);
+        source.buffer = noiseBuffer;
+        source.loop = true;
+        source.start(0);
+    };
     NoiseComponent.prototype.node = function () {
-        return this.noiseGenerator;
+        return this.output;
     };
     NoiseComponent.prototype.updateColor = function (type) {
-        //TODO: this;
+        this.currentGenerator.disconnect(this.output);
+        switch (type) {
+            case 'white':
+                {
+                    this.currentGenerator = this.whiteNoiseSource;
+                    break;
+                }
+            case 'pink':
+                {
+                    this.currentGenerator = this.pinkNoiseSource;
+                    break;
+                }
+            case 'brown':
+                {
+                    this.currentGenerator = this.brownNoiseSource;
+                    break;
+                }
+            default: this.currentGenerator = this.whiteNoiseSource;
+        }
+        this.currentGenerator.connect(this.output);
     };
     return NoiseComponent;
 }());

@@ -43,7 +43,7 @@ var MixerComponent = (function () {
         }
         return this.outputNode;
     };
-    MixerComponent.prototype.updateOscillator = function (value, target) {
+    MixerComponent.prototype.updateChannelGain = function (value, target) {
         this.inputNodes[target].gain.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minGain, this.maxGain), 0);
     };
     return MixerComponent;
@@ -55,7 +55,7 @@ __decorate([
 MixerComponent = __decorate([
     core_1.Component({
         selector: 'mixer',
-        template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n    <knob (change)=\"updateOscillator($event, i)\"></knob>\n</ng-template>\n"
+        template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n    <knob (change)=\"updateChannelGain($event, i)\"></knob>\n</ng-template>\n"
     }),
     __metadata("design:paramtypes", [core_1.ChangeDetectorRef, audioContext_service_1.AudioContextService])
 ], MixerComponent);
