@@ -22,6 +22,31 @@ var NoiseComponent = (function () {
         this.currentGenerator = this.whiteNoiseSource;
         this.currentGenerator.connect(this.output);
     }
+    NoiseComponent.prototype.node = function () {
+        return this.output;
+    };
+    NoiseComponent.prototype.updateColor = function (type) {
+        this.currentGenerator.disconnect(this.output);
+        switch (type) {
+            case 'white':
+                {
+                    this.currentGenerator = this.whiteNoiseSource;
+                    break;
+                }
+            case 'pink':
+                {
+                    this.currentGenerator = this.pinkNoiseSource;
+                    break;
+                }
+            case 'brown':
+                {
+                    this.currentGenerator = this.brownNoiseSource;
+                    break;
+                }
+            default: this.currentGenerator = this.whiteNoiseSource;
+        }
+        this.currentGenerator.connect(this.output);
+    };
     NoiseComponent.prototype.initWhiteNoise = function () {
         this.whiteNoiseSource = this.context.createBufferSource();
         this.initNoise(this.whiteNoiseSource, function (output, bufferSize) {
@@ -34,7 +59,7 @@ var NoiseComponent = (function () {
     NoiseComponent.prototype.initPinkNoise = function () {
         this.pinkNoiseSource = this.context.createBufferSource();
         this.initNoise(this.pinkNoiseSource, function (output, bufferSize) {
-            //https://noisehack.com/generate-noise-web-audio-api/
+            //http://www.musicdsp.org/files/pink.txt
             var b0, b1, b2, b3, b4, b5, b6;
             b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
             for (var i = 0; i < bufferSize; i++) {
@@ -72,31 +97,6 @@ var NoiseComponent = (function () {
         source.buffer = noiseBuffer;
         source.loop = true;
         source.start(0);
-    };
-    NoiseComponent.prototype.node = function () {
-        return this.output;
-    };
-    NoiseComponent.prototype.updateColor = function (type) {
-        this.currentGenerator.disconnect(this.output);
-        switch (type) {
-            case 'white':
-                {
-                    this.currentGenerator = this.whiteNoiseSource;
-                    break;
-                }
-            case 'pink':
-                {
-                    this.currentGenerator = this.pinkNoiseSource;
-                    break;
-                }
-            case 'brown':
-                {
-                    this.currentGenerator = this.brownNoiseSource;
-                    break;
-                }
-            default: this.currentGenerator = this.whiteNoiseSource;
-        }
-        this.currentGenerator.connect(this.output);
     };
     return NoiseComponent;
 }());
