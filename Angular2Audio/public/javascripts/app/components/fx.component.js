@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var utilities_1 = require("../supporting/utilities");
 var FxComponent = (function () {
     function FxComponent(audioContextService) {
@@ -13,12 +12,14 @@ var FxComponent = (function () {
     FxComponent.prototype.node = function () {
         this.inNode.connect(this.dry);
         this.inNode.connect(this.audioNode);
-        this.audioNode.connect(this.wet);
         this.wet.connect(this.output);
         this.dry.connect(this.output);
         return this.output;
     };
     FxComponent.prototype.input = function () { return this.inNode; };
+    FxComponent.prototype.connectWetSignal = function (node) {
+        node.connect(this.wet);
+    };
     FxComponent.prototype.updateMix = function (value) {
         var scaled = utilities_1.default.scaleFromPercent(value, 0, 1);
         this.wet.gain.setValueAtTime(scaled, 0);

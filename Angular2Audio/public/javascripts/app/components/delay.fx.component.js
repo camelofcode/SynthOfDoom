@@ -1,14 +1,9 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,7 +13,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
@@ -30,18 +24,37 @@ var DelayFxComponent = (function (_super) {
         var _this = _super.call(this, audioContextService) || this;
         _this.minDelay = 0.01;
         _this.maxDelay = 2.0;
-        _this.minFilter = 50;
+        _this.minFilter = 200;
         _this.maxFilter = 5000;
         _this.audioNode = _this.context.createDelay(_this.maxDelay);
         _this.feedback = _this.context.createGain();
         _this.filter = _this.context.createBiquadFilter();
+        _this.saturation = _this.context.createScriptProcessor();
         _this.audioNode.delayTime.setValueAtTime(0.5, 0);
         _this.feedback.gain.setValueAtTime(0.5, 0);
         _this.filter.type = 'lowpass';
         _this.filter.frequency.setValueAtTime(1000, 0);
+        _this.saturation.onaudioprocess = function (event) {
+            var inputL = event.inputBuffer.getChannelData(0);
+            var inputR = event.inputBuffer.getChannelData(1);
+            var outputL = event.outputBuffer.getChannelData(0);
+            var outputR = event.outputBuffer.getChannelData(1);
+            var driveKnob = 0.0;
+            var preSatL;
+            var preSatR;
+            for (var i = 0; i < inputL.length; i++) {
+                preSatL = inputL[i] * ((driveKnob + 0.5) * 1.2);
+                preSatR = inputR[i] * ((driveKnob + 0.5) * 1.2);
+                //http://tap-plugins.sourceforge.net/ladspa/sigmoid.html
+                outputL[i] = (2 / (1 + (Math.pow(Math.E, (-5 * preSatL)))) - 1) * 0.5;
+                outputR[i] = (2 / (1 + (Math.pow(Math.E, (-5 * preSatR)))) - 1) * 0.5;
+            }
+        };
         _this.audioNode.connect(_this.feedback);
         _this.feedback.connect(_this.filter);
         _this.filter.connect(_this.audioNode);
+        _this.audioNode.connect(_this.saturation);
+        _super.prototype.connectWetSignal.call(_this, _this.saturation);
         return _this;
     }
     DelayFxComponent.prototype.ngOnInit = function () {

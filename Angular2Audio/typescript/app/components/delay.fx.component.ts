@@ -17,6 +17,7 @@ export class DelayFxComponent extends FxComponent implements OnInit {
     audioNode: DelayNode;
     feedback: GainNode;
     filter: BiquadFilterNode;
+    saturation: ScriptProcessorNode;
 
     private readonly minDelay: number = 0.01;
     private readonly maxDelay: number = 2.0;
@@ -40,6 +41,7 @@ export class DelayFxComponent extends FxComponent implements OnInit {
         this.audioNode = this.context.createDelay(this.maxDelay);
         this.feedback = this.context.createGain();
         this.filter = this.context.createBiquadFilter();
+        this.saturation = this.context.createScriptProcessor();
 
         this.audioNode.delayTime.setValueAtTime(0.5, 0);
         this.feedback.gain.setValueAtTime(0.5, 0);
@@ -47,9 +49,31 @@ export class DelayFxComponent extends FxComponent implements OnInit {
         this.filter.type = 'lowpass';
         this.filter.frequency.setValueAtTime(1000, 0);
 
+        this.saturation.onaudioprocess = (event: AudioProcessingEvent) => {
+            var inputL = event.inputBuffer.getChannelData(0);
+            var inputR = event.inputBuffer.getChannelData(1);
+            var outputL = event.outputBuffer.getChannelData(0);
+            var outputR = event.outputBuffer.getChannelData(1);
+
+            var driveKnob = 0.0;
+            var preSatL: number;
+            var preSatR: number;
+
+            for (let i = 0; i <  inputL.length; i++) {
+                preSatL = inputL[i] * ((driveKnob + 0.5) * 1.2);
+                preSatR = inputR[i] * ((driveKnob + 0.5) * 1.2);
+
+                //http://tap-plugins.sourceforge.net/ladspa/sigmoid.html
+                outputL[i] = (2 / (1 + (Math.pow(Math.E, (-5 * preSatL)))) - 1) * 0.5;
+                outputR[i] = (2 / (1 + (Math.pow(Math.E, (-5 * preSatR)))) - 1) * 0.5;
+            }
+        }
+
         this.audioNode.connect(this.feedback);
         this.feedback.connect(this.filter);
         this.filter.connect(this.audioNode);
+        this.audioNode.connect(this.saturation);
+        super.connectWetSignal(this.saturation);
     }
 
     ngOnInit(): void {
