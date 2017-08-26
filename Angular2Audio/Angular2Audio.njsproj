@@ -77,6 +77,9 @@
     <TypeScriptCompile Include="typescript\app\app.component.ts" />
     <TypeScriptCompile Include="typescript\app\app.module.ts" />
     <TypeScriptCompile Include="typescript\app\components\biquadfilter.component.ts" />
+    <TypeScriptCompile Include="typescript\app\components\delay.fx.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\components\envelope.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -94,6 +97,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\components\ui\knob.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="TypeScript\app\components\fx.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\models\noteOffMessage.ts" />

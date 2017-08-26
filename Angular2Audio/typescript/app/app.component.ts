@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AudioContextService } from './services/audioContext.service';
+import { FxComponent } from './components/fx.component';
 
 @Component({
     selector: 'my-app',
@@ -11,6 +12,7 @@ import { AudioContextService } from './services/audioContext.service';
 <mixer class="section" #mixer></mixer>
 <envelope class="section" #envelope></envelope>
 <biquad-filter class="section" #filter></biquad-filter>
+<delay class="section" #delay></delay>
 `
 })
 export class AppComponent implements OnInit {
@@ -38,6 +40,9 @@ export class AppComponent implements OnInit {
     @ViewChild('mixer')
     private mixer: IMultiInputAudioNodeComponent;
 
+    @ViewChild('delay')
+    private delay: FxComponent;
+
     constructor(audioContextService: AudioContextService) {
         this.audioContextService = audioContextService;
         this.audioContext = this.audioContextService.context();
@@ -53,6 +58,7 @@ export class AppComponent implements OnInit {
 
         this.envelope.node().connect(this.filter.node());
 
-        this.filter.node().connect(this.audioContext.destination);
+        this.filter.node().connect(this.delay.input());
+        this.delay.node().connect(this.audioContext.destination);
     }
 }

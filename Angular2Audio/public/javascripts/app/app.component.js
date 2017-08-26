@@ -8,8 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("./services/audioContext.service");
+var fx_component_1 = require("./components/fx.component");
 var AppComponent = (function () {
     function AppComponent(audioContextService) {
         this.audioContextService = audioContextService;
@@ -22,7 +24,8 @@ var AppComponent = (function () {
         this.mixer.addChannel(this.noise.node(), 'Noise');
         this.mixer.output().connect(this.envelope.node());
         this.envelope.node().connect(this.filter.node());
-        this.filter.node().connect(this.audioContext.destination);
+        this.filter.node().connect(this.delay.input());
+        this.delay.node().connect(this.audioContext.destination);
     };
     return AppComponent;
 }());
@@ -54,10 +57,14 @@ __decorate([
     core_1.ViewChild('mixer'),
     __metadata("design:type", Object)
 ], AppComponent.prototype, "mixer", void 0);
+__decorate([
+    core_1.ViewChild('delay'),
+    __metadata("design:type", fx_component_1.FxComponent)
+], AppComponent.prototype, "delay", void 0);
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: "\n<oscillator name=\"Oscillator 1\" class=\"section\" #oscillator1></oscillator>\n<oscillator name=\"Oscillator 2\" class=\"section\" #oscillator2></oscillator>\n<oscillator name=\"Oscillator 3\" class=\"section\" #oscillator3></oscillator>\n<noise class=\"section\" #noise></noise>\n<mixer class=\"section\" #mixer></mixer>\n<envelope class=\"section\" #envelope></envelope>\n<biquad-filter class=\"section\" #filter></biquad-filter>\n"
+        template: "\n<oscillator name=\"Oscillator 1\" class=\"section\" #oscillator1></oscillator>\n<oscillator name=\"Oscillator 2\" class=\"section\" #oscillator2></oscillator>\n<oscillator name=\"Oscillator 3\" class=\"section\" #oscillator3></oscillator>\n<noise class=\"section\" #noise></noise>\n<mixer class=\"section\" #mixer></mixer>\n<envelope class=\"section\" #envelope></envelope>\n<biquad-filter class=\"section\" #filter></biquad-filter>\n<delay class=\"section\" #delay></delay>\n"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], AppComponent);
