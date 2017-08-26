@@ -30,18 +30,25 @@ var DelayFxComponent = (function (_super) {
         var _this = _super.call(this, audioContextService) || this;
         _this.minDelay = 0.01;
         _this.maxDelay = 2.0;
+        _this.minFilter = 50;
+        _this.maxFilter = 5000;
         _this.audioNode = _this.context.createDelay(_this.maxDelay);
         _this.feedback = _this.context.createGain();
+        _this.filter = _this.context.createBiquadFilter();
         _this.audioNode.delayTime.setValueAtTime(0.5, 0);
         _this.feedback.gain.setValueAtTime(0.5, 0);
+        _this.filter.type = 'lowpass';
+        _this.filter.frequency.setValueAtTime(1000, 0);
         _this.audioNode.connect(_this.feedback);
-        _this.feedback.connect(_this.audioNode);
+        _this.feedback.connect(_this.filter);
+        _this.filter.connect(_this.audioNode);
         return _this;
     }
     DelayFxComponent.prototype.ngOnInit = function () {
         this.knobMix.setInitialValue(utilities_1.default.scaleToPercent(0.5, 0, 1));
         this.knobTime.setInitialValue(utilities_1.default.scaleToPercent(0.5, this.minDelay, this.maxDelay));
         this.knobFeedback.setInitialValue(utilities_1.default.scaleToPercent(0.5, 0, 1));
+        this.knobFilter.setInitialValue(utilities_1.default.scaleToPercent(1000, this.minFilter, this.maxFilter));
     };
     DelayFxComponent.prototype.updateTime = function (value) {
         this.audioNode.delayTime.cancelScheduledValues(0);
@@ -49,6 +56,9 @@ var DelayFxComponent = (function (_super) {
     };
     DelayFxComponent.prototype.updateFeedback = function (value) {
         this.feedback.gain.setValueAtTime(utilities_1.default.scaleFromPercent(value, 0, 1), 0);
+    };
+    DelayFxComponent.prototype.updateFilter = function (value) {
+        this.filter.frequency.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minFilter, this.maxFilter), 0);
     };
     return DelayFxComponent;
 }(fx_component_1.FxComponent));
@@ -64,10 +74,14 @@ __decorate([
     core_1.ViewChild('knobTime'),
     __metadata("design:type", knob_component_1.KnobComponent)
 ], DelayFxComponent.prototype, "knobTime", void 0);
+__decorate([
+    core_1.ViewChild('knobFilter'),
+    __metadata("design:type", knob_component_1.KnobComponent)
+], DelayFxComponent.prototype, "knobFilter", void 0);
 DelayFxComponent = __decorate([
     core_1.Component({
         selector: 'delay',
-        template: "<h4>Delay</h4>\n<knob #knobTime label=\"Time\" (change)=\"updateTime($event)\"></knob>\n<knob #knobFeedback label=\"Feedback\" (change)=\"updateFeedback($event)\"></knob>\n<knob #knobMix label=\"Mix\" (change)=\"updateMix($event)\"></knob>\n"
+        template: "<h4>Delay</h4>\n<knob #knobTime label=\"Time\" (change)=\"updateTime($event)\"></knob>\n<knob #knobFeedback label=\"Feedback\" (change)=\"updateFeedback($event)\"></knob>\n<knob #knobFilter label=\"Filter\" (change)=\"updateFilter($event)\"></knob>\n<knob #knobMix label=\"Mix\" (change)=\"updateMix($event)\"></knob>\n"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], DelayFxComponent);
