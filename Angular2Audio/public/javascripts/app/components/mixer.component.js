@@ -27,6 +27,7 @@ var MixerComponent = (function () {
         for (var i = 0; i < this.inputNodes.length; i++) {
             this.gainKnobs.toArray()[i].setInitialValue(utilities_1.default.scaleToPercent(this.inputNodes[i].gain.value, this.minGain, this.maxGain));
             this.gainKnobs.toArray()[i].label = this.labels[i];
+            this.switches.toArray()[i].nativeElement.checked = true;
             this.changeDetector.detectChanges();
         }
     };
@@ -46,16 +47,28 @@ var MixerComponent = (function () {
     MixerComponent.prototype.updateChannelGain = function (value, target) {
         this.inputNodes[target].gain.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minGain, this.maxGain), 0);
     };
+    MixerComponent.prototype.updateChannelOn = function (event, target) {
+        if (event.target.checked) {
+            this.inputNodes[target].connect(this.outputNode);
+        }
+        else {
+            this.inputNodes[target].disconnect(this.outputNode);
+        }
+    };
     return MixerComponent;
 }());
 __decorate([
     core_1.ViewChildren(knob_component_1.KnobComponent),
     __metadata("design:type", core_1.QueryList)
 ], MixerComponent.prototype, "gainKnobs", void 0);
+__decorate([
+    core_1.ViewChildren('switches'),
+    __metadata("design:type", core_1.QueryList)
+], MixerComponent.prototype, "switches", void 0);
 MixerComponent = __decorate([
     core_1.Component({
         selector: 'mixer',
-        template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n    <knob (change)=\"updateChannelGain($event, i)\"></knob>\n</ng-template>\n"
+        template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n    <knob (change)=\"updateChannelGain($event, i)\"></knob>\n    <input #switches type=\"checkbox\" (change)=\"updateChannelOn($event, i)\"/>\n</ng-template>\n"
     }),
     __metadata("design:paramtypes", [core_1.ChangeDetectorRef, audioContext_service_1.AudioContextService])
 ], MixerComponent);

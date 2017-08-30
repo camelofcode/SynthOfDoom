@@ -1,4 +1,4 @@
-﻿import { Component, QueryList, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, QueryList, ViewChildren, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
 import Utilities from '../supporting/utilities';
@@ -8,6 +8,7 @@ import Utilities from '../supporting/utilities';
     template: `<h4>Mixer</h4>
 <ng-template ngFor let-item [ngForOf]="inputNodes" let-currentIndex="index + 1" let-i="index">
     <knob (change)="updateChannelGain($event, i)"></knob>
+    <input #switches type="checkbox" (change)="updateChannelOn($event, i)"/>
 </ng-template>
 `
 })
@@ -24,6 +25,9 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
     @ViewChildren(KnobComponent) 
     gainKnobs: QueryList<KnobComponent>;
 
+    @ViewChildren('switches')
+    switches: QueryList<ElementRef>;
+
     constructor(private changeDetector: ChangeDetectorRef, audioContext: AudioContextService) {
         this.audioContext = audioContext;
 
@@ -38,6 +42,9 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
         for (let i = 0; i < this.inputNodes.length; i++) {
             this.gainKnobs.toArray()[i].setInitialValue(Utilities.scaleToPercent(this.inputNodes[i].gain.value, this.minGain, this.maxGain));
             this.gainKnobs.toArray()[i].label = this.labels[i];
+
+            this.switches.toArray()[i].nativeElement.checked = true;
+
             this.changeDetector.detectChanges();
         }
     }
@@ -60,5 +67,13 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
 
     updateChannelGain(value: number, target: number) {
         this.inputNodes[target].gain.setValueAtTime(Utilities.scaleFromPercent(value, this.minGain, this.maxGain), 0);
+    }
+
+    updateChannelOn(event: any, target: number) {
+        if (event.target.checked) {
+            this.inputNodes[target].connect(this.outputNode);
+        } else {
+            this.inputNodes[target].disconnect(this.outputNode);
+        }
     }
 }

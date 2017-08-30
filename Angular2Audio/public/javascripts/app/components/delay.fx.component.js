@@ -26,12 +26,14 @@ var DelayFxComponent = (function (_super) {
         _this.maxDelay = 2.0;
         _this.minFilter = 200;
         _this.maxFilter = 5000;
-        _this.audioNode = _this.context.createDelay(_this.maxDelay);
+        _this.delay = _this.context.createDelay(_this.maxDelay);
         _this.feedback = _this.context.createGain();
         _this.filter = _this.context.createBiquadFilter();
         _this.saturation = _this.context.createScriptProcessor();
-        _this.audioNode.delayTime.setValueAtTime(0.5, 0);
+        _this.makeup = _this.context.createGain();
+        _this.delay.delayTime.setValueAtTime(0.5, 0);
         _this.feedback.gain.setValueAtTime(0.5, 0);
+        _this.makeup.gain.setValueAtTime(2.0, 0);
         _this.filter.type = 'lowpass';
         _this.filter.frequency.setValueAtTime(1000, 0);
         _this.saturation.onaudioprocess = function (event) {
@@ -43,18 +45,19 @@ var DelayFxComponent = (function (_super) {
             var preSatL;
             var preSatR;
             for (var i = 0; i < inputL.length; i++) {
-                preSatL = inputL[i] * ((driveKnob + 0.5) * 1.2);
-                preSatR = inputR[i] * ((driveKnob + 0.5) * 1.2);
+                preSatL = inputL[i] * ((driveKnob + 0.1) * 1.2);
+                preSatR = inputR[i] * ((driveKnob + 0.1) * 1.2);
                 //http://tap-plugins.sourceforge.net/ladspa/sigmoid.html
                 outputL[i] = (2 / (1 + (Math.pow(Math.E, (-5 * preSatL)))) - 1) * 0.5;
                 outputR[i] = (2 / (1 + (Math.pow(Math.E, (-5 * preSatR)))) - 1) * 0.5;
             }
         };
-        _this.audioNode.connect(_this.feedback);
+        _this.delay.connect(_this.feedback);
         _this.feedback.connect(_this.filter);
-        _this.filter.connect(_this.audioNode);
-        _this.audioNode.connect(_this.saturation);
-        _super.prototype.connectWetSignal.call(_this, _this.saturation);
+        _this.filter.connect(_this.delay);
+        _this.delay.connect(_this.saturation);
+        _this.saturation.connect(_this.makeup);
+        _this.connectFxChain(_this.delay, _this.makeup);
         return _this;
     }
     DelayFxComponent.prototype.ngOnInit = function () {
@@ -64,8 +67,8 @@ var DelayFxComponent = (function (_super) {
         this.knobFilter.setInitialValue(utilities_1.default.scaleToPercent(1000, this.minFilter, this.maxFilter));
     };
     DelayFxComponent.prototype.updateTime = function (value) {
-        this.audioNode.delayTime.cancelScheduledValues(0);
-        this.audioNode.delayTime.setTargetAtTime(utilities_1.default.scaleFromPercent(value, this.minDelay, this.maxDelay), this.context.currentTime, 0.1);
+        this.delay.delayTime.cancelScheduledValues(0);
+        this.delay.delayTime.setTargetAtTime(utilities_1.default.scaleFromPercent(value, this.minDelay, this.maxDelay), this.context.currentTime, 0.1);
     };
     DelayFxComponent.prototype.updateFeedback = function (value) {
         this.feedback.gain.setValueAtTime(utilities_1.default.scaleFromPercent(value, 0, 1), 0);
@@ -94,7 +97,7 @@ __decorate([
 DelayFxComponent = __decorate([
     core_1.Component({
         selector: 'delay',
-        template: "<h4>Delay</h4>\n<knob #knobTime label=\"Time\" (change)=\"updateTime($event)\"></knob>\n<knob #knobFeedback label=\"Feedback\" (change)=\"updateFeedback($event)\"></knob>\n<knob #knobFilter label=\"Filter\" (change)=\"updateFilter($event)\"></knob>\n<knob #knobMix label=\"Mix\" (change)=\"updateMix($event)\"></knob>\n"
+        template: "<h4>Delay</h4>\n<knob #knobTime label=\"Time\" (change)=\"updateTime($event)\"></knob>\n<knob #knobFeedback label=\"Feedback\" (change)=\"updateFeedback($event)\"></knob>\n<knob #knobFilter label=\"Filter\" (change)=\"updateFilter($event)\"></knob>\n<knob #knobMix label=\"Mix\" (change)=\"updateMix($event)\"></knob>\n<input #switchOn type=\"checkbox\" (change)=\"updateOn($event)\"/>\n"
     }),
     __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
 ], DelayFxComponent);
