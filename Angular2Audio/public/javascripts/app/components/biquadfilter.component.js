@@ -8,12 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("../services/audioContext.service");
 var input_service_1 = require("../services/input.service");
 var knob_component_1 = require("./ui/knob.component");
 var utilities_1 = require("../supporting/utilities");
-var BiquadFilterComponent = (function () {
+var BiquadFilterComponent = /** @class */ (function () {
     function BiquadFilterComponent(audioContextService, inputService) {
         var _this = this;
         this.showQ = true;
@@ -80,6 +81,13 @@ var BiquadFilterComponent = (function () {
         this.filter = this.audioContext.createBiquadFilter();
         this.filter.frequency.value = 1000;
         this.filter.Q.value = 2;
+        var lfo = this.audioContext.createOscillator();
+        lfo.frequency.value = 5;
+        var lfoGain = this.audioContext.createGain();
+        lfo.start();
+        lfo.connect(lfoGain);
+        lfoGain.gain.value = 1000;
+        lfoGain.connect(this.filter.detune);
     }
     BiquadFilterComponent.prototype.ngOnInit = function () {
         this.knobFrequency.setInitialValue(utilities_1.default.scaleToPercent(this.filter.frequency.value, this.minFrequency, this.maxFrequency));
@@ -150,46 +158,46 @@ var BiquadFilterComponent = (function () {
                 }
         }
     };
+    __decorate([
+        core_1.ViewChild('knobFrequency'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], BiquadFilterComponent.prototype, "knobFrequency", void 0);
+    __decorate([
+        core_1.ViewChild('knobQ'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], BiquadFilterComponent.prototype, "knobQ", void 0);
+    __decorate([
+        core_1.ViewChild('knobGain'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], BiquadFilterComponent.prototype, "knobGain", void 0);
+    __decorate([
+        core_1.ViewChild('knobDepth'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], BiquadFilterComponent.prototype, "knobDepth", void 0);
+    __decorate([
+        core_1.ViewChild('knobAttack'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], BiquadFilterComponent.prototype, "knobAttack", void 0);
+    __decorate([
+        core_1.ViewChild('knobDecay'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], BiquadFilterComponent.prototype, "knobDecay", void 0);
+    __decorate([
+        core_1.ViewChild('knobSustain'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], BiquadFilterComponent.prototype, "knobSustain", void 0);
+    __decorate([
+        core_1.ViewChild('knobRelease'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], BiquadFilterComponent.prototype, "knobRelease", void 0);
+    BiquadFilterComponent = __decorate([
+        core_1.Component({
+            selector: 'biquad-filter',
+            template: "<h4>Filter</h4>\n<div><label>Type</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"lowpass\" selected>Low Pass</option>\n        <option value=\"highpass\">High Pass</option>    \n        <option value=\"bandpass\">Band Pass</option>\n        <option value=\"lowshelf\">Low Shelf</option>\n        <option value=\"highshelf\">High Shelf</option>\n        <option value=\"peaking\">Peaking</option>\n        <option value=\"notch\">Notch</option>\n        <option value=\"allpass\">All Pass</option>\n    </select>\n</div>\n<knob #knobFrequency label=\"Cut Off\" (change)=\"updateFrequency($event)\"></knob>\n<knob #knobQ label=\"Resonance\" (change)=\"updateQ($event)\" [class.hide]=\"!showQ\"></knob>\n<knob #knobGain label=\"Gain\" (change)=\"updateGain($event)\" [class.hide]=\"!showGain\"></knob>\n<knob #knobDepth label=\"Env. Depth\" (change)=\"updateDepth($event)\"></knob>\n<knob #knobAttack label=\"Env. Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobDecay label=\"Env. Decay\" (change)=\"updateDecay($event)\"></knob>\n<knob #knobSustain label=\"Env. Sustain\" (change)=\"updateSustain($event)\"></knob>\n<knob #knobRelease label=\"Env. Release\" (change)=\"updateRelease($event)\"></knob>\n"
+        }),
+        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
+    ], BiquadFilterComponent);
     return BiquadFilterComponent;
 }());
-__decorate([
-    core_1.ViewChild('knobFrequency'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], BiquadFilterComponent.prototype, "knobFrequency", void 0);
-__decorate([
-    core_1.ViewChild('knobQ'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], BiquadFilterComponent.prototype, "knobQ", void 0);
-__decorate([
-    core_1.ViewChild('knobGain'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], BiquadFilterComponent.prototype, "knobGain", void 0);
-__decorate([
-    core_1.ViewChild('knobDepth'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], BiquadFilterComponent.prototype, "knobDepth", void 0);
-__decorate([
-    core_1.ViewChild('knobAttack'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], BiquadFilterComponent.prototype, "knobAttack", void 0);
-__decorate([
-    core_1.ViewChild('knobDecay'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], BiquadFilterComponent.prototype, "knobDecay", void 0);
-__decorate([
-    core_1.ViewChild('knobSustain'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], BiquadFilterComponent.prototype, "knobSustain", void 0);
-__decorate([
-    core_1.ViewChild('knobRelease'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], BiquadFilterComponent.prototype, "knobRelease", void 0);
-BiquadFilterComponent = __decorate([
-    core_1.Component({
-        selector: 'biquad-filter',
-        template: "<h4>Filter</h4>\n<div><label>Type</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"lowpass\" selected>Low Pass</option>\n        <option value=\"highpass\">High Pass</option>    \n        <option value=\"bandpass\">Band Pass</option>\n        <option value=\"lowshelf\">Low Shelf</option>\n        <option value=\"highshelf\">High Shelf</option>\n        <option value=\"peaking\">Peaking</option>\n        <option value=\"notch\">Notch</option>\n        <option value=\"allpass\">All Pass</option>\n    </select>\n</div>\n<knob #knobFrequency label=\"Cut Off\" (change)=\"updateFrequency($event)\"></knob>\n<knob #knobQ label=\"Resonance\" (change)=\"updateQ($event)\" [class.hide]=\"!showQ\"></knob>\n<knob #knobGain label=\"Gain\" (change)=\"updateGain($event)\" [class.hide]=\"!showGain\"></knob>\n<knob #knobDepth label=\"Env. Depth\" (change)=\"updateDepth($event)\"></knob>\n<knob #knobAttack label=\"Env. Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobDecay label=\"Env. Decay\" (change)=\"updateDecay($event)\"></knob>\n<knob #knobSustain label=\"Env. Sustain\" (change)=\"updateSustain($event)\"></knob>\n<knob #knobRelease label=\"Env. Release\" (change)=\"updateRelease($event)\"></knob>\n"
-    }),
-    __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
-], BiquadFilterComponent);
 exports.BiquadFilterComponent = BiquadFilterComponent;
 //# sourceMappingURL=biquadfilter.component.js.map

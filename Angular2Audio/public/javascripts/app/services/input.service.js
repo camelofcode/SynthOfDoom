@@ -8,11 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Subject_1 = require("rxjs/Subject");
 var keyboard_input_service_1 = require("./keyboard.input.service");
 var midi_input_service_1 = require("./midi.input.service");
-var InputService = (function () {
+var InputService = /** @class */ (function () {
     function InputService(keyboardInputService, midiInputService) {
         var _this = this;
         this.noteChangeSource = new Subject_1.Subject();
@@ -58,11 +59,11 @@ var InputService = (function () {
             _this.noteOff(message.number);
         });
     }
+    InputService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [keyboard_input_service_1.KeyboardInputService, midi_input_service_1.MidiInputService])
+    ], InputService);
     return InputService;
 }());
-InputService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [keyboard_input_service_1.KeyboardInputService, midi_input_service_1.MidiInputService])
-], InputService);
 exports.InputService = InputService;
 //# sourceMappingURL=input.service.js.map

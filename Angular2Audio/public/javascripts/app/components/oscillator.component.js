@@ -8,12 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var input_service_1 = require("../services/input.service");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
 var utilities_1 = require("../supporting/utilities");
-var OscillatorComponent = (function () {
+var OscillatorComponent = /** @class */ (function () {
     function OscillatorComponent(audioContext, inputService) {
         var _this = this;
         this.name = 'Oscillator';
@@ -60,22 +61,22 @@ var OscillatorComponent = (function () {
     OscillatorComponent.prototype.updateDetune = function (value) {
         this.oscillator.detune.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minDetune, this.maxDetune), 0);
     };
+    __decorate([
+        core_1.Input('name'),
+        __metadata("design:type", String)
+    ], OscillatorComponent.prototype, "name", void 0);
+    __decorate([
+        core_1.ViewChild('knobDetune'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], OscillatorComponent.prototype, "knobDetune", void 0);
+    OscillatorComponent = __decorate([
+        core_1.Component({
+            selector: 'oscillator',
+            template: "<h4>{{name}}</h4>\n<div><label>Waveform</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"sine\">Sine</option>\n        <option value=\"sawtooth\" selected>Sawtooth</option>    \n        <option value=\"square\">Square</option>\n        <option value=\"triangle\">Triangle</option>\n    </select>\n</div>\n<br/>\n<div><label>Octave</label><br/>\n    <select (change)=\"updateOctave($event.target.value)\">\n        <option value=\"-2\">-2</option>    \n        <option value=\"-1\">-1</option>\n        <option value=\"0\" selected>0</option>\n        <option value=\"1\">1</option>\n        <option value=\"2\">2</option>\n    </select></div>\n<br/>\n<div><knob #knobDetune label=\"Detune\" (change)=\"updateDetune($event)\"></knob></div>\n"
+        }),
+        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
+    ], OscillatorComponent);
     return OscillatorComponent;
 }());
-__decorate([
-    core_1.Input('name'),
-    __metadata("design:type", String)
-], OscillatorComponent.prototype, "name", void 0);
-__decorate([
-    core_1.ViewChild('knobDetune'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], OscillatorComponent.prototype, "knobDetune", void 0);
-OscillatorComponent = __decorate([
-    core_1.Component({
-        selector: 'oscillator',
-        template: "<h4>{{name}}</h4>\n<div><label>Waveform</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"sine\">Sine</option>\n        <option value=\"sawtooth\" selected>Sawtooth</option>    \n        <option value=\"square\">Square</option>\n        <option value=\"triangle\">Triangle</option>\n    </select>\n</div>\n<br/>\n<div><label>Octave</label><br/>\n    <select (change)=\"updateOctave($event.target.value)\">\n        <option value=\"-2\">-2</option>    \n        <option value=\"-1\">-1</option>\n        <option value=\"0\" selected>0</option>\n        <option value=\"1\">1</option>\n        <option value=\"2\">2</option>\n    </select></div>\n<br/>\n<div><knob #knobDetune label=\"Detune\" (change)=\"updateDetune($event)\"></knob></div>\n"
-    }),
-    __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
-], OscillatorComponent);
 exports.OscillatorComponent = OscillatorComponent;
 //# sourceMappingURL=oscillator.component.js.map

@@ -8,11 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
 var utilities_1 = require("../supporting/utilities");
-var MixerComponent = (function () {
+var MixerComponent = /** @class */ (function () {
     function MixerComponent(changeDetector, audioContext) {
         this.changeDetector = changeDetector;
         this.minGain = 0;
@@ -55,22 +56,22 @@ var MixerComponent = (function () {
             this.inputNodes[target].disconnect(this.outputNode);
         }
     };
+    __decorate([
+        core_1.ViewChildren(knob_component_1.KnobComponent),
+        __metadata("design:type", core_1.QueryList)
+    ], MixerComponent.prototype, "gainKnobs", void 0);
+    __decorate([
+        core_1.ViewChildren('switches'),
+        __metadata("design:type", core_1.QueryList)
+    ], MixerComponent.prototype, "switches", void 0);
+    MixerComponent = __decorate([
+        core_1.Component({
+            selector: 'mixer',
+            template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n    <knob (change)=\"updateChannelGain($event, i)\"></knob>\n    <input #switches type=\"checkbox\" (change)=\"updateChannelOn($event, i)\"/>\n</ng-template>\n"
+        }),
+        __metadata("design:paramtypes", [core_1.ChangeDetectorRef, audioContext_service_1.AudioContextService])
+    ], MixerComponent);
     return MixerComponent;
 }());
-__decorate([
-    core_1.ViewChildren(knob_component_1.KnobComponent),
-    __metadata("design:type", core_1.QueryList)
-], MixerComponent.prototype, "gainKnobs", void 0);
-__decorate([
-    core_1.ViewChildren('switches'),
-    __metadata("design:type", core_1.QueryList)
-], MixerComponent.prototype, "switches", void 0);
-MixerComponent = __decorate([
-    core_1.Component({
-        selector: 'mixer',
-        template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n    <knob (change)=\"updateChannelGain($event, i)\"></knob>\n    <input #switches type=\"checkbox\" (change)=\"updateChannelOn($event, i)\"/>\n</ng-template>\n"
-    }),
-    __metadata("design:paramtypes", [core_1.ChangeDetectorRef, audioContext_service_1.AudioContextService])
-], MixerComponent);
 exports.MixerComponent = MixerComponent;
 //# sourceMappingURL=mixer.component.js.map

@@ -8,12 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var input_service_1 = require("../services/input.service");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
 var utilities_1 = require("../supporting/utilities");
-var EnvelopeComponent = (function () {
+var EnvelopeComponent = /** @class */ (function () {
     function EnvelopeComponent(audioContextService, inputService) {
         var _this = this;
         this.audioContextService = audioContextService;
@@ -76,30 +77,30 @@ var EnvelopeComponent = (function () {
     EnvelopeComponent.prototype.updateRelease = function (value) {
         this.release = utilities_1.default.scaleFromPercent(value, this.minRelease, this.maxRelease);
     };
+    __decorate([
+        core_1.ViewChild('knobAttack'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], EnvelopeComponent.prototype, "knobAttack", void 0);
+    __decorate([
+        core_1.ViewChild('knobDecay'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], EnvelopeComponent.prototype, "knobDecay", void 0);
+    __decorate([
+        core_1.ViewChild('knobSustain'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], EnvelopeComponent.prototype, "knobSustain", void 0);
+    __decorate([
+        core_1.ViewChild('knobRelease'),
+        __metadata("design:type", knob_component_1.KnobComponent)
+    ], EnvelopeComponent.prototype, "knobRelease", void 0);
+    EnvelopeComponent = __decorate([
+        core_1.Component({
+            selector: 'envelope',
+            template: "<h4>Envelope</h4>\n<knob #knobAttack label=\"Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobDecay label=\"Decay\" (change)=\"updateDecay($event)\"></knob>\n<knob #knobSustain label=\"Sustain\" (change)=\"updateSustain($event)\"></knob>\n<knob #knobRelease label=\"Release\" (change)=\"updateRelease($event)\"></knob>\n"
+        }),
+        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
+    ], EnvelopeComponent);
     return EnvelopeComponent;
 }());
-__decorate([
-    core_1.ViewChild('knobAttack'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], EnvelopeComponent.prototype, "knobAttack", void 0);
-__decorate([
-    core_1.ViewChild('knobDecay'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], EnvelopeComponent.prototype, "knobDecay", void 0);
-__decorate([
-    core_1.ViewChild('knobSustain'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], EnvelopeComponent.prototype, "knobSustain", void 0);
-__decorate([
-    core_1.ViewChild('knobRelease'),
-    __metadata("design:type", knob_component_1.KnobComponent)
-], EnvelopeComponent.prototype, "knobRelease", void 0);
-EnvelopeComponent = __decorate([
-    core_1.Component({
-        selector: 'envelope',
-        template: "<h4>Envelope</h4>\n<knob #knobAttack label=\"Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobDecay label=\"Decay\" (change)=\"updateDecay($event)\"></knob>\n<knob #knobSustain label=\"Sustain\" (change)=\"updateSustain($event)\"></knob>\n<knob #knobRelease label=\"Release\" (change)=\"updateRelease($event)\"></knob>\n"
-    }),
-    __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
-], EnvelopeComponent);
 exports.EnvelopeComponent = EnvelopeComponent;
 //# sourceMappingURL=envelope.component.js.map

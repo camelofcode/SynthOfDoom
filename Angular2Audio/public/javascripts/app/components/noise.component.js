@@ -8,9 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("../services/audioContext.service");
-var NoiseComponent = (function () {
+var NoiseComponent = /** @class */ (function () {
     function NoiseComponent(audioContextService) {
         this.audioContextService = audioContextService;
         this.context = audioContextService.context();
@@ -98,14 +99,14 @@ var NoiseComponent = (function () {
         source.loop = true;
         source.start(0);
     };
+    NoiseComponent = __decorate([
+        core_1.Component({
+            selector: 'noise',
+            template: "<h4>Noise</h4>\n<div><label>Color</label><br/>\n    <select (change)=\"updateColor($event.target.value)\">\n        <option value=\"white\" selected>White</option>\n        <option value=\"pink\">Pink</option>    \n        <option value=\"brown\">Brown</option>\n    </select>\n</div>"
+        }),
+        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
+    ], NoiseComponent);
     return NoiseComponent;
 }());
-NoiseComponent = __decorate([
-    core_1.Component({
-        selector: 'noise',
-        template: "<h4>Noise</h4>\n<div><label>Color</label><br/>\n    <select (change)=\"updateColor($event.target.value)\">\n        <option value=\"white\" selected>White</option>\n        <option value=\"pink\">Pink</option>    \n        <option value=\"brown\">Brown</option>\n    </select>\n</div>"
-    }),
-    __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
-], NoiseComponent);
 exports.NoiseComponent = NoiseComponent;
 //# sourceMappingURL=noise.component.js.map

@@ -1,5 +1,6 @@
 "use strict";
-var Utilities = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var Utilities = /** @class */ (function () {
     function Utilities() {
     }
     Utilities.scaleFromPercent = function (value, lower, upper) {
@@ -10,6 +11,5 @@ var Utilities = (function () {
     };
     return Utilities;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Utilities;
 //# sourceMappingURL=utilities.js.map

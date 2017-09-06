@@ -8,10 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var audioContext_service_1 = require("./services/audioContext.service");
 var fx_component_1 = require("./components/fx.component");
-var AppComponent = (function () {
+var AppComponent = /** @class */ (function () {
     function AppComponent(audioContextService) {
         this.audioContextService = audioContextService;
         this.audioContext = this.audioContextService.context();
@@ -26,46 +27,46 @@ var AppComponent = (function () {
         this.filter.node().connect(this.delay.input());
         this.delay.node().connect(this.audioContext.destination);
     };
+    __decorate([
+        core_1.ViewChild('oscillator1'),
+        __metadata("design:type", Object)
+    ], AppComponent.prototype, "oscillator1", void 0);
+    __decorate([
+        core_1.ViewChild('oscillator2'),
+        __metadata("design:type", Object)
+    ], AppComponent.prototype, "oscillator2", void 0);
+    __decorate([
+        core_1.ViewChild('oscillator3'),
+        __metadata("design:type", Object)
+    ], AppComponent.prototype, "oscillator3", void 0);
+    __decorate([
+        core_1.ViewChild('noise'),
+        __metadata("design:type", Object)
+    ], AppComponent.prototype, "noise", void 0);
+    __decorate([
+        core_1.ViewChild('envelope'),
+        __metadata("design:type", Object)
+    ], AppComponent.prototype, "envelope", void 0);
+    __decorate([
+        core_1.ViewChild('filter'),
+        __metadata("design:type", Object)
+    ], AppComponent.prototype, "filter", void 0);
+    __decorate([
+        core_1.ViewChild('mixer'),
+        __metadata("design:type", Object)
+    ], AppComponent.prototype, "mixer", void 0);
+    __decorate([
+        core_1.ViewChild('delay'),
+        __metadata("design:type", fx_component_1.FxComponent)
+    ], AppComponent.prototype, "delay", void 0);
+    AppComponent = __decorate([
+        core_1.Component({
+            selector: 'my-app',
+            template: "\n<oscillator name=\"Oscillator 1\" class=\"section\" #oscillator1></oscillator>\n<oscillator name=\"Oscillator 2\" class=\"section\" #oscillator2></oscillator>\n<oscillator name=\"Oscillator 3\" class=\"section\" #oscillator3></oscillator>\n<noise class=\"section\" #noise></noise>\n<mixer class=\"section\" #mixer></mixer>\n<envelope class=\"section\" #envelope></envelope>\n<biquad-filter class=\"section\" #filter></biquad-filter>\n<delay class=\"section\" #delay></delay>\n"
+        }),
+        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
+    ], AppComponent);
     return AppComponent;
 }());
-__decorate([
-    core_1.ViewChild('oscillator1'),
-    __metadata("design:type", Object)
-], AppComponent.prototype, "oscillator1", void 0);
-__decorate([
-    core_1.ViewChild('oscillator2'),
-    __metadata("design:type", Object)
-], AppComponent.prototype, "oscillator2", void 0);
-__decorate([
-    core_1.ViewChild('oscillator3'),
-    __metadata("design:type", Object)
-], AppComponent.prototype, "oscillator3", void 0);
-__decorate([
-    core_1.ViewChild('noise'),
-    __metadata("design:type", Object)
-], AppComponent.prototype, "noise", void 0);
-__decorate([
-    core_1.ViewChild('envelope'),
-    __metadata("design:type", Object)
-], AppComponent.prototype, "envelope", void 0);
-__decorate([
-    core_1.ViewChild('filter'),
-    __metadata("design:type", Object)
-], AppComponent.prototype, "filter", void 0);
-__decorate([
-    core_1.ViewChild('mixer'),
-    __metadata("design:type", Object)
-], AppComponent.prototype, "mixer", void 0);
-__decorate([
-    core_1.ViewChild('delay'),
-    __metadata("design:type", fx_component_1.FxComponent)
-], AppComponent.prototype, "delay", void 0);
-AppComponent = __decorate([
-    core_1.Component({
-        selector: 'my-app',
-        template: "\n<oscillator name=\"Oscillator 1\" class=\"section\" #oscillator1></oscillator>\n<oscillator name=\"Oscillator 2\" class=\"section\" #oscillator2></oscillator>\n<oscillator name=\"Oscillator 3\" class=\"section\" #oscillator3></oscillator>\n<noise class=\"section\" #noise></noise>\n<mixer class=\"section\" #mixer></mixer>\n<envelope class=\"section\" #envelope></envelope>\n<biquad-filter class=\"section\" #filter></biquad-filter>\n<delay class=\"section\" #delay></delay>\n"
-    }),
-    __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
-], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

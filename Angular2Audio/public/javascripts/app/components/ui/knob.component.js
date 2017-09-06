@@ -8,9 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 //Based On https://github.com/spheras/knob
 var core_1 = require("@angular/core");
-var KnobComponent = (function () {
+var KnobComponent = /** @class */ (function () {
     function KnobComponent() {
         this.meterRotation = 0;
         this.tempMeterRotation = 0;
@@ -142,27 +143,27 @@ var KnobComponent = (function () {
         rot = rot + this.startDegree;
         this.knobDiv.nativeElement.style.transform = "rotate(" + rot + "deg)";
     };
+    __decorate([
+        core_1.Input('label'),
+        __metadata("design:type", String)
+    ], KnobComponent.prototype, "label", void 0);
+    __decorate([
+        core_1.Output('change'),
+        __metadata("design:type", core_1.EventEmitter)
+    ], KnobComponent.prototype, "change", void 0);
+    __decorate([
+        core_1.ViewChild('knob'),
+        __metadata("design:type", core_1.ElementRef)
+    ], KnobComponent.prototype, "knobDiv", void 0);
+    KnobComponent = __decorate([
+        core_1.Component({
+            selector: 'knob',
+            template: "\n<div class=\"knob-background\">\n    <div #knob class=\"knob-handle\"></div>\n</div>\n<label class=\"knob-label\">{{label}}</label>\n<label class=\"knob-label\">{{meterValue | number:'1.0-0'}}%</label>\n",
+            styles: ["\n.knob-background{\n    background:url('/skins/skin1_back.svg');    \n    background-size: contain;\n    background-repeat: no-repeat;\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n}\n.knob-handle{\n    background:url('/skins/skin1_front.svg');\n    background-size: contain;    \n    background-repeat: no-repeat;\n    width: 100%;\n    height: 100%;\n    cursor:pointer;\n}\n.knob-label{\n    font-size: 10px;\n    display: block;\n}\n"]
+        }),
+        __metadata("design:paramtypes", [])
+    ], KnobComponent);
     return KnobComponent;
 }());
-__decorate([
-    core_1.Input('label'),
-    __metadata("design:type", String)
-], KnobComponent.prototype, "label", void 0);
-__decorate([
-    core_1.Output('change'),
-    __metadata("design:type", core_1.EventEmitter)
-], KnobComponent.prototype, "change", void 0);
-__decorate([
-    core_1.ViewChild('knob'),
-    __metadata("design:type", core_1.ElementRef)
-], KnobComponent.prototype, "knobDiv", void 0);
-KnobComponent = __decorate([
-    core_1.Component({
-        selector: 'knob',
-        template: "\n<div class=\"knob-background\">\n    <div #knob class=\"knob-handle\"></div>\n</div>\n<label class=\"knob-label\">{{label}}</label>\n<label class=\"knob-label\">{{meterValue | number:'1.0-0'}}%</label>\n",
-        styles: ["\n.knob-background{\n    background:url('/skins/skin1_back.svg');    \n    background-size: contain;\n    background-repeat: no-repeat;\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n}\n.knob-handle{\n    background:url('/skins/skin1_front.svg');\n    background-size: contain;    \n    background-repeat: no-repeat;\n    width: 100%;\n    height: 100%;\n    cursor:pointer;\n}\n.knob-label{\n    font-size: 10px;\n    display: block;\n}\n"]
-    }),
-    __metadata("design:paramtypes", [])
-], KnobComponent);
 exports.KnobComponent = KnobComponent;
 //# sourceMappingURL=knob.component.js.map

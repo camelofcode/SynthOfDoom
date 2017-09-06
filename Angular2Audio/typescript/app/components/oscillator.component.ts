@@ -67,7 +67,7 @@ export class OscillatorComponent implements IAudioNodeComponent, OnInit {
         return this.oscillator;
     }
 
-    updateType(type: string) {
+    updateType(type: OscillatorType) {
         this.oscillator.type = type;
     }
 

@@ -1,6 +1,7 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var utilities_1 = require("../supporting/utilities");
-var FxComponent = (function () {
+var FxComponent = /** @class */ (function () {
     function FxComponent(audioContextService) {
         this.audioContextService = audioContextService;
         this.context = audioContextService.context();

@@ -100,6 +100,15 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
         this.filter = this.audioContext.createBiquadFilter();
         this.filter.frequency.value = 1000;
         this.filter.Q.value = 2;
+
+        //var lfo = this.audioContext.createOscillator();
+        //lfo.frequency.value = 5;
+
+        //var lfoGain = this.audioContext.createGain();
+        //lfo.start();
+        //lfo.connect(lfoGain);
+        //lfoGain.gain.value = 1000;
+        //lfoGain.connect(this.filter.detune);
     }
 
     ngOnInit(): void {
@@ -149,7 +158,7 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
         this.release = Utilities.scaleFromPercent(value, this.minRelease, this.maxRelease);
     }
 
-    updateType(type: string) {
+    updateType(type: BiquadFilterType) {
         this.filter.type = type;
 
         switch (type) {
