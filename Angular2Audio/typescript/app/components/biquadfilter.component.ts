@@ -7,8 +7,21 @@ import Utilities from '../supporting/utilities';
 @Component({
     selector: 'biquad-filter',
     template: `<h4>Filter</h4>
+<div><label>Type</label><br/>
+    <select (change)="updateType($event.target.value)">
+        <option value="lowpass" selected>Low Pass</option>
+        <option value="highpass">High Pass</option>    
+        <option value="bandpass">Band Pass</option>
+        <option value="lowshelf">Low Shelf</option>
+        <option value="highshelf">High Shelf</option>
+        <option value="peaking">Peaking</option>
+        <option value="notch">Notch</option>
+        <option value="allpass">All Pass</option>
+    </select>
+</div>
 <knob #knobFrequency label="Cut Off" (change)="updateFrequency($event)"></knob>
-<knob #knobQ label="Resonance" (change)="updateQ($event)"></knob>
+<knob #knobQ label="Resonance" (change)="updateQ($event)" [class.hide]="!showQ"></knob>
+<knob #knobGain label="Gain" (change)="updateGain($event)" [class.hide]="!showGain"></knob>
 <knob #knobDepth label="Env. Depth" (change)="updateDepth($event)"></knob>
 <knob #knobAttack label="Env. Attack" (change)="updateAttack($event)"></knob>
 <knob #knobDecay label="Env. Decay" (change)="updateDecay($event)"></knob>
@@ -21,6 +34,9 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
     private readonly inputService: InputService;
     private readonly filter: BiquadFilterNode;
 
+    showQ = true;
+    showGain = false;
+
     private frequency = 1000;
     private depth = 0.0;
     private attack = 0.5;
@@ -29,9 +45,11 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
     private release = 0.5;
 
     private readonly minFrequency: number = 60;
-    private readonly maxFrequency: number = 5000;
+    private readonly maxFrequency: number = 10000;
     private readonly minQ: number = 1;
     private readonly maxQ: number = 16;
+    private readonly minGain: number = -24;
+    private readonly maxGain: number = 24;
     private readonly minDepth: number = -1;
     private readonly maxDepth: number = 1;
     private readonly minAttack: number = 0;
@@ -48,6 +66,9 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
 
     @ViewChild('knobQ')
     private knobQ: KnobComponent;
+
+    @ViewChild('knobGain')
+    private knobGain: KnobComponent;
 
     @ViewChild('knobDepth')
     private knobDepth: KnobComponent;
@@ -104,6 +125,10 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
         this.filter.Q.setValueAtTime(Utilities.scaleFromPercent(value, this.minQ, this.maxQ), 0);
     }
 
+    updateGain(value: number) {
+        this.filter.gain.setValueAtTime(Utilities.scaleFromPercent(value, this.minGain, this.maxGain), 0);
+    }
+
     updateDepth(value: number) {
         this.depth = Utilities.scaleFromPercent(value, this.minDepth, this.maxDepth);
     }
@@ -124,6 +149,42 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
         this.release = Utilities.scaleFromPercent(value, this.minRelease, this.maxRelease);
     }
 
+    updateType(type: string) {
+        this.filter.type = type;
+
+        switch (type) {
+            case 'lowpass':
+            case 'highpass':
+            case 'bandpass':
+            case 'notch':
+            case 'allpass':
+                {
+                    this.showGain = false;
+                    this.showQ = true;
+                    this.filter.gain.setValueAtTime(0, 0);
+                    this.knobGain.setInitialValue(Utilities.scaleToPercent(this.filter.gain.value, this.minGain, this.maxGain));
+                    return;
+                }
+            case 'lowshelf':
+            case 'highshelf':
+                {
+
+
+                    this.showGain = true;
+                    this.showQ = false;
+                    this.filter.Q.setValueAtTime(2, 0);
+                    this.knobQ.setInitialValue(Utilities.scaleToPercent(this.filter.Q.value, this.minQ, this.maxQ));
+                    return;
+                }
+            case 'peaking':
+            {
+                this.showGain = true;
+                this.showQ = true;
+                return;
+            }
+        }
+    }
+
     private velocityToGain = (velocity: number) => {
         return velocity / 127.0;
     }
@@ -141,14 +202,11 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
         if (this.depth === 0) {
             return;
         } else if (this.depth > 0) {
-
             attackTarget = Utilities.scaleFromPercent(depthPercent, this.frequency, this.maxFrequency);
             decayTarget = Utilities.scaleFromPercent(depthPercent * this.sustain, this.frequency, this.maxFrequency);
         } else {
             attackTarget = Utilities.scaleFromPercent(depthPercent, this.frequency, this.minFrequency);
             decayTarget = Utilities.scaleFromPercent(depthPercent * this.sustain, this.frequency, this.minFrequency);
-            console.log(attackTarget);
-            console.log(decayTarget);
         }
 
         this.filter.frequency.linearRampToValueAtTime(attackTarget, time + this.attack);

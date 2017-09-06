@@ -21,3 +21,7 @@ knob{
     text-align: center;
     min-width: 50px;
 }
+
+.hide {
+    display: none;
+}
