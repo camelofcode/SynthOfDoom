@@ -1,3 +1,3 @@
-﻿interface IAudioNodeComponent {
+﻿interface IAudioNodeComponent extends IHasLfoTargets {
     node(): AudioNode;
 }

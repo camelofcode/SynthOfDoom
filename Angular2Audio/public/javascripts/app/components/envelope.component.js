@@ -65,6 +65,9 @@ var EnvelopeComponent = /** @class */ (function () {
     EnvelopeComponent.prototype.node = function () {
         return this.envelope;
     };
+    EnvelopeComponent.prototype.registerTargets = function () {
+        return;
+    };
     EnvelopeComponent.prototype.updateAttack = function (value) {
         this.attack = utilities_1.default.scaleFromPercent(value, this.minAttack, this.maxAttack);
     };

@@ -83,8 +83,14 @@
     <TypeScriptCompile Include="typescript\app\components\envelope.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\components\interfaces\IHasLfoTargets.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="TypeScript\app\components\interfaces\IMultiInputAudioNodeComponent.ts" />
     <TypeScriptCompile Include="typescript\app\components\interfaces\IAudioNodeComponent.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\components\lfo.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\components\mixer.component.ts">
@@ -102,10 +108,18 @@
     <TypeScriptCompile Include="TypeScript\app\components\fx.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="TypeScript\app\models\lfoConnectionResponse.ts" />
+    <TypeScriptCompile Include="TypeScript\app\models\lfoConnectionRequest.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\models\lfoTarget.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\models\noteOffMessage.ts" />
     <TypeScriptCompile Include="typescript\app\models\noteOnMessage.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="TypeScript\app\services\lfoTarget.service.ts" />
     <TypeScriptCompile Include="typescript\app\services\audioContext.service.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

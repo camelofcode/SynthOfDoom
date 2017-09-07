@@ -1,7 +1,9 @@
 ﻿import { Component, ViewChild, OnInit } from '@angular/core';
 import { AudioContextService } from '../services/audioContext.service';
 import { InputService } from '../services/input.service';
+import { LfoTargetService } from '../services/lfoTarget.service';
 import { KnobComponent } from './ui/knob.component';
+import { LfoTarget } from '../models/lfoTarget';
 import Utilities from '../supporting/utilities';
 
 @Component({
@@ -32,6 +34,7 @@ import Utilities from '../supporting/utilities';
 export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
     private readonly audioContext: AudioContext;
     private readonly inputService: InputService;
+    private readonly lfoTargetService: LfoTargetService;
     private readonly filter: BiquadFilterNode;
 
     showQ = true;
@@ -85,9 +88,10 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
     @ViewChild('knobRelease')
     private knobRelease: KnobComponent;
 
-    constructor(audioContextService: AudioContextService, inputService: InputService) {
+    constructor(audioContextService: AudioContextService, inputService: InputService, lfoTargetService: LfoTargetService) {
         this.audioContext = audioContextService.context();
         this.inputService = inputService;
+        this.lfoTargetService = lfoTargetService;
 
         this.inputService.velocityOn$.subscribe((velocity: number) => {
             this.velocityOn();
@@ -100,15 +104,6 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
         this.filter = this.audioContext.createBiquadFilter();
         this.filter.frequency.value = 1000;
         this.filter.Q.value = 2;
-
-        //var lfo = this.audioContext.createOscillator();
-        //lfo.frequency.value = 5;
-
-        //var lfoGain = this.audioContext.createGain();
-        //lfo.start();
-        //lfo.connect(lfoGain);
-        //lfoGain.gain.value = 1000;
-        //lfoGain.connect(this.filter.detune);
     }
 
     ngOnInit(): void {
@@ -123,6 +118,10 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
 
     node(): AudioNode {
         return this.filter;
+    }
+
+    registerTargets(): void {
+         this.lfoTargetService.registerTarget(new LfoTarget('filterCutoff', 'Filter Cutoff', 20, 5000, this.filter.frequency));
     }
 
     updateFrequency(value: number) {

@@ -12,10 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var input_service_1 = require("../services/input.service");
 var audioContext_service_1 = require("../services/audioContext.service");
+var lfoTarget_service_1 = require("../services/lfoTarget.service");
 var knob_component_1 = require("./ui/knob.component");
+var lfoTarget_1 = require("../models/lfoTarget");
 var utilities_1 = require("../supporting/utilities");
 var OscillatorComponent = /** @class */ (function () {
-    function OscillatorComponent(audioContext, inputService) {
+    function OscillatorComponent(audioContext, inputService, lfoTargetService) {
         var _this = this;
         this.name = 'Oscillator';
         //TODO: Portamento needs to be a global setting
@@ -39,6 +41,7 @@ var OscillatorComponent = /** @class */ (function () {
         };
         this.audioContext = audioContext;
         this.inputService = inputService;
+        this.lfoTargetService = lfoTargetService;
         this.inputService.noteChange$.subscribe(function (number) {
             _this.noteChange(number);
         });
@@ -51,6 +54,11 @@ var OscillatorComponent = /** @class */ (function () {
     };
     OscillatorComponent.prototype.node = function () {
         return this.oscillator;
+    };
+    OscillatorComponent.prototype.registerTargets = function (componentName) {
+        var id = componentName.toLowerCase().replace(' ', '') + 'Detune';
+        var name = componentName + ' Detune';
+        this.lfoTargetService.registerTarget(new lfoTarget_1.LfoTarget(id, name, 1, 100, this.oscillator.detune));
     };
     OscillatorComponent.prototype.updateType = function (type) {
         this.oscillator.type = type;
@@ -74,7 +82,7 @@ var OscillatorComponent = /** @class */ (function () {
             selector: 'oscillator',
             template: "<h4>{{name}}</h4>\n<div><label>Waveform</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"sine\">Sine</option>\n        <option value=\"sawtooth\" selected>Sawtooth</option>    \n        <option value=\"square\">Square</option>\n        <option value=\"triangle\">Triangle</option>\n    </select>\n</div>\n<br/>\n<div><label>Octave</label><br/>\n    <select (change)=\"updateOctave($event.target.value)\">\n        <option value=\"-2\">-2</option>    \n        <option value=\"-1\">-1</option>\n        <option value=\"0\" selected>0</option>\n        <option value=\"1\">1</option>\n        <option value=\"2\">2</option>\n    </select></div>\n<br/>\n<div><knob #knobDetune label=\"Detune\" (change)=\"updateDetune($event)\"></knob></div>\n"
         }),
-        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
+        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService, lfoTarget_service_1.LfoTargetService])
     ], OscillatorComponent);
     return OscillatorComponent;
 }());

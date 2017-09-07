@@ -70,6 +70,10 @@ export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
         return this.envelope;
     }
 
+    registerTargets(): void {
+        return;
+    }
+
     updateAttack(value: number) {
         this.attack = Utilities.scaleFromPercent(value, this.minAttack, this.maxAttack);
     }

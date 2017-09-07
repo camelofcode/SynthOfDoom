@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AudioContextService } from './services/audioContext.service';
 import { FxComponent } from './components/fx.component';
+import { LfoComponent } from './components/lfo.component';
 
 @Component({
     selector: 'my-app',
@@ -12,10 +13,13 @@ import { FxComponent } from './components/fx.component';
 <mixer class="section" #mixer></mixer>
 <envelope class="section" #envelope></envelope>
 <biquad-filter class="section" #filter></biquad-filter>
+<lfo name="Lfo 1" class="section" #lfo1></lfo>
+<lfo name="Lfo 2" class="section" #lfo2></lfo>
+<lfo name="Lfo 3" class="section" #lfo3></lfo>
 <delay class="section" #delay></delay>
 `
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit  {
     private readonly audioContextService: AudioContextService;
     private readonly audioContext: AudioContext;
 
@@ -43,6 +47,15 @@ export class AppComponent implements OnInit {
     @ViewChild('delay')
     private delay: FxComponent;
 
+    @ViewChild('lfo1')
+    private lfo1: LfoComponent;
+
+    @ViewChild('lfo2')
+    private lfo2: LfoComponent;
+
+    @ViewChild('lfo3')
+    private lfo3: LfoComponent;
+
     constructor(audioContextService: AudioContextService) {
         this.audioContextService = audioContextService;
         this.audioContext = this.audioContextService.context();
@@ -60,5 +73,13 @@ export class AppComponent implements OnInit {
 
         this.filter.node().connect(this.delay.input());
         this.delay.node().connect(this.audioContext.destination);
+
+        this.filter.registerTargets('Filter');
+        this.oscillator1.registerTargets('Oscillator 1');
+        this.oscillator2.registerTargets('Oscillator 2');
+        this.oscillator3.registerTargets('Oscillator 3');
+        this.lfo1.loadTargets();
+        this.lfo2.loadTargets();
+        this.lfo3.loadTargets();
     }
 }

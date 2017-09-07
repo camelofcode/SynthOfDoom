@@ -1,7 +1,9 @@
 ﻿import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { InputService } from '../services/input.service';
 import { AudioContextService } from '../services/audioContext.service';
+import { LfoTargetService } from '../services/lfoTarget.service';
 import { KnobComponent } from './ui/knob.component';
+import { LfoTarget } from '../models/lfoTarget';
 import Utilities from '../supporting/utilities';
 
 @Component({
@@ -30,6 +32,7 @@ import Utilities from '../supporting/utilities';
 })
 export class OscillatorComponent implements IAudioNodeComponent, OnInit {
     private readonly inputService: InputService;
+    private readonly lfoTargetService: LfoTargetService;
     private readonly audioContext: AudioContextService;
     private readonly oscillator: OscillatorNode;
 
@@ -46,9 +49,10 @@ export class OscillatorComponent implements IAudioNodeComponent, OnInit {
     @ViewChild('knobDetune')
     private knobDetune: KnobComponent;
 
-    constructor(audioContext: AudioContextService, inputService: InputService) {
+    constructor(audioContext: AudioContextService, inputService: InputService, lfoTargetService: LfoTargetService) {
         this.audioContext = audioContext;
         this.inputService = inputService;
+        this.lfoTargetService = lfoTargetService;
 
         this.inputService.noteChange$.subscribe((number: number) => {
             this.noteChange(number);
@@ -65,6 +69,13 @@ export class OscillatorComponent implements IAudioNodeComponent, OnInit {
 
     node(): AudioNode {
         return this.oscillator;
+    }
+
+    registerTargets(componentName: string): void {
+        const id = componentName.toLowerCase().replace(' ', '') + 'Detune';
+        const name = componentName + ' Detune';
+
+        this.lfoTargetService.registerTarget(new LfoTarget(id, name, 1, 100, this.oscillator.detune));
     }
 
     updateType(type: OscillatorType) {

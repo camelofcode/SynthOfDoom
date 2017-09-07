@@ -26,6 +26,9 @@ var NoiseComponent = /** @class */ (function () {
     NoiseComponent.prototype.node = function () {
         return this.output;
     };
+    NoiseComponent.prototype.registerTargets = function () {
+        return;
+    };
     NoiseComponent.prototype.updateColor = function (type) {
         this.currentGenerator.disconnect(this.output);
         switch (type) {

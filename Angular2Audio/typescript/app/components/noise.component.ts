@@ -34,9 +34,12 @@ export class NoiseComponent implements IAudioNodeComponent {
         this.currentGenerator.connect(this.output);
     }
 
-
     node(): AudioNode {
         return this.output;
+    }
+
+    registerTargets(): void {
+        return;
     }
 
     updateColor(type: string) {
