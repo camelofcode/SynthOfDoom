@@ -43,6 +43,7 @@ var BiquadFilterComponent = /** @class */ (function () {
         this.maxSustain = 1;
         this.minRelease = 0;
         this.maxRelease = 2;
+        this.name = 'Oscillator';
         this.velocityToGain = function (velocity) {
             return velocity / 127.0;
         };
@@ -97,8 +98,10 @@ var BiquadFilterComponent = /** @class */ (function () {
     BiquadFilterComponent.prototype.node = function () {
         return this.filter;
     };
-    BiquadFilterComponent.prototype.registerTargets = function () {
-        this.lfoTargetService.registerTarget(new lfoTarget_1.LfoTarget('filterCutoff', 'Filter Cutoff', 20, 5000, this.filter.frequency));
+    BiquadFilterComponent.prototype.registerTargets = function (componentName) {
+        var id = componentName.toLowerCase().replace(' ', '') + 'Cutoff';
+        var name = componentName + ' Cutoff';
+        this.lfoTargetService.registerTarget(new lfoTarget_1.LfoTarget(id, name, 20, 5000, this.filter.frequency));
     };
     BiquadFilterComponent.prototype.updateFrequency = function (value) {
         this.frequency = utilities_1.default.scaleFromPercent(value, this.minFrequency, this.maxFrequency);
@@ -158,6 +161,10 @@ var BiquadFilterComponent = /** @class */ (function () {
         }
     };
     __decorate([
+        core_1.Input('name'),
+        __metadata("design:type", String)
+    ], BiquadFilterComponent.prototype, "name", void 0);
+    __decorate([
         core_1.ViewChild('knobFrequency'),
         __metadata("design:type", knob_component_1.KnobComponent)
     ], BiquadFilterComponent.prototype, "knobFrequency", void 0);
@@ -192,7 +199,7 @@ var BiquadFilterComponent = /** @class */ (function () {
     BiquadFilterComponent = __decorate([
         core_1.Component({
             selector: 'biquad-filter',
-            template: "<h4>Filter</h4>\n<div><label>Type</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"lowpass\" selected>Low Pass</option>\n        <option value=\"highpass\">High Pass</option>    \n        <option value=\"bandpass\">Band Pass</option>\n        <option value=\"lowshelf\">Low Shelf</option>\n        <option value=\"highshelf\">High Shelf</option>\n        <option value=\"peaking\">Peaking</option>\n        <option value=\"notch\">Notch</option>\n        <option value=\"allpass\">All Pass</option>\n    </select>\n</div>\n<knob #knobFrequency label=\"Cut Off\" (change)=\"updateFrequency($event)\"></knob>\n<knob #knobQ label=\"Resonance\" (change)=\"updateQ($event)\" [class.hide]=\"!showQ\"></knob>\n<knob #knobGain label=\"Gain\" (change)=\"updateGain($event)\" [class.hide]=\"!showGain\"></knob>\n<knob #knobDepth label=\"Env. Depth\" (change)=\"updateDepth($event)\"></knob>\n<knob #knobAttack label=\"Env. Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobDecay label=\"Env. Decay\" (change)=\"updateDecay($event)\"></knob>\n<knob #knobSustain label=\"Env. Sustain\" (change)=\"updateSustain($event)\"></knob>\n<knob #knobRelease label=\"Env. Release\" (change)=\"updateRelease($event)\"></knob>\n"
+            template: "<h4>{{name}}</h4>\n<div><label>Type</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"lowpass\" selected>Low Pass</option>\n        <option value=\"highpass\">High Pass</option>    \n        <option value=\"bandpass\">Band Pass</option>\n        <option value=\"lowshelf\">Low Shelf</option>\n        <option value=\"highshelf\">High Shelf</option>\n        <option value=\"peaking\">Peaking</option>\n        <option value=\"notch\">Notch</option>\n        <option value=\"allpass\">All Pass</option>\n    </select>\n</div>\n<knob #knobFrequency label=\"Cut Off\" (change)=\"updateFrequency($event)\"></knob>\n<knob #knobQ label=\"Resonance\" (change)=\"updateQ($event)\" [class.hide]=\"!showQ\"></knob>\n<knob #knobGain label=\"Gain\" (change)=\"updateGain($event)\" [class.hide]=\"!showGain\"></knob>\n<knob #knobDepth label=\"Env. Depth\" (change)=\"updateDepth($event)\"></knob>\n<knob #knobAttack label=\"Env. Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobDecay label=\"Env. Decay\" (change)=\"updateDecay($event)\"></knob>\n<knob #knobSustain label=\"Env. Sustain\" (change)=\"updateSustain($event)\"></knob>\n<knob #knobRelease label=\"Env. Release\" (change)=\"updateRelease($event)\"></knob>\n"
         }),
         __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService, lfoTarget_service_1.LfoTargetService])
     ], BiquadFilterComponent);

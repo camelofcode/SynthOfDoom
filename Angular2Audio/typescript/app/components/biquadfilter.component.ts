@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, OnInit } from '@angular/core';
+﻿import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { AudioContextService } from '../services/audioContext.service';
 import { InputService } from '../services/input.service';
 import { LfoTargetService } from '../services/lfoTarget.service';
@@ -8,7 +8,7 @@ import Utilities from '../supporting/utilities';
 
 @Component({
     selector: 'biquad-filter',
-    template: `<h4>Filter</h4>
+    template: `<h4>{{name}}</h4>
 <div><label>Type</label><br/>
     <select (change)="updateType($event.target.value)">
         <option value="lowpass" selected>Low Pass</option>
@@ -63,6 +63,9 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
     private readonly maxSustain: number = 1;
     private readonly minRelease: number = 0;
     private readonly maxRelease: number = 2;
+
+    @Input('name')
+    name: String = 'Oscillator';
 
     @ViewChild('knobFrequency')
     private knobFrequency: KnobComponent;
@@ -120,8 +123,11 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
         return this.filter;
     }
 
-    registerTargets(): void {
-         this.lfoTargetService.registerTarget(new LfoTarget('filterCutoff', 'Filter Cutoff', 20, 5000, this.filter.frequency));
+    registerTargets(componentName: string): void {
+        const id = componentName.toLowerCase().replace(' ', '') + 'Cutoff';
+        const name = componentName + ' Cutoff';
+
+        this.lfoTargetService.registerTarget(new LfoTarget(id, name, 20, 5000, this.filter.frequency));
     }
 
     updateFrequency(value: number) {
@@ -185,11 +191,11 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
                     return;
                 }
             case 'peaking':
-            {
-                this.showGain = true;
-                this.showQ = true;
-                return;
-            }
+                {
+                    this.showGain = true;
+                    this.showQ = true;
+                    return;
+                }
         }
     }
 

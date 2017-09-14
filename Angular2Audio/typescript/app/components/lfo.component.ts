@@ -28,9 +28,7 @@ import Utilities from '../supporting/utilities';
 <div>
     <knob #knobFrequecy label="Rate" (change)="updateFrequency($event)"></knob>
     <knob #knobAmplitude label="Depth" (change)="updateAmplitude($event)"></knob>
-
 </div>
-
 `
 })
 export class LfoComponent implements OnInit {
@@ -110,7 +108,6 @@ export class LfoComponent implements OnInit {
         this.knobAmplitude.setInitialValue(Utilities.scaleToPercent(this.gain.gain.value, this.minAmplitude, this.maxAmplitude));
     }
 
-
     updateFrequency(value: number) {
         this.lfo.frequency.setValueAtTime(Utilities.scaleFromPercent(value, this.minFrequency, this.maxFrequency), 0);
     }
@@ -118,6 +115,4 @@ export class LfoComponent implements OnInit {
     updateAmplitude(value: number) {
         this.gain.gain.setValueAtTime(Utilities.scaleFromPercent(value, this.minAmplitude, this.maxAmplitude), 0);
     }
-
-
 }
