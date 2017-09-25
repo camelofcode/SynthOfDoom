@@ -18,6 +18,8 @@ import { LfoComponent } from './components/lfo.component';
 <lfo name="Lfo 2" class="section" #lfo2></lfo>
 <lfo name="Lfo 3" class="section" #lfo3></lfo>
 <delay class="section" #delay></delay>
+<br/>
+<piano></piano>
 `
 })
 export class AppComponent implements OnInit  {

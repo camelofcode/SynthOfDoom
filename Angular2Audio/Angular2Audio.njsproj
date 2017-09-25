@@ -102,6 +102,7 @@
     <TypeScriptCompile Include="typescript\app\components\oscillator.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="TypeScript\app\components\ui\piano.component.ts" />
     <TypeScriptCompile Include="typescript\app\components\ui\knob.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

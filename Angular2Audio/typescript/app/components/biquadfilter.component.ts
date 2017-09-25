@@ -182,8 +182,6 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
             case 'lowshelf':
             case 'highshelf':
                 {
-
-
                     this.showGain = true;
                     this.showQ = false;
                     this.filter.Q.setValueAtTime(2, 0);
