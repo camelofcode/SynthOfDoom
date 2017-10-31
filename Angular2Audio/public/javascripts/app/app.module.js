@@ -11,6 +11,7 @@ var platform_browser_1 = require("@angular/platform-browser");
 var input_service_1 = require("./services/input.service");
 var midi_input_service_1 = require("./services/midi.input.service");
 var keyboard_input_service_1 = require("./services/keyboard.input.service");
+var controlChange_service_1 = require("./services/controlChange.service");
 var audioContext_service_1 = require("./services/audioContext.service");
 var lfoTarget_service_1 = require("./services/lfoTarget.service");
 var app_component_1 = require("./app.component");
@@ -31,7 +32,7 @@ var AppModule = /** @class */ (function () {
             imports: [platform_browser_1.BrowserModule],
             declarations: [app_component_1.AppComponent, envelope_component_1.EnvelopeComponent, oscillator_component_1.OscillatorComponent, lfo_component_1.LfoComponent, biquadfilter_component_1.BiquadFilterComponent, noise_component_1.NoiseComponent, delay_fx_component_1.DelayFxComponent, mixer_component_1.MixerComponent, knob_component_1.KnobComponent, piano_component_1.PianoComponent],
             bootstrap: [app_component_1.AppComponent],
-            providers: [input_service_1.InputService, midi_input_service_1.MidiInputService, keyboard_input_service_1.KeyboardInputService, audioContext_service_1.AudioContextService, lfoTarget_service_1.LfoTargetService]
+            providers: [input_service_1.InputService, midi_input_service_1.MidiInputService, keyboard_input_service_1.KeyboardInputService, audioContext_service_1.AudioContextService, lfoTarget_service_1.LfoTargetService, controlChange_service_1.ControlChangeService]
         })
     ], AppModule);
     return AppModule;

@@ -13,8 +13,10 @@ var MidiInputService = /** @class */ (function () {
         var _this = this;
         this.noteOnSource = new Subject_1.Subject();
         this.noteOffSource = new Subject_1.Subject();
+        this.controlChangeSource = new Subject_1.Subject();
         this.noteOn$ = this.noteOnSource.asObservable();
         this.noteOff$ = this.noteOffSource.asObservable();
+        this.controlChange$ = this.controlChangeSource.asObservable();
         this.onMidiInit = function (midi) {
             _this.midiAccess = midi;
             var haveAtLeastOneDevice = false;
@@ -45,6 +47,13 @@ var MidiInputService = /** @class */ (function () {
                 case 0x80:
                     _this.noteOffSource.next({
                         number: event.data[1]
+                    });
+                    return;
+                // control change
+                case 0xB0:
+                    _this.controlChangeSource.next({
+                        control: event.data[1],
+                        value: event.data[2]
                     });
                     return;
             }

@@ -2,15 +2,18 @@
 import { Subject } from 'rxjs/Subject';
 import { NoteOnMessage } from '../models/noteOnMessage';
 import { NoteOffMessage } from '../models/noteOffMessage';
+import { ControlChangeMessage } from '../models/controlChangeMessage';
 
 @Injectable()
 export class MidiInputService implements OnInit {
     private midiAccess: any;
     private noteOnSource = new Subject<NoteOnMessage>();
     private noteOffSource = new Subject<NoteOffMessage>();
+    private controlChangeSource = new Subject<ControlChangeMessage>();
 
     noteOn$ = this.noteOnSource.asObservable();
     noteOff$ = this.noteOffSource.asObservable();
+    controlChange$ = this.controlChangeSource.asObservable();
 
     ngOnInit(): void {
         if (navigator['requestMIDIAccess']) {
@@ -55,6 +58,13 @@ export class MidiInputService implements OnInit {
                 this.noteOffSource.next({
                     number: event.data[1]
                 } as NoteOffMessage);
+                return;
+            // control change
+            case 0xB0:
+                this.controlChangeSource.next({
+                    control: event.data[1],
+                    value: event.data[2]
+                } as ControlChangeMessage);
                 return;
         }
     }

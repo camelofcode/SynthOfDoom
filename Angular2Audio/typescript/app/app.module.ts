@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { InputService } from './services/input.service';
 import { MidiInputService } from './services/midi.input.service';
 import { KeyboardInputService } from './services/keyboard.input.service';
+import { ControlChangeService } from './services/controlChange.service';
 import { AudioContextService } from './services/audioContext.service';
 import { LfoTargetService } from './services/lfoTarget.service';
 
@@ -24,6 +25,6 @@ import { PianoComponent } from './components/ui/piano.component';
   imports:      [ BrowserModule ],
   declarations: [ AppComponent, EnvelopeComponent, OscillatorComponent, LfoComponent, BiquadFilterComponent, NoiseComponent, DelayFxComponent, MixerComponent, KnobComponent, PianoComponent ],
   bootstrap:    [ AppComponent ],
-  providers:    [ InputService, MidiInputService, KeyboardInputService, AudioContextService, LfoTargetService ]
+  providers: [InputService, MidiInputService, KeyboardInputService, AudioContextService, LfoTargetService, ControlChangeService ]
 })
 export class AppModule { }

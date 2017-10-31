@@ -2,6 +2,7 @@
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
 import { FxComponent } from './fx.component';
+import { ControlChangeService } from '../services/controlChange.service';
 import Utilities from '../supporting/utilities';
 
 @Component({
@@ -21,6 +22,8 @@ export class DelayFxComponent extends FxComponent implements OnInit {
     saturation: ScriptProcessorNode;
     makeup: GainNode;
 
+    private readonly controlChangeService: ControlChangeService;
+
     private readonly minDelay: number = 0.01;
     private readonly maxDelay: number = 2.0;
     private readonly minFilter: number = 200;
@@ -38,13 +41,16 @@ export class DelayFxComponent extends FxComponent implements OnInit {
     @ViewChild('knobFilter')
     private knobFilter: KnobComponent;
 
-    constructor(audioContextService: AudioContextService) {
+    constructor(audioContextService: AudioContextService, controlChangeService: ControlChangeService) {
         super(audioContextService);
         this.delay = this.context.createDelay(this.maxDelay);
         this.feedback = this.context.createGain();
         this.filter = this.context.createBiquadFilter();
         this.saturation = this.context.createScriptProcessor();
         this.makeup = this.context.createGain();
+
+        this.controlChangeService = controlChangeService;
+        this.controlChangeService.setTarget(this.controlChangeTime.bind(this));
 
         this.delay.delayTime.setValueAtTime(0.5, 0);
         this.feedback.gain.setValueAtTime(0.5, 0);
@@ -88,6 +94,12 @@ export class DelayFxComponent extends FxComponent implements OnInit {
         this.knobFilter.setInitialValue(Utilities.scaleToPercent(1000, this.minFilter, this.maxFilter));
     }
 
+    private controlChangeTime = (value: number) => {
+        this.delay.delayTime.cancelScheduledValues(0);
+        this.delay.delayTime.setTargetAtTime(Utilities.scaleFromPercent(value, this.minDelay, this.maxDelay), this.context.currentTime, 0.1);
+        this.knobTime.setInitialValue(value);
+    }
+
     updateTime(value: number) {
         this.delay.delayTime.cancelScheduledValues(0);
         this.delay.delayTime.setTargetAtTime(Utilities.scaleFromPercent(value, this.minDelay, this.maxDelay), this.context.currentTime, 0.1);
@@ -100,4 +112,6 @@ export class DelayFxComponent extends FxComponent implements OnInit {
     updateFilter(value: number) {
         this.filter.frequency.setValueAtTime(Utilities.scaleFromPercent(value, this.minFilter, this.maxFilter), 0);
     }
+
+
 }

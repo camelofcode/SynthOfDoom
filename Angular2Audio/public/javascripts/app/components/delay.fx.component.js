@@ -23,20 +23,28 @@ var core_1 = require("@angular/core");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
 var fx_component_1 = require("./fx.component");
+var controlChange_service_1 = require("../services/controlChange.service");
 var utilities_1 = require("../supporting/utilities");
 var DelayFxComponent = /** @class */ (function (_super) {
     __extends(DelayFxComponent, _super);
-    function DelayFxComponent(audioContextService) {
+    function DelayFxComponent(audioContextService, controlChangeService) {
         var _this = _super.call(this, audioContextService) || this;
         _this.minDelay = 0.01;
         _this.maxDelay = 2.0;
         _this.minFilter = 200;
         _this.maxFilter = 5000;
+        _this.controlChangeTime = function (value) {
+            _this.delay.delayTime.cancelScheduledValues(0);
+            _this.delay.delayTime.setTargetAtTime(utilities_1.default.scaleFromPercent(value, _this.minDelay, _this.maxDelay), _this.context.currentTime, 0.1);
+            _this.knobTime.setInitialValue(value);
+        };
         _this.delay = _this.context.createDelay(_this.maxDelay);
         _this.feedback = _this.context.createGain();
         _this.filter = _this.context.createBiquadFilter();
         _this.saturation = _this.context.createScriptProcessor();
         _this.makeup = _this.context.createGain();
+        _this.controlChangeService = controlChangeService;
+        _this.controlChangeService.setTarget(_this.controlChangeTime.bind(_this));
         _this.delay.delayTime.setValueAtTime(0.5, 0);
         _this.feedback.gain.setValueAtTime(0.5, 0);
         _this.makeup.gain.setValueAtTime(2.0, 0);
@@ -103,7 +111,7 @@ var DelayFxComponent = /** @class */ (function (_super) {
             selector: 'delay',
             template: "<h4>Delay</h4>\n<knob #knobTime label=\"Time\" (change)=\"updateTime($event)\"></knob>\n<knob #knobFeedback label=\"Feedback\" (change)=\"updateFeedback($event)\"></knob>\n<knob #knobFilter label=\"Filter\" (change)=\"updateFilter($event)\"></knob>\n<knob #knobMix label=\"Mix\" (change)=\"updateMix($event)\"></knob>\n<input #switchOn type=\"checkbox\" (change)=\"updateOn($event)\"/>\n"
         }),
-        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
+        __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, controlChange_service_1.ControlChangeService])
     ], DelayFxComponent);
     return DelayFxComponent;
 }(fx_component_1.FxComponent));
