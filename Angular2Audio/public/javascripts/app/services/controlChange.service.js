@@ -10,20 +10,43 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var Subject_1 = require("rxjs/Subject");
 var midi_input_service_1 = require("./midi.input.service");
 var ControlChangeService = /** @class */ (function () {
     function ControlChangeService(midiInputService) {
         var _this = this;
+        this.targets = new Array();
+        this.learntTargets = {};
+        this.currentlyLearning = null;
+        this.learningStoppedSource = new Subject_1.Subject();
+        this.learningStopped$ = this.learningStoppedSource.asObservable();
         this.controlChange = function (control, value) {
-            _this.target(_this.scaleToPercentFromMidi(value));
+            if (_this.currentlyLearning !== null) {
+                _this.learntTargets[control] = _this.currentlyLearning;
+                _this.currentlyLearning = null;
+                _this.learningStoppedSource.next();
+            }
+            if (_this.learntTargets[control]) {
+                _this.learntTargets[control].update(_this.scaleToPercentFromMidi(value));
+            }
         };
         this.midiInputService = midiInputService;
         this.midiInputService.controlChange$.subscribe(function (message) {
             _this.controlChange(message.control, message.value);
         });
     }
-    ControlChangeService.prototype.setTarget = function (target) {
-        this.target = target;
+    ControlChangeService.prototype.getTargets = function () {
+        return this.targets;
+    };
+    ControlChangeService.prototype.registerTarget = function (target) {
+        this.targets.push(target);
+    };
+    ControlChangeService.prototype.beginLearn = function (target) {
+        this.currentlyLearning = target;
+    };
+    ControlChangeService.prototype.cancelLearn = function () {
+        this.currentlyLearning = null;
+        this.learningStoppedSource.next();
     };
     ControlChangeService.prototype.scaleToMidiFromPercent = function (value) {
         return (127.0 * (value / 100.0));

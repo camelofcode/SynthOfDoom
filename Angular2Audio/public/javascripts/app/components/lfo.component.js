@@ -34,12 +34,12 @@ var LfoComponent = /** @class */ (function () {
         this.gain.gain.value = 0.5;
         this.lfo.connect(this.gain);
     }
-    LfoComponent.prototype.ngOnInit = function () {
+    LfoComponent.prototype.ngAfterViewChecked = function () {
         var _this = this;
-        this.knobFrequency.init(this.minFrequency, this.maxFrequency, this.lfo.frequency.value, function (value) {
+        this.knobFrequency.init(this.name, this.minFrequency, this.maxFrequency, this.lfo.frequency.value, function (value) {
             _this.lfo.frequency.setValueAtTime(value, 0);
         });
-        this.knobAmplitude.init(this.minAmplitude, this.maxAmplitude, 0.5, function (value) {
+        this.knobAmplitude.init(this.name, this.minAmplitude, this.maxAmplitude, 0.5, function (value) {
             _this.gain.gain.setValueAtTime(value, 0);
         });
     };
@@ -71,7 +71,7 @@ var LfoComponent = /** @class */ (function () {
             this.currentTarget = null;
         }
         this.gain.gain.value = 0.5;
-        this.knobAmplitude.init(this.minAmplitude, this.maxAmplitude, 0.5, function (value) {
+        this.knobAmplitude.init(this.name, this.minAmplitude, this.maxAmplitude, 0.5, function (value) {
             _this.gain.gain.setValueAtTime(value, 0);
         });
     };

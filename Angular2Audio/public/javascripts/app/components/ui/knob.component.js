@@ -11,8 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 //Based On https://github.com/spheras/knob
 var core_1 = require("@angular/core");
+var controlChange_service_1 = require("../../services/controlChange.service");
 var KnobComponent = /** @class */ (function () {
-    function KnobComponent() {
+    function KnobComponent(controlChangeService, changeDetector) {
         this.meterRotation = 0;
         this.tempMeterRotation = 0;
         this.startX = 0;
@@ -30,20 +31,34 @@ var KnobComponent = /** @class */ (function () {
         this.setLabel = function () {
             var value = this.unit === '%' ? this.percentValue : this.scaleFromPercent(this.percentValue, this.loValue, this.hiValue);
             this.labelValue = parseInt(value + "", 10) === value ? value : value.toFixed(2);
+            this.changeDetector.detectChanges();
         };
+        this.controlChangeService = controlChangeService;
+        this.changeDetector = changeDetector;
         this.maxDistance = document.body.clientHeight;
         if (document.body.clientWidth > this.maxDistance) {
             this.maxDistance = document.body.clientWidth;
         }
         this.maxDistance = Math.round((this.maxDistance * 10) / 100);
     }
-    KnobComponent.prototype.init = function (lo, hi, initial, update) {
+    KnobComponent.prototype.init = function (component, lo, hi, initial, update) {
+        var _this = this;
         this.loValue = lo;
         this.hiValue = hi;
         this.updateFunction = update;
         this.percentValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
         this.calculateInitialValue();
         this.setLabel();
+        this.controlChangeService.registerTarget({
+            id: component + "" + this.label,
+            displayName: component + " " + this.label,
+            update: function (value) {
+                _this.percentValue = value;
+                _this.calculateInitialValue();
+                _this.setLabel();
+                _this.setValueFromPercent(_this.percentValue);
+            }
+        });
     };
     KnobComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
@@ -180,7 +195,7 @@ var KnobComponent = /** @class */ (function () {
             template: "\n<div class=\"knob-background\">\n    <div #knob class=\"knob-handle\"></div>\n</div>\n<label class=\"knob-label\">{{label}}</label>\n<label class=\"knob-label\">{{labelValue}} {{unit}}</label>\n",
             styles: ["\n.knob-background{\n    background:url('/skins/skin1_back.svg');    \n    background-size: contain;\n    background-repeat: no-repeat;\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n}\n.knob-handle{\n    background:url('/skins/skin1_front.svg');\n    background-size: contain;    \n    background-repeat: no-repeat;\n    width: 100%;\n    height: 100%;\n    cursor:pointer;\n}\n.knob-label{\n    font-size: 10px;\n    display: block;\n}\n"]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [controlChange_service_1.ControlChangeService, core_1.ChangeDetectorRef])
     ], KnobComponent);
     return KnobComponent;
 }());

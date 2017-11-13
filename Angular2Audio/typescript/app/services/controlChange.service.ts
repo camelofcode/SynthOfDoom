@@ -1,4 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { ControlChangeTarget } from '../models/controlChangeTarget';
 import { MidiInputService } from './midi.input.service';
 
 import { ControlChangeMessage } from '../models/controlChangeMessage';
@@ -6,10 +8,12 @@ import { ControlChangeMessage } from '../models/controlChangeMessage';
 @Injectable()
 export class ControlChangeService {
     private readonly midiInputService: MidiInputService;
+    private readonly targets: Array<ControlChangeTarget> = new Array<ControlChangeTarget>();
+    private readonly learntTargets: { [id: number]: ControlChangeTarget; } = {};
+    private currentlyLearning: ControlChangeTarget = null;
 
-    private isMidiLearning: boolean;
-
-    private target: Function;
+    private learningStoppedSource = new Subject();
+    learningStopped$ = this.learningStoppedSource.asObservable();
 
     constructor(midiInputService: MidiInputService) {
         this.midiInputService = midiInputService;
@@ -19,12 +23,32 @@ export class ControlChangeService {
         });
     }
 
-    setTarget(target: Function) {
-        this.target = target;
+    getTargets() {
+        return this.targets;
+    }
+
+    registerTarget(target: ControlChangeTarget) {
+        this.targets.push(target);
+    }
+
+    beginLearn(target: ControlChangeTarget) {
+        this.currentlyLearning = target;
+    }
+
+    cancelLearn() {
+        this.currentlyLearning = null;
+        this.learningStoppedSource.next();
     }
 
     private controlChange = (control: number, value: number) => {
-        this.target(this.scaleToPercentFromMidi(value));
+        if (this.currentlyLearning !== null) {
+            this.learntTargets[control] = this.currentlyLearning;
+            this.currentlyLearning = null;
+            this.learningStoppedSource.next();
+        }
+        if (this.learntTargets[control]) {
+            this.learntTargets[control].update(this.scaleToPercentFromMidi(value));
+        }
     }
 
     private scaleToMidiFromPercent(value: number) {

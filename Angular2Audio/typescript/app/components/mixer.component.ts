@@ -1,4 +1,4 @@
-﻿import { Component, QueryList, ViewChildren, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
+﻿import { Component, QueryList, ViewChildren, AfterViewChecked, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
 
@@ -12,7 +12,7 @@ import { KnobComponent } from './ui/knob.component';
 </ng-template>
 `
 })
-export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewInit {
+export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewChecked {
     private readonly minGain: number = 0;
     private readonly maxGain: number = 1;
 
@@ -34,6 +34,8 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
     @ViewChildren('switches')
     switches: QueryList<ElementRef>;
 
+    private name: String = "Mixer";
+
     constructor(private changeDetector: ChangeDetectorRef, audioContextService: AudioContextService) {
         this.audioContext = audioContextService.context();
 
@@ -48,17 +50,17 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
         this.outputNode2.gain.value = 1.0;
     }
 
-    ngAfterViewInit(): void {
+    ngAfterViewChecked(): void {
         for (let i = 0; i < this.inputNodes.length; i++) {
             const x = i;
 
-            this.gainKnobs.toArray()[i].init(this.minGain, this.maxGain, this.inputNodes[i].gain.value, (value: number) => {
+            this.gainKnobs.toArray()[i].label = this.labels[i];
+
+            this.gainKnobs.toArray()[i].init(this.name, this.minGain, this.maxGain, this.inputNodes[i].gain.value, (value: number) => {
                 this.inputNodes[x].gain.setValueAtTime(value, 0);
             });
 
-            this.gainKnobs.toArray()[i].label = this.labels[i];
-
-            this.filterKnobs.toArray()[i].init(this.minGain, this.maxGain, this.output2ChannelGains[i].gain.value, (value: number) => {
+            this.filterKnobs.toArray()[i].init(this.name + " " + i, this.minGain, this.maxGain, this.output2ChannelGains[i].gain.value, (value: number) => {
                 this.output1ChannelGains[x].gain.setValueAtTime(1 - value, 0);
                 this.output2ChannelGains[x].gain.setValueAtTime(value, 0);
             });

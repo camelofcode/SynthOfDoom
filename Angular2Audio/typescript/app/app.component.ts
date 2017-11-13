@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
 import { AudioContextService } from './services/audioContext.service';
 import { FxComponent } from './components/fx.component';
 import { LfoComponent } from './components/lfo.component';
+import { MidiLearnComponent } from './components/ui/midilearn.component';
 
 @Component({
     selector: 'my-app',
     template: `
+<midi-learn #midiLearn></midi-learn>
 <oscillator name="Oscillator 1" class="section" #oscillator1></oscillator>
 <oscillator name="Oscillator 2" class="section" #oscillator2></oscillator>
 <oscillator name="Oscillator 3" class="section" #oscillator3></oscillator>
@@ -22,9 +24,12 @@ import { LfoComponent } from './components/lfo.component';
 <piano></piano>
 `
 })
-export class AppComponent implements OnInit  {
+export class AppComponent implements OnInit, AfterViewChecked  {
     private readonly audioContextService: AudioContextService;
     private readonly audioContext: AudioContext;
+
+    @ViewChild('midiLearn')
+    private midiLearn: MidiLearnComponent;
 
     @ViewChild('oscillator1')
     private oscillator1: IAudioNodeComponent;
@@ -90,5 +95,10 @@ export class AppComponent implements OnInit  {
         this.lfo1.loadTargets();
         this.lfo2.loadTargets();
         this.lfo3.loadTargets();
+
+    }
+
+    ngAfterViewChecked(): void {
+        this.midiLearn.loadTargets();
     }
 }

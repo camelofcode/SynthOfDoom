@@ -16,6 +16,7 @@ var MixerComponent = /** @class */ (function () {
         this.changeDetector = changeDetector;
         this.minGain = 0;
         this.maxGain = 1;
+        this.name = "Mixer";
         this.audioContext = audioContextService.context();
         this.inputNodes = new Array();
         this.output1ChannelGains = new Array();
@@ -26,15 +27,15 @@ var MixerComponent = /** @class */ (function () {
         this.outputNode2 = this.audioContext.createGain();
         this.outputNode2.gain.value = 1.0;
     }
-    MixerComponent.prototype.ngAfterViewInit = function () {
+    MixerComponent.prototype.ngAfterViewChecked = function () {
         var _this = this;
         var _loop_1 = function (i) {
             var x = i;
-            this_1.gainKnobs.toArray()[i].init(this_1.minGain, this_1.maxGain, this_1.inputNodes[i].gain.value, function (value) {
+            this_1.gainKnobs.toArray()[i].label = this_1.labels[i];
+            this_1.gainKnobs.toArray()[i].init(this_1.name, this_1.minGain, this_1.maxGain, this_1.inputNodes[i].gain.value, function (value) {
                 _this.inputNodes[x].gain.setValueAtTime(value, 0);
             });
-            this_1.gainKnobs.toArray()[i].label = this_1.labels[i];
-            this_1.filterKnobs.toArray()[i].init(this_1.minGain, this_1.maxGain, this_1.output2ChannelGains[i].gain.value, function (value) {
+            this_1.filterKnobs.toArray()[i].init(this_1.name + " " + i, this_1.minGain, this_1.maxGain, this_1.output2ChannelGains[i].gain.value, function (value) {
                 _this.output1ChannelGains[x].gain.setValueAtTime(1 - value, 0);
                 _this.output2ChannelGains[x].gain.setValueAtTime(value, 0);
             });

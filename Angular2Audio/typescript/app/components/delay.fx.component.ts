@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, OnInit } from '@angular/core';
+﻿import { Component, ViewChild, AfterViewChecked } from '@angular/core';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
 import { FxComponent } from './fx.component';
@@ -14,7 +14,7 @@ import { ControlChangeService } from '../services/controlChange.service';
 <input #switchOn type="checkbox" (change)="updateOn($event)"/>
 `
 })
-export class DelayFxComponent extends FxComponent implements OnInit {
+export class DelayFxComponent extends FxComponent implements AfterViewChecked {
     delay: DelayNode;
     feedback: GainNode;
     filter: BiquadFilterNode;
@@ -37,6 +37,8 @@ export class DelayFxComponent extends FxComponent implements OnInit {
 
     @ViewChild('knobFilter')
     private knobFilter: KnobComponent;
+
+    private name: String = "Delay";
 
     constructor(audioContextService: AudioContextService) {
         super(audioContextService);
@@ -81,21 +83,21 @@ export class DelayFxComponent extends FxComponent implements OnInit {
         this.connectFxChain(this.delay, this.makeup);
     }
 
-    ngOnInit(): void {
-        this.knobMix.init(0, 1, 0.5, (value: number) => {
+    ngAfterViewChecked(): void {
+        this.knobMix.init(this.name, 0, 1, 0.5, (value: number) => {
             this.updateMix(value);
         });
 
-        this.knobTime.init(this.minDelay, this.maxDelay, 0.5, (value: number) => {
+        this.knobTime.init(this.name,this.minDelay, this.maxDelay, 0.5, (value: number) => {
             this.delay.delayTime.cancelScheduledValues(0);
             this.delay.delayTime.setTargetAtTime(value, this.context.currentTime, 0.1);
         });
 
-        this.knobFeedback.init(0, 1, 0.5, (value: number) => {
+        this.knobFeedback.init(this.name,0, 1, 0.5, (value: number) => {
             this.feedback.gain.setValueAtTime(value, 0);
         });
 
-        this.knobFilter.init(this.minFilter, this.maxFilter, 1000, (value: number) => {
+        this.knobFilter.init(this.name,this.minFilter, this.maxFilter, 1000, (value: number) => {
             this.filter.frequency.setValueAtTime(value, 0);
         });
     }

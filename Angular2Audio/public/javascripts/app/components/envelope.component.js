@@ -29,6 +29,7 @@ var EnvelopeComponent = /** @class */ (function () {
         this.maxSustain = 1;
         this.minRelease = 0;
         this.maxRelease = 2;
+        this.name = "Envelope";
         this.velocityToGain = function (velocity) {
             return velocity / 127.0;
         };
@@ -55,18 +56,18 @@ var EnvelopeComponent = /** @class */ (function () {
         this.envelope = this.audioContext.createGain();
         this.envelope.gain.value = 0.0;
     }
-    EnvelopeComponent.prototype.ngOnInit = function () {
+    EnvelopeComponent.prototype.ngAfterViewChecked = function () {
         var _this = this;
-        this.knobAttack.init(this.minAttack, this.maxAttack, this.attack, function (value) {
+        this.knobAttack.init(this.name, this.minAttack, this.maxAttack, this.attack, function (value) {
             _this.attack = value;
         });
-        this.knobDecay.init(this.minDecay, this.maxDecay, this.decay, function (value) {
+        this.knobDecay.init(this.name, this.minDecay, this.maxDecay, this.decay, function (value) {
             _this.decay = value;
         });
-        this.knobSustain.init(this.minSustain, this.maxSustain, this.sustain, function (value) {
+        this.knobSustain.init(this.name, this.minSustain, this.maxSustain, this.sustain, function (value) {
             _this.sustain = value;
         });
-        this.knobRelease.init(this.minRelease, this.maxRelease, this.release, function (value) {
+        this.knobRelease.init(this.name, this.minRelease, this.maxRelease, this.release, function (value) {
             _this.sustain = value;
         });
     };

@@ -85,28 +85,28 @@ var BiquadFilterComponent = /** @class */ (function () {
         this.filter.frequency.value = 1000;
         this.filter.Q.value = 2;
     }
-    BiquadFilterComponent.prototype.ngOnInit = function () {
+    BiquadFilterComponent.prototype.ngAfterViewChecked = function () {
         var _this = this;
-        this.knobFrequency.init(this.minFrequency, this.maxFrequency, this.filter.frequency.value, function (value) {
+        this.knobFrequency.init(this.name, this.minFrequency, this.maxFrequency, this.filter.frequency.value, function (value) {
             _this.frequency = value;
             _this.filter.frequency.setValueAtTime(_this.frequency, 0);
         });
-        this.knobQ.init(this.minQ, this.maxQ, this.filter.Q.value, function (value) {
+        this.knobQ.init(this.name, this.minQ, this.maxQ, this.filter.Q.value, function (value) {
             _this.filter.Q.setValueAtTime(value, 0);
         });
-        this.knobDepth.init(this.minDepth, this.maxDepth, this.depth, function (value) {
+        this.knobDepth.init(this.name, this.minDepth, this.maxDepth, this.depth, function (value) {
             _this.depth = value;
         });
-        this.knobAttack.init(this.minAttack, this.maxAttack, this.attack, function (value) {
+        this.knobAttack.init(this.name, this.minAttack, this.maxAttack, this.attack, function (value) {
             _this.attack = value;
         });
-        this.knobDecay.init(this.minDecay, this.maxDecay, this.decay, function (value) {
+        this.knobDecay.init(this.name, this.minDecay, this.maxDecay, this.decay, function (value) {
             _this.decay = value;
         });
-        this.knobSustain.init(this.minSustain, this.maxSustain, this.sustain, function (value) {
+        this.knobSustain.init(this.name, this.minSustain, this.maxSustain, this.sustain, function (value) {
             _this.sustain = value;
         });
-        this.knobRelease.init(this.minRelease, this.maxRelease, this.release, function (value) {
+        this.knobRelease.init(this.name, this.minRelease, this.maxRelease, this.release, function (value) {
             _this.sustain = value;
         });
     };
@@ -131,7 +131,7 @@ var BiquadFilterComponent = /** @class */ (function () {
                     this.showGain = false;
                     this.showQ = true;
                     this.filter.gain.setValueAtTime(0, 0);
-                    this.knobGain.init(this.minGain, this.maxGain, this.filter.gain.value, function (value) {
+                    this.knobGain.init(this.name, this.minGain, this.maxGain, this.filter.gain.value, function (value) {
                         _this.filter.gain.setValueAtTime(value, 0);
                     });
                     return;
@@ -142,7 +142,7 @@ var BiquadFilterComponent = /** @class */ (function () {
                     this.showGain = true;
                     this.showQ = false;
                     this.filter.Q.setValueAtTime(2, 0);
-                    this.knobGain.init(this.minGain, this.maxGain, this.filter.gain.value, function (value) {
+                    this.knobGain.init(this.name, this.minGain, this.maxGain, this.filter.gain.value, function (value) {
                         _this.filter.gain.setValueAtTime(value, 0);
                     });
                     return;

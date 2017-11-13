@@ -48,9 +48,9 @@ var OscillatorComponent = /** @class */ (function () {
         this.oscillator.start();
         this.oscillator.type = 'sawtooth';
     }
-    OscillatorComponent.prototype.ngOnInit = function () {
+    OscillatorComponent.prototype.ngAfterViewChecked = function () {
         var _this = this;
-        this.knobDetune.init(this.minDetune, this.maxDetune, this.oscillator.detune.value, function (value) {
+        this.knobDetune.init(this.name, this.minDetune, this.maxDetune, this.oscillator.detune.value, function (value) {
             _this.oscillator.detune.setValueAtTime(value, 0);
         });
     };

@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, OnInit } from '@angular/core';
+﻿import { Component, ViewChild, AfterViewChecked } from '@angular/core';
 import { InputService } from '../services/input.service';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
@@ -12,7 +12,7 @@ import { KnobComponent } from './ui/knob.component';
 <knob #knobRelease label="Release" unit="s"></knob>
 `
 })
-export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
+export class EnvelopeComponent implements IAudioNodeComponent, AfterViewChecked {
     private readonly inputService: InputService;
     private readonly audioContext: AudioContext;
     private readonly envelope: GainNode;
@@ -42,6 +42,8 @@ export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
     @ViewChild('knobRelease')
     private knobRelease: KnobComponent;
 
+    private name: String = "Envelope";
+
     constructor(private audioContextService: AudioContextService, inputService: InputService) {
         this.audioContext = audioContextService.context();
         this.inputService = inputService;
@@ -58,20 +60,20 @@ export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
         this.envelope.gain.value = 0.0;
     }
 
-    ngOnInit(): void {
-        this.knobAttack.init(this.minAttack, this.maxAttack, this.attack, (value: number) => {
+    ngAfterViewChecked(): void {
+        this.knobAttack.init(this.name, this.minAttack, this.maxAttack, this.attack, (value: number) => {
             this.attack = value;
         });
 
-        this.knobDecay.init(this.minDecay, this.maxDecay, this.decay, (value: number) => {
+        this.knobDecay.init(this.name, this.minDecay, this.maxDecay, this.decay, (value: number) => {
             this.decay = value;
         });
 
-        this.knobSustain.init(this.minSustain, this.maxSustain, this.sustain, (value: number) => {
+        this.knobSustain.init(this.name, this.minSustain, this.maxSustain, this.sustain, (value: number) => {
             this.sustain = value;
         });
 
-        this.knobRelease.init(this.minRelease, this.maxRelease, this.release, (value: number) => {
+        this.knobRelease.init(this.name, this.minRelease, this.maxRelease, this.release, (value: number) => {
             this.sustain = value;
         });
     }

@@ -103,6 +103,9 @@
     <TypeScriptCompile Include="typescript\app\components\oscillator.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\components\ui\midilearn.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="TypeScript\app\components\ui\piano.component.ts" />
     <TypeScriptCompile Include="typescript\app\components\ui\knob.component.ts">
       <SubType>Code</SubType>
@@ -111,6 +114,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\models\controlChangeMessage.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="typescript\app\models\controlChangeTarget.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="TypeScript\app\models\lfoConnectionResponse.ts" />

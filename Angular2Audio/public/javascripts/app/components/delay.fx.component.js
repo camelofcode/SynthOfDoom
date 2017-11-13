@@ -31,6 +31,7 @@ var DelayFxComponent = /** @class */ (function (_super) {
         _this.maxDelay = 2.0;
         _this.minFilter = 200;
         _this.maxFilter = 5000;
+        _this.name = "Delay";
         _this.delay = _this.context.createDelay(_this.maxDelay);
         _this.feedback = _this.context.createGain();
         _this.filter = _this.context.createBiquadFilter();
@@ -65,19 +66,19 @@ var DelayFxComponent = /** @class */ (function (_super) {
         _this.connectFxChain(_this.delay, _this.makeup);
         return _this;
     }
-    DelayFxComponent.prototype.ngOnInit = function () {
+    DelayFxComponent.prototype.ngAfterViewChecked = function () {
         var _this = this;
-        this.knobMix.init(0, 1, 0.5, function (value) {
+        this.knobMix.init(this.name, 0, 1, 0.5, function (value) {
             _this.updateMix(value);
         });
-        this.knobTime.init(this.minDelay, this.maxDelay, 0.5, function (value) {
+        this.knobTime.init(this.name, this.minDelay, this.maxDelay, 0.5, function (value) {
             _this.delay.delayTime.cancelScheduledValues(0);
             _this.delay.delayTime.setTargetAtTime(value, _this.context.currentTime, 0.1);
         });
-        this.knobFeedback.init(0, 1, 0.5, function (value) {
+        this.knobFeedback.init(this.name, 0, 1, 0.5, function (value) {
             _this.feedback.gain.setValueAtTime(value, 0);
         });
-        this.knobFilter.init(this.minFilter, this.maxFilter, 1000, function (value) {
+        this.knobFilter.init(this.name, this.minFilter, this.maxFilter, 1000, function (value) {
             _this.filter.frequency.setValueAtTime(value, 0);
         });
     };

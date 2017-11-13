@@ -1,5 +1,7 @@
 ﻿//Based On https://github.com/spheras/knob
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { ControlChangeService } from '../../services/controlChange.service';
+import { ControlChangeTarget } from '../../models/controlChangeTarget';
 
 @Component({
     selector: 'knob',
@@ -51,6 +53,9 @@ export class KnobComponent {
     private hiValue: number;
     private updateFunction: Function;
 
+    private controlChangeService: ControlChangeService;
+    private changeDetector: ChangeDetectorRef;
+
     @Input('label')
     label: String = 'label';
 
@@ -60,7 +65,10 @@ export class KnobComponent {
     @ViewChild('knob')
     knobDiv: ElementRef;
 
-    constructor() {
+    constructor(controlChangeService: ControlChangeService, changeDetector: ChangeDetectorRef) {
+        this.controlChangeService = controlChangeService;
+        this.changeDetector = changeDetector;
+
         this.maxDistance = document.body.clientHeight;
         if (document.body.clientWidth > this.maxDistance) {
             this.maxDistance = document.body.clientWidth;
@@ -68,7 +76,7 @@ export class KnobComponent {
         this.maxDistance = Math.round((this.maxDistance * 10) / 100);
     }
 
-    init(lo: number, hi: number, initial: number, update: Function) {
+    init(component: String, lo: number, hi: number, initial: number, update: Function) {
         this.loValue = lo;
         this.hiValue = hi;
         this.updateFunction = update;
@@ -77,6 +85,17 @@ export class KnobComponent {
 
         this.calculateInitialValue();
         this.setLabel();
+
+        this.controlChangeService.registerTarget({
+            id: component + "" + this.label,
+            displayName: component + " " + this.label,
+            update: (value: number) => {
+                this.percentValue = value;
+                this.calculateInitialValue();
+                this.setLabel();
+                this.setValueFromPercent(this.percentValue);
+            }
+        } as ControlChangeTarget);
     }
 
     ngAfterViewInit() {
@@ -193,7 +212,9 @@ export class KnobComponent {
 
     private setLabel = function () {
         let value = this.unit === '%' ? this.percentValue : this.scaleFromPercent(this.percentValue, this.loValue, this.hiValue);
-        this.labelValue = parseInt(value+"", 10) === value ? value : value.toFixed(2);
+
+        this.labelValue = parseInt(value + "", 10) === value ? value : value.toFixed(2);
+        this.changeDetector.detectChanges();
     }
 
     private calculateInitialValue() {

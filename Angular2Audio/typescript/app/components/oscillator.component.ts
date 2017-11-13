@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, Input } from '@angular/core';
+﻿import { Component, AfterViewChecked, ViewChild, Input } from '@angular/core';
 import { InputService } from '../services/input.service';
 import { AudioContextService } from '../services/audioContext.service';
 import { LfoTargetService } from '../services/lfoTarget.service';
@@ -29,7 +29,7 @@ import { LfoTarget } from '../models/lfoTarget';
 <div><knob #knobDetune label="Detune" unit="cents"></knob></div>
 `
 })
-export class OscillatorComponent implements IAudioNodeComponent, OnInit {
+export class OscillatorComponent implements IAudioNodeComponent, AfterViewChecked {
     private readonly inputService: InputService;
     private readonly lfoTargetService: LfoTargetService;
     private readonly audioContext: AudioContextService;
@@ -62,8 +62,8 @@ export class OscillatorComponent implements IAudioNodeComponent, OnInit {
         this.oscillator.type = 'sawtooth';
     }
 
-    ngOnInit(): void {
-        this.knobDetune.init(this.minDetune, this.maxDetune, this.oscillator.detune.value, (value: number) => {
+    ngAfterViewChecked(): void {
+        this.knobDetune.init(this.name, this.minDetune, this.maxDetune, this.oscillator.detune.value, (value: number) => {
             this.oscillator.detune.setValueAtTime(value, 0);
         });
     }

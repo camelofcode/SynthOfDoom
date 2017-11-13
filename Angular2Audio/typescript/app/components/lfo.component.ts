@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, Input } from '@angular/core';
+﻿import { Component, AfterViewChecked, ViewChild, Input } from '@angular/core';
 import { LfoTargetService } from '../services/lfoTarget.service';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
@@ -30,7 +30,7 @@ import { LfoConnectionResponse } from '../models/lfoConnectionResponse';
 </div>
 `
 })
-export class LfoComponent implements OnInit {
+export class LfoComponent implements AfterViewChecked {
     private readonly audioContext: AudioContext;
     private readonly lfoTargetService: LfoTargetService;
     private readonly lfo: OscillatorNode;
@@ -67,12 +67,12 @@ export class LfoComponent implements OnInit {
         this.lfo.connect(this.gain);
     }
 
-    ngOnInit(): void {
-        this.knobFrequency.init(this.minFrequency, this.maxFrequency, this.lfo.frequency.value, (value: number) => {
+    ngAfterViewChecked(): void {
+        this.knobFrequency.init(this.name, this.minFrequency, this.maxFrequency, this.lfo.frequency.value, (value: number) => {
             this.lfo.frequency.setValueAtTime(value, 0);
         });
 
-        this.knobAmplitude.init(this.minAmplitude, this.maxAmplitude, 0.5, (value: number) => {
+        this.knobAmplitude.init(this.name, this.minAmplitude, this.maxAmplitude, 0.5, (value: number) => {
             this.gain.gain.setValueAtTime(value, 0);
         });
     }
@@ -109,7 +109,7 @@ export class LfoComponent implements OnInit {
         }
 
         this.gain.gain.value = 0.5;
-        this.knobAmplitude.init(this.minAmplitude, this.maxAmplitude, 0.5, (value: number) => {
+        this.knobAmplitude.init(this.name, this.minAmplitude, this.maxAmplitude, 0.5, (value: number) => {
             this.gain.gain.setValueAtTime(value, 0);
         });
     }

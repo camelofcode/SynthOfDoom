@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, OnInit, Input } from '@angular/core';
+﻿import { Component, ViewChild, AfterViewChecked, Input } from '@angular/core';
 import { AudioContextService } from '../services/audioContext.service';
 import { InputService } from '../services/input.service';
 import { LfoTargetService } from '../services/lfoTarget.service';
@@ -30,7 +30,7 @@ import { LfoTarget } from '../models/lfoTarget';
 <knob #knobRelease label="Env. Release"  unit="s"></knob>
 `
 })
-export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
+export class BiquadFilterComponent implements IAudioNodeComponent, AfterViewChecked {
     private readonly audioContext: AudioContext;
     private readonly inputService: InputService;
     private readonly lfoTargetService: LfoTargetService;
@@ -108,33 +108,33 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
         this.filter.Q.value = 2;
     }
 
-    ngOnInit(): void {
-        this.knobFrequency.init(this.minFrequency, this.maxFrequency, this.filter.frequency.value, (value: number) => {
+    ngAfterViewChecked(): void {
+        this.knobFrequency.init(this.name, this.minFrequency, this.maxFrequency, this.filter.frequency.value, (value: number) => {
             this.frequency = value;
             this.filter.frequency.setValueAtTime(this.frequency, 0);
         });
 
-        this.knobQ.init(this.minQ, this.maxQ, this.filter.Q.value, (value: number) => {
+        this.knobQ.init(this.name, this.minQ, this.maxQ, this.filter.Q.value, (value: number) => {
             this.filter.Q.setValueAtTime(value, 0);
         });
 
-        this.knobDepth.init(this.minDepth, this.maxDepth, this.depth, (value: number) => {
+        this.knobDepth.init(this.name, this.minDepth, this.maxDepth, this.depth, (value: number) => {
             this.depth = value;
         });
 
-        this.knobAttack.init(this.minAttack, this.maxAttack, this.attack, (value: number) => {
+        this.knobAttack.init(this.name, this.minAttack, this.maxAttack, this.attack, (value: number) => {
             this.attack = value;
         });
 
-        this.knobDecay.init(this.minDecay, this.maxDecay, this.decay, (value: number) => {
+        this.knobDecay.init(this.name, this.minDecay, this.maxDecay, this.decay, (value: number) => {
             this.decay = value;
         });
 
-        this.knobSustain.init(this.minSustain, this.maxSustain, this.sustain, (value: number) => {
+        this.knobSustain.init(this.name, this.minSustain, this.maxSustain, this.sustain, (value: number) => {
             this.sustain = value;
         });
 
-        this.knobRelease.init(this.minRelease, this.maxRelease, this.release, (value: number) => {
+        this.knobRelease.init(this.name, this.minRelease, this.maxRelease, this.release, (value: number) => {
             this.sustain = value;
         });
     }
@@ -163,7 +163,7 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
                     this.showGain = false;
                     this.showQ = true;
                     this.filter.gain.setValueAtTime(0, 0);
-                    this.knobGain.init(this.minGain, this.maxGain, this.filter.gain.value, (value: number) => {
+                    this.knobGain.init(this.name, this.minGain, this.maxGain, this.filter.gain.value, (value: number) => {
                         this.filter.gain.setValueAtTime(value, 0);
                     });
                     return;
@@ -174,7 +174,7 @@ export class BiquadFilterComponent implements IAudioNodeComponent, OnInit {
                     this.showGain = true;
                     this.showQ = false;
                     this.filter.Q.setValueAtTime(2, 0);
-                    this.knobGain.init(this.minGain, this.maxGain, this.filter.gain.value, (value: number) => {
+                    this.knobGain.init(this.name, this.minGain, this.maxGain, this.filter.gain.value, (value: number) => {
                         this.filter.gain.setValueAtTime(value, 0);
                     });
                     return;

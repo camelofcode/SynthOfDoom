@@ -20,10 +20,11 @@ import { DelayFxComponent } from './components/delay.fx.component';
 import { MixerComponent } from './components/mixer.component';
 import { KnobComponent } from './components/ui/knob.component';
 import { PianoComponent } from './components/ui/piano.component';
+import { MidiLearnComponent } from './components/ui/midilearn.component';
 
 @NgModule({
   imports:      [ BrowserModule ],
-  declarations: [ AppComponent, EnvelopeComponent, OscillatorComponent, LfoComponent, BiquadFilterComponent, NoiseComponent, DelayFxComponent, MixerComponent, KnobComponent, PianoComponent ],
+  declarations: [AppComponent, EnvelopeComponent, OscillatorComponent, LfoComponent, BiquadFilterComponent, NoiseComponent, DelayFxComponent, MixerComponent, KnobComponent, PianoComponent, MidiLearnComponent ],
   bootstrap:    [ AppComponent ],
   providers: [InputService, MidiInputService, KeyboardInputService, AudioContextService, LfoTargetService, ControlChangeService ]
 })
