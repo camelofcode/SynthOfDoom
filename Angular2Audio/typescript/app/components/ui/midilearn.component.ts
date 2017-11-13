@@ -4,7 +4,7 @@ import { ControlChangeTarget } from '../../models/controlChangeTarget';
 
 @Component({
     selector: 'midi-learn',
-    template: `<div><label>Midi Learn Target</label><br/>
+    template: `<div><label>Midi Learn Target</label>
     <select #selectedTarget>
         <option *ngFor="let target of targets" value="{{target.id}}">{{target.displayName}}</option>  
     </select>

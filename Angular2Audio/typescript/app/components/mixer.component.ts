@@ -6,9 +6,11 @@ import { KnobComponent } from './ui/knob.component';
     selector: 'mixer',
     template: `<h4>Mixer</h4>
 <ng-template ngFor let-item [ngForOf]="inputNodes" let-currentIndex="index + 1" let-i="index">
+<div id="mixerChannel{{i}}">
     <knob #gainKnobs></knob>
     <knob #filterKnobs label="Filter 1/2 Mix" unit="%"></knob>
     <input #switches type="checkbox" (change)="updateChannelOn($event, i)"/>
+</div>
 </ng-template>
 `
 })

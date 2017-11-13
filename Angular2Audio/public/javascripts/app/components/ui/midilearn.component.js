@@ -41,7 +41,7 @@ var MidiLearnComponent = /** @class */ (function () {
     MidiLearnComponent = __decorate([
         core_1.Component({
             selector: 'midi-learn',
-            template: "<div><label>Midi Learn Target</label><br/>\n    <select #selectedTarget>\n        <option *ngFor=\"let target of targets\" value=\"{{target.id}}\">{{target.displayName}}</option>  \n    </select>\n<button (click)=\"startLearn(selectedTarget.value)\" *ngIf=\"!learning\">Learn</button>\n<button (click)=\"cancelLearn()\" *ngIf=\"learning\">Cancel</button>\n</div>\n"
+            template: "<div><label>Midi Learn Target</label>\n    <select #selectedTarget>\n        <option *ngFor=\"let target of targets\" value=\"{{target.id}}\">{{target.displayName}}</option>  \n    </select>\n<button (click)=\"startLearn(selectedTarget.value)\" *ngIf=\"!learning\">Learn</button>\n<button (click)=\"cancelLearn()\" *ngIf=\"learning\">Cancel</button>\n</div>\n"
         }),
         __metadata("design:paramtypes", [controlChange_service_1.ControlChangeService, core_1.ChangeDetectorRef])
     ], MidiLearnComponent);

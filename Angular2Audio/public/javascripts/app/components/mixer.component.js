@@ -99,7 +99,7 @@ var MixerComponent = /** @class */ (function () {
     MixerComponent = __decorate([
         core_1.Component({
             selector: 'mixer',
-            template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n    <knob #gainKnobs></knob>\n    <knob #filterKnobs label=\"Filter 1/2 Mix\" unit=\"%\"></knob>\n    <input #switches type=\"checkbox\" (change)=\"updateChannelOn($event, i)\"/>\n</ng-template>\n"
+            template: "<h4>Mixer</h4>\n<ng-template ngFor let-item [ngForOf]=\"inputNodes\" let-currentIndex=\"index + 1\" let-i=\"index\">\n<div id=\"mixerChannel{{i}}\">\n    <knob #gainKnobs></knob>\n    <knob #filterKnobs label=\"Filter 1/2 Mix\" unit=\"%\"></knob>\n    <input #switches type=\"checkbox\" (change)=\"updateChannelOn($event, i)\"/>\n</div>\n</ng-template>\n"
         }),
         __metadata("design:paramtypes", [core_1.ChangeDetectorRef, audioContext_service_1.AudioContextService])
     ], MixerComponent);

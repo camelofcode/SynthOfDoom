@@ -7,21 +7,23 @@ import { MidiLearnComponent } from './components/ui/midilearn.component';
 @Component({
     selector: 'my-app',
     template: `
-<midi-learn #midiLearn></midi-learn>
-<oscillator name="Oscillator 1" class="section" #oscillator1></oscillator>
-<oscillator name="Oscillator 2" class="section" #oscillator2></oscillator>
-<oscillator name="Oscillator 3" class="section" #oscillator3></oscillator>
-<noise class="section" #noise></noise>
-<mixer class="section" #mixer></mixer>
-<envelope class="section" #envelope></envelope>
-<biquad-filter name="Filter 1" class="section" #filter1></biquad-filter>
-<biquad-filter name="Filter 2" class="section" #filter2></biquad-filter>
-<lfo name="Lfo 1" class="section" #lfo1></lfo>
-<lfo name="Lfo 2" class="section" #lfo2></lfo>
-<lfo name="Lfo 3" class="section" #lfo3></lfo>
-<delay class="section" #delay></delay>
+<div class="center">
+<midi-learn #midiLearn id="midi-learn"></midi-learn>
+<oscillator name="Oscillator 1" class="section" #oscillator1 id="oscillator1"></oscillator>
+<oscillator name="Oscillator 2" class="section" #oscillator2  id="oscillator2"></oscillator>
+<oscillator name="Oscillator 3" class="section" #oscillator3  id="oscillator3"></oscillator>
+<noise class="section" #noise id="noise"></noise>
+<mixer class="section" #mixer id="mixer"></mixer>
+<envelope class="section" #envelope  id="envelope"></envelope>
+<biquad-filter name="Filter 1" class="section" #filter1 id="filter1"></biquad-filter>
+<biquad-filter name="Filter 2" class="section" #filter2 id="filter2"></biquad-filter>
+<lfo name="Lfo 1" class="section" #lfo1 id="lfo1"></lfo>
+<lfo name="Lfo 2" class="section" #lfo2 id="lfo2"></lfo>
+<lfo name="Lfo 3" class="section" #lfo3 id="lfo3"></lfo>
+<delay class="section" #delay id="delay"></delay>
 <br/>
-<piano></piano>
+<piano id="piano"></piano>
+</div>
 `
 })
 export class AppComponent implements OnInit, AfterViewChecked  {
