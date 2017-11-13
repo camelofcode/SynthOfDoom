@@ -25,8 +25,8 @@ import { LfoConnectionResponse } from '../models/lfoConnectionResponse';
 </div>
 <br/>
 <div>
-    <knob #knobFrequency label="Rate"></knob>
-    <knob #knobAmplitude label="Depth"></knob>
+    <knob #knobFrequency label="Rate" unit="Hz"></knob>
+    <knob #knobAmplitude label="Depth" unit="%"></knob>
 </div>
 `
 })

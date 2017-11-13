@@ -7,10 +7,10 @@ import { ControlChangeService } from '../services/controlChange.service';
 @Component({
     selector: 'delay',
     template: `<h4>Delay</h4>
-<knob #knobTime label="Time"></knob>
-<knob #knobFeedback label="Feedback"></knob>
-<knob #knobFilter label="Filter"></knob>
-<knob #knobMix label="Mix"></knob>
+<knob #knobTime label="Time" unit="s"></knob>
+<knob #knobFeedback label="Feedback" unit="%"></knob>
+<knob #knobFilter label="Filter" unit="Hz"></knob>
+<knob #knobMix label="Mix" unit="%"></knob>
 <input #switchOn type="checkbox" (change)="updateOn($event)"/>
 `
 })

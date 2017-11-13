@@ -100,7 +100,7 @@ var DelayFxComponent = /** @class */ (function (_super) {
     DelayFxComponent = __decorate([
         core_1.Component({
             selector: 'delay',
-            template: "<h4>Delay</h4>\n<knob #knobTime label=\"Time\"></knob>\n<knob #knobFeedback label=\"Feedback\"></knob>\n<knob #knobFilter label=\"Filter\"></knob>\n<knob #knobMix label=\"Mix\"></knob>\n<input #switchOn type=\"checkbox\" (change)=\"updateOn($event)\"/>\n"
+            template: "<h4>Delay</h4>\n<knob #knobTime label=\"Time\" unit=\"s\"></knob>\n<knob #knobFeedback label=\"Feedback\" unit=\"%\"></knob>\n<knob #knobFilter label=\"Filter\" unit=\"Hz\"></knob>\n<knob #knobMix label=\"Mix\" unit=\"%\"></knob>\n<input #switchOn type=\"checkbox\" (change)=\"updateOn($event)\"/>\n"
         }),
         __metadata("design:paramtypes", [audioContext_service_1.AudioContextService])
     ], DelayFxComponent);

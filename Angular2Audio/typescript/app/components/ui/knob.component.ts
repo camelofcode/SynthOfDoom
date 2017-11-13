@@ -8,7 +8,7 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@
     <div #knob class="knob-handle"></div>
 </div>
 <label class="knob-label">{{label}}</label>
-<label class="knob-label">{{meterValue | number:'1.0-0'}} {{unit}}</label>
+<label class="knob-label">{{labelValue}} {{unit}}</label>
 `,
     styles: [`
 .knob-background{
@@ -43,7 +43,8 @@ export class KnobComponent {
 
     private min: number = 0;
     private max: number = 100;
-    private meterValue: number = 50;
+    private percentValue: number = 50;
+    private labelValue: number = 50;
     private startDegree: number = 200;
     private endDegree: number = 120;
     private intensive: boolean = true;
@@ -52,10 +53,7 @@ export class KnobComponent {
     label: String = 'label';
 
     @Input('unit')
-    unit: String = 'unit';
-
-    //@Output('change')
-    //change: EventEmitter<number> = new EventEmitter<number>(false);
+    unit: String = '';
 
     @ViewChild('knob')
     knobDiv: ElementRef;
@@ -76,7 +74,9 @@ export class KnobComponent {
         this.hiValue = hi;
         this.updateFunction = update;
 
-        this.meterValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
+        this.percentValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
+        this.setLabel();
+
         this.calculateInitialValue();
     }
 
@@ -117,14 +117,17 @@ export class KnobComponent {
 
         this.knobDiv.nativeElement.style.transform = `rotate(${newValue + this.startDegree}deg)`;
 
-        this.meterValue = (100 * newValue) / maxDegrees;
+        this.percentValue = (100 * newValue) / maxDegrees;
         const norm = this.max - this.min;
-        this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
+        this.percentValue = Math.round(((norm * this.percentValue) / 100) + this.min);
 
         if (this.intensive) {
-            this.setValueFromPercent(this.meterValue);
+            this.setValueFromPercent(this.percentValue);
         }
+
+        this.setLabel();
     }
+
 
     getMousePosition(event: any): any {
         const result = { clientX: 0, clientY: 0 };
@@ -162,7 +165,7 @@ export class KnobComponent {
 
         var funcRemove = (e: any) => {
             if (!this.intensive) {
-                this.setValueFromPercent(this.meterValue);
+                this.setValueFromPercent(this.percentValue);
             }
             if (e.stopPropagation) {
                 e.stopPropagation();
@@ -189,8 +192,13 @@ export class KnobComponent {
         this.updateFunction(this.scaleFromPercent(value, this.loValue, this.hiValue));
     }
 
+    private setLabel = function () {
+        let value = this.unit === '%' ? this.percentValue : this.scaleFromPercent(this.percentValue, this.loValue, this.hiValue);
+        this.labelValue = parseInt(value+"", 10) === value ? value : value.toFixed(2);
+    }
+
     private calculateInitialValue() {
-        const norm: number = this.meterValue - this.min;
+        const norm: number = this.percentValue - this.min;
         const percent = norm * 100 / (this.max - this.min);
         const maxdeg = this.getMaxDegrees();
         let rot = percent * maxdeg / 100;

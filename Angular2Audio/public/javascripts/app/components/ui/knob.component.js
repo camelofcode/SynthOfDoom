@@ -20,12 +20,17 @@ var KnobComponent = /** @class */ (function () {
         this.maxDistance = 0;
         this.min = 0;
         this.max = 100;
-        this.meterValue = 50;
+        this.percentValue = 50;
+        this.labelValue = 50;
         this.startDegree = 200;
         this.endDegree = 120;
         this.intensive = true;
         this.label = 'label';
-        this.unit = 'unit';
+        this.unit = '';
+        this.setLabel = function () {
+            var value = this.unit === '%' ? this.percentValue : this.scaleFromPercent(this.percentValue, this.loValue, this.hiValue);
+            this.labelValue = parseInt(value + "", 10) === value ? value : value.toFixed(2);
+        };
         this.maxDistance = document.body.clientHeight;
         if (document.body.clientWidth > this.maxDistance) {
             this.maxDistance = document.body.clientWidth;
@@ -36,7 +41,8 @@ var KnobComponent = /** @class */ (function () {
         this.loValue = lo;
         this.hiValue = hi;
         this.updateFunction = update;
-        this.meterValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
+        this.percentValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
+        this.setLabel();
         this.calculateInitialValue();
     };
     KnobComponent.prototype.ngAfterViewInit = function () {
@@ -62,10 +68,6 @@ var KnobComponent = /** @class */ (function () {
             return 0;
         }
     };
-    //setInitialValue(value: number) {
-    //    this.meterValue = value;
-    //    this.calculateInitialValue();
-    //}
     KnobComponent.prototype.calculateChange = function (mousePositionChange) {
         var maxDegrees = this.getMaxDegrees();
         var newValue = mousePositionChange * maxDegrees / this.maxDistance;
@@ -78,12 +80,13 @@ var KnobComponent = /** @class */ (function () {
         }
         this.tempMeterRotation = newValue;
         this.knobDiv.nativeElement.style.transform = "rotate(" + (newValue + this.startDegree) + "deg)";
-        this.meterValue = (100 * newValue) / maxDegrees;
+        this.percentValue = (100 * newValue) / maxDegrees;
         var norm = this.max - this.min;
-        this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
+        this.percentValue = Math.round(((norm * this.percentValue) / 100) + this.min);
         if (this.intensive) {
-            this.setValueFromPercent(this.meterValue);
+            this.setValueFromPercent(this.percentValue);
         }
+        this.setLabel();
     };
     KnobComponent.prototype.getMousePosition = function (event) {
         var result = { clientX: 0, clientY: 0 };
@@ -120,7 +123,7 @@ var KnobComponent = /** @class */ (function () {
         };
         var funcRemove = function (e) {
             if (!_this.intensive) {
-                _this.setValueFromPercent(_this.meterValue);
+                _this.setValueFromPercent(_this.percentValue);
             }
             if (e.stopPropagation) {
                 e.stopPropagation();
@@ -145,7 +148,7 @@ var KnobComponent = /** @class */ (function () {
         this.updateFunction(this.scaleFromPercent(value, this.loValue, this.hiValue));
     };
     KnobComponent.prototype.calculateInitialValue = function () {
-        var norm = this.meterValue - this.min;
+        var norm = this.percentValue - this.min;
         var percent = norm * 100 / (this.max - this.min);
         var maxdeg = this.getMaxDegrees();
         var rot = percent * maxdeg / 100;
@@ -174,7 +177,7 @@ var KnobComponent = /** @class */ (function () {
     KnobComponent = __decorate([
         core_1.Component({
             selector: 'knob',
-            template: "\n<div class=\"knob-background\">\n    <div #knob class=\"knob-handle\"></div>\n</div>\n<label class=\"knob-label\">{{label}}</label>\n<label class=\"knob-label\">{{meterValue | number:'1.0-0'}} {{unit}}</label>\n",
+            template: "\n<div class=\"knob-background\">\n    <div #knob class=\"knob-handle\"></div>\n</div>\n<label class=\"knob-label\">{{label}}</label>\n<label class=\"knob-label\">{{labelValue}} {{unit}}</label>\n",
             styles: ["\n.knob-background{\n    background:url('/skins/skin1_back.svg');    \n    background-size: contain;\n    background-repeat: no-repeat;\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n}\n.knob-handle{\n    background:url('/skins/skin1_front.svg');\n    background-size: contain;    \n    background-repeat: no-repeat;\n    width: 100%;\n    height: 100%;\n    cursor:pointer;\n}\n.knob-label{\n    font-size: 10px;\n    display: block;\n}\n"]
         }),
         __metadata("design:paramtypes", [])

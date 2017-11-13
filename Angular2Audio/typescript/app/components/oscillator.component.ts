@@ -26,7 +26,7 @@ import { LfoTarget } from '../models/lfoTarget';
         <option value="2">2</option>
     </select></div>
 <br/>
-<div><knob #knobDetune label="Detune"></knob></div>
+<div><knob #knobDetune label="Detune" unit="cents"></knob></div>
 `
 })
 export class OscillatorComponent implements IAudioNodeComponent, OnInit {
