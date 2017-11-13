@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var utilities_1 = require("../supporting/utilities");
 var FxComponent = /** @class */ (function () {
     function FxComponent(audioContextService) {
         this.audioContextService = audioContextService;
@@ -25,9 +24,8 @@ var FxComponent = /** @class */ (function () {
         end.connect(this.fxChainEnd);
     };
     FxComponent.prototype.updateMix = function (value) {
-        var scaled = utilities_1.default.scaleFromPercent(value, 0, 1);
-        this.wet.gain.setValueAtTime(scaled, 0);
-        this.dry.gain.setValueAtTime(1.0 - scaled, 0);
+        this.wet.gain.setValueAtTime(value, 0);
+        this.dry.gain.setValueAtTime(1.0 - value, 0);
     };
     FxComponent.prototype.updateOn = function (event) {
         if (event.target.checked) {

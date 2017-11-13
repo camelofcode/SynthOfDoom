@@ -15,7 +15,6 @@ var input_service_1 = require("../services/input.service");
 var lfoTarget_service_1 = require("../services/lfoTarget.service");
 var knob_component_1 = require("./ui/knob.component");
 var lfoTarget_1 = require("../models/lfoTarget");
-var utilities_1 = require("../supporting/utilities");
 var BiquadFilterComponent = /** @class */ (function () {
     function BiquadFilterComponent(audioContextService, inputService, lfoTargetService) {
         var _this = this;
@@ -58,12 +57,12 @@ var BiquadFilterComponent = /** @class */ (function () {
                 return;
             }
             else if (_this.depth > 0) {
-                attackTarget = utilities_1.default.scaleFromPercent(depthPercent, _this.frequency, _this.maxFrequency);
-                decayTarget = utilities_1.default.scaleFromPercent(depthPercent * _this.sustain, _this.frequency, _this.maxFrequency);
+                attackTarget = _this.scaleFromPercent(depthPercent, _this.frequency, _this.maxFrequency);
+                decayTarget = _this.scaleFromPercent(depthPercent * _this.sustain, _this.frequency, _this.maxFrequency);
             }
             else {
-                attackTarget = utilities_1.default.scaleFromPercent(depthPercent, _this.frequency, _this.minFrequency);
-                decayTarget = utilities_1.default.scaleFromPercent(depthPercent * _this.sustain, _this.frequency, _this.minFrequency);
+                attackTarget = _this.scaleFromPercent(depthPercent, _this.frequency, _this.minFrequency);
+                decayTarget = _this.scaleFromPercent(depthPercent * _this.sustain, _this.frequency, _this.minFrequency);
             }
             _this.filter.frequency.linearRampToValueAtTime(attackTarget, time + _this.attack);
             _this.filter.frequency.linearRampToValueAtTime(decayTarget, time + _this.attack + _this.decay);
@@ -87,13 +86,29 @@ var BiquadFilterComponent = /** @class */ (function () {
         this.filter.Q.value = 2;
     }
     BiquadFilterComponent.prototype.ngOnInit = function () {
-        this.knobFrequency.setInitialValue(utilities_1.default.scaleToPercent(this.filter.frequency.value, this.minFrequency, this.maxFrequency));
-        this.knobQ.setInitialValue(utilities_1.default.scaleToPercent(this.filter.Q.value, this.minQ, this.maxQ));
-        this.knobDepth.setInitialValue(utilities_1.default.scaleToPercent(this.depth, this.minDepth, this.maxDepth));
-        this.knobAttack.setInitialValue(utilities_1.default.scaleToPercent(this.attack, this.minAttack, this.maxAttack));
-        this.knobDecay.setInitialValue(utilities_1.default.scaleToPercent(this.decay, this.minDecay, this.maxDecay));
-        this.knobSustain.setInitialValue(utilities_1.default.scaleToPercent(this.sustain, this.minSustain, this.maxSustain));
-        this.knobRelease.setInitialValue(utilities_1.default.scaleToPercent(this.release, this.minRelease, this.maxRelease));
+        var _this = this;
+        this.knobFrequency.init(this.minFrequency, this.maxFrequency, this.filter.frequency.value, function (value) {
+            _this.frequency = value;
+            _this.filter.frequency.setValueAtTime(_this.frequency, 0);
+        });
+        this.knobQ.init(this.minQ, this.maxQ, this.filter.Q.value, function (value) {
+            _this.filter.Q.setValueAtTime(value, 0);
+        });
+        this.knobDepth.init(this.minDepth, this.maxDepth, this.depth, function (value) {
+            _this.depth = value;
+        });
+        this.knobAttack.init(this.minAttack, this.maxAttack, this.attack, function (value) {
+            _this.attack = value;
+        });
+        this.knobDecay.init(this.minDecay, this.maxDecay, this.decay, function (value) {
+            _this.decay = value;
+        });
+        this.knobSustain.init(this.minSustain, this.maxSustain, this.sustain, function (value) {
+            _this.sustain = value;
+        });
+        this.knobRelease.init(this.minRelease, this.maxRelease, this.release, function (value) {
+            _this.sustain = value;
+        });
     };
     BiquadFilterComponent.prototype.node = function () {
         return this.filter;
@@ -103,32 +118,8 @@ var BiquadFilterComponent = /** @class */ (function () {
         var name = componentName + ' Cutoff';
         this.lfoTargetService.registerTarget(new lfoTarget_1.LfoTarget(id, name, 20, 5000, this.filter.frequency));
     };
-    BiquadFilterComponent.prototype.updateFrequency = function (value) {
-        this.frequency = utilities_1.default.scaleFromPercent(value, this.minFrequency, this.maxFrequency);
-        this.filter.frequency.setValueAtTime(this.frequency, 0);
-    };
-    BiquadFilterComponent.prototype.updateQ = function (value) {
-        this.filter.Q.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minQ, this.maxQ), 0);
-    };
-    BiquadFilterComponent.prototype.updateGain = function (value) {
-        this.filter.gain.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minGain, this.maxGain), 0);
-    };
-    BiquadFilterComponent.prototype.updateDepth = function (value) {
-        this.depth = utilities_1.default.scaleFromPercent(value, this.minDepth, this.maxDepth);
-    };
-    BiquadFilterComponent.prototype.updateAttack = function (value) {
-        this.attack = utilities_1.default.scaleFromPercent(value, this.minAttack, this.maxAttack);
-    };
-    BiquadFilterComponent.prototype.updateDecay = function (value) {
-        this.decay = utilities_1.default.scaleFromPercent(value, this.minDecay, this.maxDecay);
-    };
-    BiquadFilterComponent.prototype.updateSustain = function (value) {
-        this.sustain = utilities_1.default.scaleFromPercent(value, this.minSustain, this.maxSustain);
-    };
-    BiquadFilterComponent.prototype.updateRelease = function (value) {
-        this.release = utilities_1.default.scaleFromPercent(value, this.minRelease, this.maxRelease);
-    };
     BiquadFilterComponent.prototype.updateType = function (type) {
+        var _this = this;
         this.filter.type = type;
         switch (type) {
             case 'lowpass':
@@ -140,7 +131,9 @@ var BiquadFilterComponent = /** @class */ (function () {
                     this.showGain = false;
                     this.showQ = true;
                     this.filter.gain.setValueAtTime(0, 0);
-                    this.knobGain.setInitialValue(utilities_1.default.scaleToPercent(this.filter.gain.value, this.minGain, this.maxGain));
+                    this.knobGain.init(this.minGain, this.maxGain, this.filter.gain.value, function (value) {
+                        _this.filter.gain.setValueAtTime(value, 0);
+                    });
                     return;
                 }
             case 'lowshelf':
@@ -149,7 +142,9 @@ var BiquadFilterComponent = /** @class */ (function () {
                     this.showGain = true;
                     this.showQ = false;
                     this.filter.Q.setValueAtTime(2, 0);
-                    this.knobQ.setInitialValue(utilities_1.default.scaleToPercent(this.filter.Q.value, this.minQ, this.maxQ));
+                    this.knobGain.init(this.minGain, this.maxGain, this.filter.gain.value, function (value) {
+                        _this.filter.gain.setValueAtTime(value, 0);
+                    });
                     return;
                 }
             case 'peaking':
@@ -159,6 +154,9 @@ var BiquadFilterComponent = /** @class */ (function () {
                     return;
                 }
         }
+    };
+    BiquadFilterComponent.prototype.scaleFromPercent = function (value, lower, upper) {
+        return ((upper - lower) * (value / 100.0)) + lower;
     };
     __decorate([
         core_1.Input('name'),
@@ -199,7 +197,7 @@ var BiquadFilterComponent = /** @class */ (function () {
     BiquadFilterComponent = __decorate([
         core_1.Component({
             selector: 'biquad-filter',
-            template: "<h4>{{name}}</h4>\n<div><label>Type</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"lowpass\" selected>Low Pass</option>\n        <option value=\"highpass\">High Pass</option>    \n        <option value=\"bandpass\">Band Pass</option>\n        <option value=\"lowshelf\">Low Shelf</option>\n        <option value=\"highshelf\">High Shelf</option>\n        <option value=\"peaking\">Peaking</option>\n        <option value=\"notch\">Notch</option>\n        <option value=\"allpass\">All Pass</option>\n    </select>\n</div>\n<knob #knobFrequency label=\"Cut Off\" (change)=\"updateFrequency($event)\"></knob>\n<knob #knobQ label=\"Resonance\" (change)=\"updateQ($event)\" [class.hide]=\"!showQ\"></knob>\n<knob #knobGain label=\"Gain\" (change)=\"updateGain($event)\" [class.hide]=\"!showGain\"></knob>\n<knob #knobDepth label=\"Env. Depth\" (change)=\"updateDepth($event)\"></knob>\n<knob #knobAttack label=\"Env. Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobDecay label=\"Env. Decay\" (change)=\"updateDecay($event)\"></knob>\n<knob #knobSustain label=\"Env. Sustain\" (change)=\"updateSustain($event)\"></knob>\n<knob #knobRelease label=\"Env. Release\" (change)=\"updateRelease($event)\"></knob>\n"
+            template: "<h4>{{name}}</h4>\n<div><label>Type</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"lowpass\" selected>Low Pass</option>\n        <option value=\"highpass\">High Pass</option>    \n        <option value=\"bandpass\">Band Pass</option>\n        <option value=\"lowshelf\">Low Shelf</option>\n        <option value=\"highshelf\">High Shelf</option>\n        <option value=\"peaking\">Peaking</option>\n        <option value=\"notch\">Notch</option>\n        <option value=\"allpass\">All Pass</option>\n    </select>\n</div>\n<knob #knobFrequency label=\"Cut Off\"  unit=\"Hz\"></knob>\n<knob #knobQ label=\"Resonance\" [class.hide]=\"!showQ\"  unit=\"\"></knob>\n<knob #knobGain label=\"Gain\" [class.hide]=\"!showGain\"  unit=\"\"></knob>\n<knob #knobDepth label=\"Env. Depth\"  unit=\"\"></knob>\n<knob #knobAttack label=\"Env. Attack\"  unit=\"s\"></knob>\n<knob #knobDecay label=\"Env. Decay\"  unit=\"s\"></knob>\n<knob #knobSustain label=\"Env. Sustain\"  unit=\"s\"></knob>\n<knob #knobRelease label=\"Env. Release\"  unit=\"s\"></knob>\n"
         }),
         __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService, lfoTarget_service_1.LfoTargetService])
     ], BiquadFilterComponent);

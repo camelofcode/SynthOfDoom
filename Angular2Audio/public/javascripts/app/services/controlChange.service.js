@@ -11,12 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var midi_input_service_1 = require("./midi.input.service");
-var utilities_1 = require("../supporting/utilities");
 var ControlChangeService = /** @class */ (function () {
     function ControlChangeService(midiInputService) {
         var _this = this;
         this.controlChange = function (control, value) {
-            _this.target(utilities_1.default.scaleToPercentFromMidi(value));
+            _this.target(_this.scaleToPercentFromMidi(value));
         };
         this.midiInputService = midiInputService;
         this.midiInputService.controlChange$.subscribe(function (message) {
@@ -25,6 +24,12 @@ var ControlChangeService = /** @class */ (function () {
     }
     ControlChangeService.prototype.setTarget = function (target) {
         this.target = target;
+    };
+    ControlChangeService.prototype.scaleToMidiFromPercent = function (value) {
+        return (127.0 * (value / 100.0));
+    };
+    ControlChangeService.prototype.scaleToPercentFromMidi = function (value) {
+        return (value / 127.0) * 100.0;
     };
     ControlChangeService = __decorate([
         core_1.Injectable(),

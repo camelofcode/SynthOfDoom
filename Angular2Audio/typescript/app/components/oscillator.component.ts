@@ -4,7 +4,6 @@ import { AudioContextService } from '../services/audioContext.service';
 import { LfoTargetService } from '../services/lfoTarget.service';
 import { KnobComponent } from './ui/knob.component';
 import { LfoTarget } from '../models/lfoTarget';
-import Utilities from '../supporting/utilities';
 
 @Component({
     selector: 'oscillator',
@@ -27,7 +26,7 @@ import Utilities from '../supporting/utilities';
         <option value="2">2</option>
     </select></div>
 <br/>
-<div><knob #knobDetune label="Detune" (change)="updateDetune($event)"></knob></div>
+<div><knob #knobDetune label="Detune"></knob></div>
 `
 })
 export class OscillatorComponent implements IAudioNodeComponent, OnInit {
@@ -64,7 +63,9 @@ export class OscillatorComponent implements IAudioNodeComponent, OnInit {
     }
 
     ngOnInit(): void {
-        this.knobDetune.setInitialValue(Utilities.scaleToPercent(this.oscillator.detune.value, this.minDetune, this.maxDetune));
+        this.knobDetune.init(this.minDetune, this.maxDetune, this.oscillator.detune.value, (value: number) => {
+            this.oscillator.detune.setValueAtTime(value, 0);
+        });
     }
 
     node(): AudioNode {
@@ -84,10 +85,6 @@ export class OscillatorComponent implements IAudioNodeComponent, OnInit {
 
     updateOctave(octave: string) {
         this.octave = parseInt(octave, 10);
-    }
-
-    updateDetune(value: number) {
-        this.oscillator.detune.setValueAtTime(Utilities.scaleFromPercent(value, this.minDetune, this.maxDetune), 0);
     }
 
     private frequencyFromNoteNumber = (note: number) => {

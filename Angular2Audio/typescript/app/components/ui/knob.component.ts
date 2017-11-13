@@ -8,7 +8,7 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@
     <div #knob class="knob-handle"></div>
 </div>
 <label class="knob-label">{{label}}</label>
-<label class="knob-label">{{meterValue | number:'1.0-0'}}%</label>
+<label class="knob-label">{{meterValue | number:'1.0-0'}} {{unit}}</label>
 `,
     styles: [`
 .knob-background{
@@ -51,8 +51,11 @@ export class KnobComponent {
     @Input('label')
     label: String = 'label';
 
-    @Output('change')
-    change: EventEmitter<number> = new EventEmitter<number>(false);
+    @Input('unit')
+    unit: String = 'unit';
+
+    //@Output('change')
+    //change: EventEmitter<number> = new EventEmitter<number>(false);
 
     @ViewChild('knob')
     knobDiv: ElementRef;
@@ -63,6 +66,18 @@ export class KnobComponent {
             this.maxDistance = document.body.clientWidth;
         }
         this.maxDistance = Math.round((this.maxDistance * 10) / 100);
+    }
+
+    private loValue: number;
+    private hiValue: number;
+    private updateFunction: Function;
+    init(lo: number, hi: number, initial: number, update: Function) {
+        this.loValue = lo;
+        this.hiValue = hi;
+        this.updateFunction = update;
+
+        this.meterValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
+        this.calculateInitialValue();
     }
 
     ngAfterViewInit() {
@@ -88,11 +103,6 @@ export class KnobComponent {
         }
     }
 
-    setInitialValue(value: number) {
-        this.meterValue = value;
-        this.calculateInitialValue();
-    }
-
     calculateChange(mousePositionChange: number) {
         const maxDegrees = this.getMaxDegrees();
         let newValue = mousePositionChange * maxDegrees / this.maxDistance;
@@ -112,7 +122,7 @@ export class KnobComponent {
         this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
 
         if (this.intensive) {
-            this.change.emit(this.meterValue);
+            this.setValueFromPercent(this.meterValue);
         }
     }
 
@@ -152,7 +162,7 @@ export class KnobComponent {
 
         var funcRemove = (e: any) => {
             if (!this.intensive) {
-                this.change.emit(this.meterValue);
+                this.setValueFromPercent(this.meterValue);
             }
             if (e.stopPropagation) {
                 e.stopPropagation();
@@ -175,6 +185,10 @@ export class KnobComponent {
         document.addEventListener('touchend', funcRemove, false);
     }
 
+    private setValueFromPercent(value: number) {
+        this.updateFunction(this.scaleFromPercent(value, this.loValue, this.hiValue));
+    }
+
     private calculateInitialValue() {
         const norm: number = this.meterValue - this.min;
         const percent = norm * 100 / (this.max - this.min);
@@ -183,5 +197,13 @@ export class KnobComponent {
         this.meterRotation = rot % 360;
         rot = rot + this.startDegree;
         this.knobDiv.nativeElement.style.transform = `rotate(${rot}deg)`;
+    }
+
+    private scaleFromPercent(value: number, lower: number, upper: number) {
+        return ((upper - lower) * (value / 100.0)) + lower;
+    }
+
+    private scaleToPercent(value: number, lower: number, upper: number) {
+        return ((value - lower) / (upper - lower)) * 100.0;
     }
 }

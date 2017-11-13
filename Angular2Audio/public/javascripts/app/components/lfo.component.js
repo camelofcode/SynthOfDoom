@@ -15,7 +15,6 @@ var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
 var lfoTarget_1 = require("../models/lfoTarget");
 var lfoConnectionRequest_1 = require("../models/lfoConnectionRequest");
-var utilities_1 = require("../supporting/utilities");
 var LfoComponent = /** @class */ (function () {
     function LfoComponent(audioContextService, lfoTargetService) {
         this.targets = new Array();
@@ -36,8 +35,13 @@ var LfoComponent = /** @class */ (function () {
         this.lfo.connect(this.gain);
     }
     LfoComponent.prototype.ngOnInit = function () {
-        this.knobFrequecy.setInitialValue(utilities_1.default.scaleToPercent(this.lfo.frequency.value, this.minFrequency, this.maxFrequency));
-        this.knobAmplitude.setInitialValue(utilities_1.default.scaleToPercent(this.gain.gain.value, this.minAmplitude, this.maxAmplitude));
+        var _this = this;
+        this.knobFrequency.init(this.minFrequency, this.maxFrequency, this.lfo.frequency.value, function (value) {
+            _this.lfo.frequency.setValueAtTime(value, 0);
+        });
+        this.knobAmplitude.init(this.minAmplitude, this.maxAmplitude, 0.5, function (value) {
+            _this.gain.gain.setValueAtTime(value, 0);
+        });
     };
     LfoComponent.prototype.loadTargets = function () {
         this.targets = new Array();
@@ -51,6 +55,7 @@ var LfoComponent = /** @class */ (function () {
         this.lfo.type = type;
     };
     LfoComponent.prototype.updateTarget = function (targetId) {
+        var _this = this;
         if (this.currentTarget) {
             this.lfoTargetService.disconnectTarget(new lfoConnectionRequest_1.LfoConnectionRequest(this.currentTarget, this.gain));
         }
@@ -65,23 +70,19 @@ var LfoComponent = /** @class */ (function () {
             this.maxAmplitude = 1;
             this.currentTarget = null;
         }
-        this.gain.gain.value = utilities_1.default.scaleFromPercent(50, this.minAmplitude, this.maxAmplitude);
-        this.knobAmplitude.setInitialValue(utilities_1.default.scaleToPercent(this.gain.gain.value, this.minAmplitude, this.maxAmplitude));
-    };
-    LfoComponent.prototype.updateFrequency = function (value) {
-        this.lfo.frequency.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minFrequency, this.maxFrequency), 0);
-    };
-    LfoComponent.prototype.updateAmplitude = function (value) {
-        this.gain.gain.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minAmplitude, this.maxAmplitude), 0);
+        this.gain.gain.value = 0.5;
+        this.knobAmplitude.init(this.minAmplitude, this.maxAmplitude, 0.5, function (value) {
+            _this.gain.gain.setValueAtTime(value, 0);
+        });
     };
     __decorate([
         core_1.Input('name'),
         __metadata("design:type", String)
     ], LfoComponent.prototype, "name", void 0);
     __decorate([
-        core_1.ViewChild('knobFrequecy'),
+        core_1.ViewChild('knobFrequency'),
         __metadata("design:type", knob_component_1.KnobComponent)
-    ], LfoComponent.prototype, "knobFrequecy", void 0);
+    ], LfoComponent.prototype, "knobFrequency", void 0);
     __decorate([
         core_1.ViewChild('knobAmplitude'),
         __metadata("design:type", knob_component_1.KnobComponent)
@@ -89,7 +90,7 @@ var LfoComponent = /** @class */ (function () {
     LfoComponent = __decorate([
         core_1.Component({
             selector: 'lfo',
-            template: "<h4>{{name}}</h4>\n<div><label>Waveform</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"sine\" selected>Sine</option>\n        <option value=\"sawtooth\">Sawtooth</option>    \n        <option value=\"square\">Square</option>\n        <option value=\"triangle\">Triangle</option>\n    </select>\n</div>\n<br/>\n<div><label>Target</label><br/>\n    <select (change)=\"updateTarget($event.target.value)\">\n        <option *ngFor=\"let target of targets\" value=\"{{target.id}}\">{{target.displayName}}</option>  \n    </select>\n</div>\n<br/>\n<div>\n    <knob #knobFrequecy label=\"Rate\" (change)=\"updateFrequency($event)\"></knob>\n    <knob #knobAmplitude label=\"Depth\" (change)=\"updateAmplitude($event)\"></knob>\n</div>\n"
+            template: "<h4>{{name}}</h4>\n<div><label>Waveform</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"sine\" selected>Sine</option>\n        <option value=\"sawtooth\">Sawtooth</option>    \n        <option value=\"square\">Square</option>\n        <option value=\"triangle\">Triangle</option>\n    </select>\n</div>\n<br/>\n<div><label>Target</label><br/>\n    <select (change)=\"updateTarget($event.target.value)\">\n        <option *ngFor=\"let target of targets\" value=\"{{target.id}}\">{{target.displayName}}</option>  \n    </select>\n</div>\n<br/>\n<div>\n    <knob #knobFrequency label=\"Rate\"></knob>\n    <knob #knobAmplitude label=\"Depth\"></knob>\n</div>\n"
         }),
         __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, lfoTarget_service_1.LfoTargetService])
     ], LfoComponent);

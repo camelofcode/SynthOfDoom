@@ -3,8 +3,6 @@ import { MidiInputService } from './midi.input.service';
 
 import { ControlChangeMessage } from '../models/controlChangeMessage';
 
-import Utilities from '../supporting/utilities';
-
 @Injectable()
 export class ControlChangeService {
     private readonly midiInputService: MidiInputService;
@@ -26,6 +24,14 @@ export class ControlChangeService {
     }
 
     private controlChange = (control: number, value: number) => {
-        this.target(Utilities.scaleToPercentFromMidi(value));
+        this.target(this.scaleToPercentFromMidi(value));
+    }
+
+    private scaleToMidiFromPercent(value: number) {
+        return (127.0 * (value / 100.0));
+    }
+
+    private scaleToPercentFromMidi(value: number) {
+        return (value / 127.0) * 100.0;
     }
 }

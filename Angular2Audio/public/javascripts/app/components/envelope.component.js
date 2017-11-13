@@ -13,7 +13,6 @@ var core_1 = require("@angular/core");
 var input_service_1 = require("../services/input.service");
 var audioContext_service_1 = require("../services/audioContext.service");
 var knob_component_1 = require("./ui/knob.component");
-var utilities_1 = require("../supporting/utilities");
 var EnvelopeComponent = /** @class */ (function () {
     function EnvelopeComponent(audioContextService, inputService) {
         var _this = this;
@@ -57,28 +56,25 @@ var EnvelopeComponent = /** @class */ (function () {
         this.envelope.gain.value = 0.0;
     }
     EnvelopeComponent.prototype.ngOnInit = function () {
-        this.knobAttack.setInitialValue(utilities_1.default.scaleToPercent(this.attack, this.minAttack, this.maxAttack));
-        this.knobDecay.setInitialValue(utilities_1.default.scaleToPercent(this.decay, this.minDecay, this.maxDecay));
-        this.knobSustain.setInitialValue(utilities_1.default.scaleToPercent(this.sustain, this.minSustain, this.maxSustain));
-        this.knobRelease.setInitialValue(utilities_1.default.scaleToPercent(this.release, this.minRelease, this.maxRelease));
+        var _this = this;
+        this.knobAttack.init(this.minAttack, this.maxAttack, this.attack, function (value) {
+            _this.attack = value;
+        });
+        this.knobDecay.init(this.minDecay, this.maxDecay, this.decay, function (value) {
+            _this.decay = value;
+        });
+        this.knobSustain.init(this.minSustain, this.maxSustain, this.sustain, function (value) {
+            _this.sustain = value;
+        });
+        this.knobRelease.init(this.minRelease, this.maxRelease, this.release, function (value) {
+            _this.sustain = value;
+        });
     };
     EnvelopeComponent.prototype.node = function () {
         return this.envelope;
     };
     EnvelopeComponent.prototype.registerTargets = function () {
         return;
-    };
-    EnvelopeComponent.prototype.updateAttack = function (value) {
-        this.attack = utilities_1.default.scaleFromPercent(value, this.minAttack, this.maxAttack);
-    };
-    EnvelopeComponent.prototype.updateDecay = function (value) {
-        this.decay = utilities_1.default.scaleFromPercent(value, this.minDecay, this.maxDecay);
-    };
-    EnvelopeComponent.prototype.updateSustain = function (value) {
-        this.sustain = utilities_1.default.scaleFromPercent(value, this.minSustain, this.maxSustain);
-    };
-    EnvelopeComponent.prototype.updateRelease = function (value) {
-        this.release = utilities_1.default.scaleFromPercent(value, this.minRelease, this.maxRelease);
     };
     __decorate([
         core_1.ViewChild('knobAttack'),
@@ -99,7 +95,7 @@ var EnvelopeComponent = /** @class */ (function () {
     EnvelopeComponent = __decorate([
         core_1.Component({
             selector: 'envelope',
-            template: "<h4>Envelope</h4>\n<knob #knobAttack label=\"Attack\" (change)=\"updateAttack($event)\"></knob>\n<knob #knobDecay label=\"Decay\" (change)=\"updateDecay($event)\"></knob>\n<knob #knobSustain label=\"Sustain\" (change)=\"updateSustain($event)\"></knob>\n<knob #knobRelease label=\"Release\" (change)=\"updateRelease($event)\"></knob>\n"
+            template: "<h4>Envelope</h4>\n<knob #knobAttack label=\"Attack\" unit=\"s\"></knob>\n<knob #knobDecay label=\"Decay\" unit=\"s\"></knob>\n<knob #knobSustain label=\"Sustain\" unit=\"s\"></knob>\n<knob #knobRelease label=\"Release\" unit=\"s\"></knob>\n"
         }),
         __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService])
     ], EnvelopeComponent);

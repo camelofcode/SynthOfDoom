@@ -15,7 +15,6 @@ var audioContext_service_1 = require("../services/audioContext.service");
 var lfoTarget_service_1 = require("../services/lfoTarget.service");
 var knob_component_1 = require("./ui/knob.component");
 var lfoTarget_1 = require("../models/lfoTarget");
-var utilities_1 = require("../supporting/utilities");
 var OscillatorComponent = /** @class */ (function () {
     function OscillatorComponent(audioContext, inputService, lfoTargetService) {
         var _this = this;
@@ -50,7 +49,10 @@ var OscillatorComponent = /** @class */ (function () {
         this.oscillator.type = 'sawtooth';
     }
     OscillatorComponent.prototype.ngOnInit = function () {
-        this.knobDetune.setInitialValue(utilities_1.default.scaleToPercent(this.oscillator.detune.value, this.minDetune, this.maxDetune));
+        var _this = this;
+        this.knobDetune.init(this.minDetune, this.maxDetune, this.oscillator.detune.value, function (value) {
+            _this.oscillator.detune.setValueAtTime(value, 0);
+        });
     };
     OscillatorComponent.prototype.node = function () {
         return this.oscillator;
@@ -66,9 +68,6 @@ var OscillatorComponent = /** @class */ (function () {
     OscillatorComponent.prototype.updateOctave = function (octave) {
         this.octave = parseInt(octave, 10);
     };
-    OscillatorComponent.prototype.updateDetune = function (value) {
-        this.oscillator.detune.setValueAtTime(utilities_1.default.scaleFromPercent(value, this.minDetune, this.maxDetune), 0);
-    };
     __decorate([
         core_1.Input('name'),
         __metadata("design:type", String)
@@ -80,7 +79,7 @@ var OscillatorComponent = /** @class */ (function () {
     OscillatorComponent = __decorate([
         core_1.Component({
             selector: 'oscillator',
-            template: "<h4>{{name}}</h4>\n<div><label>Waveform</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"sine\">Sine</option>\n        <option value=\"sawtooth\" selected>Sawtooth</option>    \n        <option value=\"square\">Square</option>\n        <option value=\"triangle\">Triangle</option>\n    </select>\n</div>\n<br/>\n<div><label>Octave</label><br/>\n    <select (change)=\"updateOctave($event.target.value)\">\n        <option value=\"-2\">-2</option>    \n        <option value=\"-1\">-1</option>\n        <option value=\"0\" selected>0</option>\n        <option value=\"1\">1</option>\n        <option value=\"2\">2</option>\n    </select></div>\n<br/>\n<div><knob #knobDetune label=\"Detune\" (change)=\"updateDetune($event)\"></knob></div>\n"
+            template: "<h4>{{name}}</h4>\n<div><label>Waveform</label><br/>\n    <select (change)=\"updateType($event.target.value)\">\n        <option value=\"sine\">Sine</option>\n        <option value=\"sawtooth\" selected>Sawtooth</option>    \n        <option value=\"square\">Square</option>\n        <option value=\"triangle\">Triangle</option>\n    </select>\n</div>\n<br/>\n<div><label>Octave</label><br/>\n    <select (change)=\"updateOctave($event.target.value)\">\n        <option value=\"-2\">-2</option>    \n        <option value=\"-1\">-1</option>\n        <option value=\"0\" selected>0</option>\n        <option value=\"1\">1</option>\n        <option value=\"2\">2</option>\n    </select></div>\n<br/>\n<div><knob #knobDetune label=\"Detune\"></knob></div>\n"
         }),
         __metadata("design:paramtypes", [audioContext_service_1.AudioContextService, input_service_1.InputService, lfoTarget_service_1.LfoTargetService])
     ], OscillatorComponent);

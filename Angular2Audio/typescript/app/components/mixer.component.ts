@@ -1,14 +1,13 @@
 ﻿import { Component, QueryList, ViewChildren, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
-import Utilities from '../supporting/utilities';
 
 @Component({
     selector: 'mixer',
     template: `<h4>Mixer</h4>
 <ng-template ngFor let-item [ngForOf]="inputNodes" let-currentIndex="index + 1" let-i="index">
-    <knob #gainKnobs (change)="updateChannelGain($event, i)"></knob>
-    <knob #filterKnobs label="Filter 1/2 Mix" (change)="updateChannelFilter($event, i)"></knob>
+    <knob #gainKnobs></knob>
+    <knob #filterKnobs label="Filter 1/2 Mix"></knob>
     <input #switches type="checkbox" (change)="updateChannelOn($event, i)"/>
 </ng-template>
 `
@@ -51,10 +50,18 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
 
     ngAfterViewInit(): void {
         for (let i = 0; i < this.inputNodes.length; i++) {
-            this.gainKnobs.toArray()[i].setInitialValue(Utilities.scaleToPercent(this.inputNodes[i].gain.value, this.minGain, this.maxGain));
+            const x = i;
+
+            this.gainKnobs.toArray()[i].init(this.minGain, this.maxGain, this.inputNodes[i].gain.value, (value: number) => {
+                this.inputNodes[x].gain.setValueAtTime(value, 0);
+            });
+
             this.gainKnobs.toArray()[i].label = this.labels[i];
 
-            this.filterKnobs.toArray()[i].setInitialValue(Utilities.scaleToPercent(this.output2ChannelGains[i].gain.value, this.minGain, this.maxGain));
+            this.filterKnobs.toArray()[i].init(this.minGain, this.maxGain, this.output2ChannelGains[i].gain.value, (value: number) => {
+                this.output1ChannelGains[x].gain.setValueAtTime(1 - value, 0);
+                this.output2ChannelGains[x].gain.setValueAtTime(value, 0);
+            });
 
             this.switches.toArray()[i].nativeElement.checked = true;
 
@@ -95,15 +102,6 @@ export class MixerComponent implements IMultiInputAudioNodeComponent, AfterViewI
         }
 
         return this.outputNode2;
-    }
-
-    updateChannelGain(value: number, target: number) {
-        this.inputNodes[target].gain.setValueAtTime(Utilities.scaleFromPercent(value, this.minGain, this.maxGain), 0);
-    }
-
-    updateChannelFilter(value: number, target: number) {
-        this.output1ChannelGains[target].gain.setValueAtTime(Utilities.scaleFromPercent(100 - value, this.minGain, this.maxGain), 0);
-        this.output2ChannelGains[target].gain.setValueAtTime(Utilities.scaleFromPercent(value, this.minGain, this.maxGain), 0);
     }
 
     updateChannelOn(event: any, target: number) {

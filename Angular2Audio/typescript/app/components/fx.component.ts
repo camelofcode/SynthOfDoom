@@ -1,5 +1,4 @@
 ﻿import { AudioContextService } from '../services/audioContext.service';
-import Utilities from '../supporting/utilities';
 
 export abstract class FxComponent   {
 
@@ -40,9 +39,8 @@ export abstract class FxComponent   {
     }
 
     updateMix(value: number) {
-        const scaled = Utilities.scaleFromPercent(value, 0, 1);
-        this.wet.gain.setValueAtTime(scaled, 0);
-        this.dry.gain.setValueAtTime(1.0 - scaled, 0);
+        this.wet.gain.setValueAtTime(value, 0);
+        this.dry.gain.setValueAtTime(1.0 - value, 0);
     }
 
     updateOn(event: any) {

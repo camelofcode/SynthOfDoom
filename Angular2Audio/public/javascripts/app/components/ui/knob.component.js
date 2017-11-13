@@ -25,13 +25,20 @@ var KnobComponent = /** @class */ (function () {
         this.endDegree = 120;
         this.intensive = true;
         this.label = 'label';
-        this.change = new core_1.EventEmitter(false);
+        this.unit = 'unit';
         this.maxDistance = document.body.clientHeight;
         if (document.body.clientWidth > this.maxDistance) {
             this.maxDistance = document.body.clientWidth;
         }
         this.maxDistance = Math.round((this.maxDistance * 10) / 100);
     }
+    KnobComponent.prototype.init = function (lo, hi, initial, update) {
+        this.loValue = lo;
+        this.hiValue = hi;
+        this.updateFunction = update;
+        this.meterValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
+        this.calculateInitialValue();
+    };
     KnobComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         this.knobDiv.nativeElement.addEventListener('mousedown', function (e) { _this.setChangeListener(e); });
@@ -55,10 +62,10 @@ var KnobComponent = /** @class */ (function () {
             return 0;
         }
     };
-    KnobComponent.prototype.setInitialValue = function (value) {
-        this.meterValue = value;
-        this.calculateInitialValue();
-    };
+    //setInitialValue(value: number) {
+    //    this.meterValue = value;
+    //    this.calculateInitialValue();
+    //}
     KnobComponent.prototype.calculateChange = function (mousePositionChange) {
         var maxDegrees = this.getMaxDegrees();
         var newValue = mousePositionChange * maxDegrees / this.maxDistance;
@@ -75,7 +82,7 @@ var KnobComponent = /** @class */ (function () {
         var norm = this.max - this.min;
         this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
         if (this.intensive) {
-            this.change.emit(this.meterValue);
+            this.setValueFromPercent(this.meterValue);
         }
     };
     KnobComponent.prototype.getMousePosition = function (event) {
@@ -113,7 +120,7 @@ var KnobComponent = /** @class */ (function () {
         };
         var funcRemove = function (e) {
             if (!_this.intensive) {
-                _this.change.emit(_this.meterValue);
+                _this.setValueFromPercent(_this.meterValue);
             }
             if (e.stopPropagation) {
                 e.stopPropagation();
@@ -134,6 +141,9 @@ var KnobComponent = /** @class */ (function () {
         document.addEventListener('mouseup', funcRemove, false);
         document.addEventListener('touchend', funcRemove, false);
     };
+    KnobComponent.prototype.setValueFromPercent = function (value) {
+        this.updateFunction(this.scaleFromPercent(value, this.loValue, this.hiValue));
+    };
     KnobComponent.prototype.calculateInitialValue = function () {
         var norm = this.meterValue - this.min;
         var percent = norm * 100 / (this.max - this.min);
@@ -143,14 +153,20 @@ var KnobComponent = /** @class */ (function () {
         rot = rot + this.startDegree;
         this.knobDiv.nativeElement.style.transform = "rotate(" + rot + "deg)";
     };
+    KnobComponent.prototype.scaleFromPercent = function (value, lower, upper) {
+        return ((upper - lower) * (value / 100.0)) + lower;
+    };
+    KnobComponent.prototype.scaleToPercent = function (value, lower, upper) {
+        return ((value - lower) / (upper - lower)) * 100.0;
+    };
     __decorate([
         core_1.Input('label'),
         __metadata("design:type", String)
     ], KnobComponent.prototype, "label", void 0);
     __decorate([
-        core_1.Output('change'),
-        __metadata("design:type", core_1.EventEmitter)
-    ], KnobComponent.prototype, "change", void 0);
+        core_1.Input('unit'),
+        __metadata("design:type", String)
+    ], KnobComponent.prototype, "unit", void 0);
     __decorate([
         core_1.ViewChild('knob'),
         __metadata("design:type", core_1.ElementRef)
@@ -158,7 +174,7 @@ var KnobComponent = /** @class */ (function () {
     KnobComponent = __decorate([
         core_1.Component({
             selector: 'knob',
-            template: "\n<div class=\"knob-background\">\n    <div #knob class=\"knob-handle\"></div>\n</div>\n<label class=\"knob-label\">{{label}}</label>\n<label class=\"knob-label\">{{meterValue | number:'1.0-0'}}%</label>\n",
+            template: "\n<div class=\"knob-background\">\n    <div #knob class=\"knob-handle\"></div>\n</div>\n<label class=\"knob-label\">{{label}}</label>\n<label class=\"knob-label\">{{meterValue | number:'1.0-0'}} {{unit}}</label>\n",
             styles: ["\n.knob-background{\n    background:url('/skins/skin1_back.svg');    \n    background-size: contain;\n    background-repeat: no-repeat;\n    width: 30px;\n    height: 30px;\n    display: inline-block;\n}\n.knob-handle{\n    background:url('/skins/skin1_front.svg');\n    background-size: contain;    \n    background-repeat: no-repeat;\n    width: 100%;\n    height: 100%;\n    cursor:pointer;\n}\n.knob-label{\n    font-size: 10px;\n    display: block;\n}\n"]
         }),
         __metadata("design:paramtypes", [])

@@ -5,7 +5,6 @@ import { KnobComponent } from './ui/knob.component';
 import { LfoTarget } from '../models/lfoTarget';
 import { LfoConnectionRequest } from '../models/lfoConnectionRequest';
 import { LfoConnectionResponse } from '../models/lfoConnectionResponse';
-import Utilities from '../supporting/utilities';
 
 @Component({
     selector: 'lfo',
@@ -26,8 +25,8 @@ import Utilities from '../supporting/utilities';
 </div>
 <br/>
 <div>
-    <knob #knobFrequecy label="Rate" (change)="updateFrequency($event)"></knob>
-    <knob #knobAmplitude label="Depth" (change)="updateAmplitude($event)"></knob>
+    <knob #knobFrequency label="Rate"></knob>
+    <knob #knobAmplitude label="Depth"></knob>
 </div>
 `
 })
@@ -47,8 +46,8 @@ export class LfoComponent implements OnInit {
     private maxAmplitude: number = 1;
     private currentTarget: string = null;
 
-    @ViewChild('knobFrequecy')
-    private knobFrequecy: KnobComponent;
+    @ViewChild('knobFrequency')
+    private knobFrequency: KnobComponent;
 
     @ViewChild('knobAmplitude')
     private knobAmplitude: KnobComponent;
@@ -69,8 +68,13 @@ export class LfoComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.knobFrequecy.setInitialValue(Utilities.scaleToPercent(this.lfo.frequency.value, this.minFrequency, this.maxFrequency));
-        this.knobAmplitude.setInitialValue(Utilities.scaleToPercent(this.gain.gain.value, this.minAmplitude, this.maxAmplitude));
+        this.knobFrequency.init(this.minFrequency, this.maxFrequency, this.lfo.frequency.value, (value: number) => {
+            this.lfo.frequency.setValueAtTime(value, 0);
+        });
+
+        this.knobAmplitude.init(this.minAmplitude, this.maxAmplitude, 0.5, (value: number) => {
+            this.gain.gain.setValueAtTime(value, 0);
+        });
     }
 
     loadTargets(): void {
@@ -104,15 +108,9 @@ export class LfoComponent implements OnInit {
             this.currentTarget = null;
         }
 
-        this.gain.gain.value = Utilities.scaleFromPercent(50, this.minAmplitude, this.maxAmplitude);
-        this.knobAmplitude.setInitialValue(Utilities.scaleToPercent(this.gain.gain.value, this.minAmplitude, this.maxAmplitude));
-    }
-
-    updateFrequency(value: number) {
-        this.lfo.frequency.setValueAtTime(Utilities.scaleFromPercent(value, this.minFrequency, this.maxFrequency), 0);
-    }
-
-    updateAmplitude(value: number) {
-        this.gain.gain.setValueAtTime(Utilities.scaleFromPercent(value, this.minAmplitude, this.maxAmplitude), 0);
+        this.gain.gain.value = 0.5;
+        this.knobAmplitude.init(this.minAmplitude, this.maxAmplitude, 0.5, (value: number) => {
+            this.gain.gain.setValueAtTime(value, 0);
+        });
     }
 }

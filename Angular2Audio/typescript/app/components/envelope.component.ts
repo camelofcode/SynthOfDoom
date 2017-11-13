@@ -2,15 +2,14 @@
 import { InputService } from '../services/input.service';
 import { AudioContextService } from '../services/audioContext.service';
 import { KnobComponent } from './ui/knob.component';
-import Utilities from '../supporting/utilities';
 
 @Component({
     selector: 'envelope',
     template: `<h4>Envelope</h4>
-<knob #knobAttack label="Attack" (change)="updateAttack($event)"></knob>
-<knob #knobDecay label="Decay" (change)="updateDecay($event)"></knob>
-<knob #knobSustain label="Sustain" (change)="updateSustain($event)"></knob>
-<knob #knobRelease label="Release" (change)="updateRelease($event)"></knob>
+<knob #knobAttack label="Attack" unit="s"></knob>
+<knob #knobDecay label="Decay" unit="s"></knob>
+<knob #knobSustain label="Sustain" unit="s"></knob>
+<knob #knobRelease label="Release" unit="s"></knob>
 `
 })
 export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
@@ -60,10 +59,21 @@ export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
     }
 
     ngOnInit(): void {
-        this.knobAttack.setInitialValue(Utilities.scaleToPercent(this.attack, this.minAttack, this.maxAttack));
-        this.knobDecay.setInitialValue(Utilities.scaleToPercent(this.decay, this.minDecay, this.maxDecay));
-        this.knobSustain.setInitialValue(Utilities.scaleToPercent(this.sustain, this.minSustain, this.maxSustain));
-        this.knobRelease.setInitialValue(Utilities.scaleToPercent(this.release, this.minRelease, this.maxRelease));
+        this.knobAttack.init(this.minAttack, this.maxAttack, this.attack, (value: number) => {
+            this.attack = value;
+        });
+
+        this.knobDecay.init(this.minDecay, this.maxDecay, this.decay, (value: number) => {
+            this.decay = value;
+        });
+
+        this.knobSustain.init(this.minSustain, this.maxSustain, this.sustain, (value: number) => {
+            this.sustain = value;
+        });
+
+        this.knobRelease.init(this.minRelease, this.maxRelease, this.release, (value: number) => {
+            this.sustain = value;
+        });
     }
 
     node(): AudioNode {
@@ -72,22 +82,6 @@ export class EnvelopeComponent implements IAudioNodeComponent, OnInit {
 
     registerTargets(): void {
         return;
-    }
-
-    updateAttack(value: number) {
-        this.attack = Utilities.scaleFromPercent(value, this.minAttack, this.maxAttack);
-    }
-
-    updateDecay(value: number) {
-        this.decay = Utilities.scaleFromPercent(value, this.minDecay, this.maxDecay);
-    }
-
-    updateSustain(value: number) {
-        this.sustain = Utilities.scaleFromPercent(value, this.minSustain, this.maxSustain);
-    }
-
-    updateRelease(value: number) {
-        this.release = Utilities.scaleFromPercent(value, this.minRelease, this.maxRelease);
     }
 
     private velocityToGain = (velocity: number) => {

@@ -71,7 +71,6 @@
     <Folder Include="typescript\app\components\ui\" />
     <Folder Include="typescript\app\models\" />
     <Folder Include="typescript\app\components\" />
-    <Folder Include="typescript\app\supporting\" />
     <Folder Include="typescript\app\services\" />
     <Folder Include="views\" />
   </ItemGroup>
@@ -139,9 +138,6 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\app\services\midi.input.service.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="typescript\app\supporting\utilities.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typescript\main.ts" />
