@@ -42,14 +42,14 @@ var KnobComponent = /** @class */ (function () {
         this.hiValue = hi;
         this.updateFunction = update;
         this.percentValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
-        this.setLabel();
         this.calculateInitialValue();
+        this.setLabel();
     };
     KnobComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         this.knobDiv.nativeElement.addEventListener('mousedown', function (e) { _this.setChangeListener(e); });
         this.knobDiv.nativeElement.addEventListener('touchstart', function (e) { _this.setChangeListener(e); });
-        this.calculateInitialValue();
+        this.setLabel();
     };
     KnobComponent.prototype.getMouseDifference = function (e) {
         var mousepos = this.getMousePosition(e);

@@ -40,7 +40,6 @@ export class KnobComponent {
     private startX: number = 0;
     private startY: number = 0;
     private maxDistance: number = 0;
-
     private min: number = 0;
     private max: number = 100;
     private percentValue: number = 50;
@@ -48,6 +47,9 @@ export class KnobComponent {
     private startDegree: number = 200;
     private endDegree: number = 120;
     private intensive: boolean = true;
+    private loValue: number;
+    private hiValue: number;
+    private updateFunction: Function;
 
     @Input('label')
     label: String = 'label';
@@ -66,24 +68,22 @@ export class KnobComponent {
         this.maxDistance = Math.round((this.maxDistance * 10) / 100);
     }
 
-    private loValue: number;
-    private hiValue: number;
-    private updateFunction: Function;
     init(lo: number, hi: number, initial: number, update: Function) {
         this.loValue = lo;
         this.hiValue = hi;
         this.updateFunction = update;
 
         this.percentValue = this.scaleToPercent(initial, this.loValue, this.hiValue);
-        this.setLabel();
 
         this.calculateInitialValue();
+        this.setLabel();
     }
 
     ngAfterViewInit() {
         this.knobDiv.nativeElement.addEventListener('mousedown', (e: any) => { this.setChangeListener(e); });
         this.knobDiv.nativeElement.addEventListener('touchstart', (e: any) => { this.setChangeListener(e); });
-        this.calculateInitialValue();
+
+        this.setLabel();
     }
 
     getMouseDifference(e: any) {
@@ -127,7 +127,6 @@ export class KnobComponent {
 
         this.setLabel();
     }
-
 
     getMousePosition(event: any): any {
         const result = { clientX: 0, clientY: 0 };
