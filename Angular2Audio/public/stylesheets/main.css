@@ -11,7 +11,7 @@ a {
     border: 1px solid #006400;
     display: inline-block;
     padding: 5px;
-    margin: 0px;
+    margin: 0;
     position: absolute;
 }
 
@@ -19,7 +19,7 @@ knob {
     display: inline-block;
     /*border: 1px solid #0000cd;*/
     border: 1px solid #ffffff;
-    padding: 0px;
+    padding: 0;
     text-align: center;
     min-width: 60px;
     margin: -2px;
@@ -36,19 +36,12 @@ knob {
     width: 800px;
 }
 
-.inner {
-
-}
-
 h4 {
     margin: 3px;
 }
 
-#midi-learn {
-
-}
-
 #oscillator1 {
+
 }
 
 #oscillator2 {
@@ -63,7 +56,6 @@ h4 {
     top: 607px;
     width: 82px;
 }
-
 
 #mixer {
     left: 93px;

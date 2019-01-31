@@ -9,5 +9,10 @@ export class AudioContextService {
 
     constructor() {
         this.audioContext = new AudioContext();
+
+        window.addEventListener('keydown', ($event: KeyboardEvent) => {
+            if (this.audioContext.state !== "running")
+                this.audioContext.resume();
+        });
     }
 }

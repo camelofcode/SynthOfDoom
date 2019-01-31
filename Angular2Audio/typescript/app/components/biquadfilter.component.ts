@@ -174,7 +174,7 @@ export class BiquadFilterComponent implements IAudioNodeComponent, AfterViewChec
                     this.showGain = true;
                     this.showQ = false;
                     this.filter.Q.setValueAtTime(2, 0);
-                    this.knobGain.init(this.name, this.minGain, this.maxGain, this.filter.gain.value, (value: number) => {
+                    this.knobQ.init(this.name, this.minGain, this.maxGain, this.filter.gain.value, (value: number) => {
                         this.filter.gain.setValueAtTime(value, 0);
                     });
                     return;

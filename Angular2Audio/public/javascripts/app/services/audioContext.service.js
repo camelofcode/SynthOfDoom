@@ -12,7 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var AudioContextService = /** @class */ (function () {
     function AudioContextService() {
+        var _this = this;
         this.audioContext = new AudioContext();
+        window.addEventListener('keydown', function ($event) {
+            if (_this.audioContext.state !== "running")
+                _this.audioContext.resume();
+        });
     }
     AudioContextService.prototype.context = function () {
         return this.audioContext;

@@ -142,7 +142,7 @@ var BiquadFilterComponent = /** @class */ (function () {
                     this.showGain = true;
                     this.showQ = false;
                     this.filter.Q.setValueAtTime(2, 0);
-                    this.knobGain.init(this.name, this.minGain, this.maxGain, this.filter.gain.value, function (value) {
+                    this.knobQ.init(this.name, this.minGain, this.maxGain, this.filter.gain.value, function (value) {
                         _this.filter.gain.setValueAtTime(value, 0);
                     });
                     return;
