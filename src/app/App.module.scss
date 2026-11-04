@@ -1,0 +1,126 @@
+@use '../styles/mixins' as mixins;
+
+.appShell {
+  width: min(100% - 2rem, 72rem);
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 3rem) 0 2rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--colour-border);
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+  }
+}
+
+.eyebrow,
+.kicker {
+  margin: 0 0 0.75rem;
+  color: var(--colour-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.phaseBadge {
+  flex: 0 0 auto;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--colour-accent-muted);
+  border-radius: 999px;
+  color: var(--colour-accent-soft);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.intro {
+  max-width: 48rem;
+  padding: clamp(3rem, 10vw, 7rem) 0;
+
+  h2 {
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  p:last-child {
+    max-width: 42rem;
+    margin: 1.5rem 0 0;
+    color: var(--colour-text-muted);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.7;
+  }
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-panel);
+  background: var(--colour-border);
+
+  @include mixins.below(58rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include mixins.below(34rem) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.moduleCard {
+  min-height: 10rem;
+  padding: 1.25rem;
+  background: var(--colour-panel);
+
+  h3 {
+    margin: 2rem 0 0.4rem;
+    font-size: 1rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--colour-text-subtle);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+}
+
+.moduleNumber {
+  color: var(--colour-accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.footer {
+  display: flex;
+  gap: 0.65rem;
+  justify-content: center;
+  padding-top: 2rem;
+  color: var(--colour-text-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+@include mixins.below(34rem) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

@@ -1,6 +1,6 @@
 # SynthOfDoom Modernisation Plan
 
-> Status: proposed plan
+> Status: active; Phase 1 complete, Phase 2 next
 >
 > Audit date: 4 November 2026
 >
@@ -112,23 +112,23 @@ Current modules and behaviour worth preserving are:
 
 These are migration requirements, not reasons to reproduce the old implementation exactly:
 
-| Area | Current issue | Required outcome |
-| --- | --- | --- |
-| Audio startup | `AudioContext` is created eagerly and only resumed on a keyboard event. | Create/resume it after an explicit pointer or keyboard gesture, show its state, and support retry. |
-| Scheduling | Many `AudioParam` calls use absolute time `0`; envelope scheduling cancels from `0`. | Schedule relative to `audioContext.currentTime` and prevent discontinuities/clicks when retriggering. |
-| Amp envelope | The release knob callback writes to `sustain`. | Release updates the release value and has a regression test. |
-| Filter envelope | The release knob callback also writes to `sustain`. | Release updates the release value and has a regression test. |
-| Filter controls | The shelf-filter branch reinitialises the Q knob as gain instead of the gain knob. | Filter-type-specific controls and ranges are explicit and tested. |
-| Delay saturation | It uses deprecated, main-thread `ScriptProcessorNode` and assumes stereo buffers. | Prefer a native `WaveShaperNode`; use `AudioWorklet` only if custom DSP remains necessary. |
-| Lifecycle | `AfterViewChecked` repeatedly initialises knobs, registers targets, and forces change detection. | Initialise the graph and parameter registry exactly once; clean up listeners and nodes on disposal. |
-| Piano | Keys are visual only; a delayed jQuery script adds highlighting but does not play notes. | Render keys from note data and wire pointer, touch, keyboard, and MIDI state to the same note API. |
-| MIDI | MIDI init is called manually as if it were a component lifecycle method; there is no hot-plug handling or visible status. | Request access deliberately, listen for device state changes, select inputs, and expose unsupported/denied/disconnected states. |
-| MIDI learn | Mappings are in memory, targets can be registered repeatedly, and identifiers are label-derived. | Use stable parameter IDs, enforce one registry entry per ID, allow clearing mappings, and persist them locally. |
-| Keyboard input | Global listeners are never removed and key repeats depend on downstream de-duplication. | Ignore repeats, avoid capturing typing in form fields, handle blur/visibility loss, and dispose listeners. |
-| Typing | `any`, `Function`, boxed `String`, global interfaces, and index access hide errors. | Use strict TypeScript, discriminated event types, `string`, explicit function signatures, and module exports. |
-| UI/layout | Fixed absolute positions at an 800 px width make the synth non-responsive. | Use semantic panels and CSS Grid/Flexbox with desktop, tablet, and narrow-screen layouts. |
-| Accessibility | Custom knobs have no focus, keyboard operation, name, value text, or ARIA semantics. | Provide native or correctly implemented slider semantics, full keyboard control, focus styling, and screen-reader labels. |
-| Repository | Generated output, dependencies, binaries, and IDE build files are committed. | Track authored source and lockfile only; generate build/test artefacts locally as needed. |
+| Area             | Current issue                                                                                                             | Required outcome                                                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Audio startup    | `AudioContext` is created eagerly and only resumed on a keyboard event.                                                   | Create/resume it after an explicit pointer or keyboard gesture, show its state, and support retry.                              |
+| Scheduling       | Many `AudioParam` calls use absolute time `0`; envelope scheduling cancels from `0`.                                      | Schedule relative to `audioContext.currentTime` and prevent discontinuities/clicks when retriggering.                           |
+| Amp envelope     | The release knob callback writes to `sustain`.                                                                            | Release updates the release value and has a regression test.                                                                    |
+| Filter envelope  | The release knob callback also writes to `sustain`.                                                                       | Release updates the release value and has a regression test.                                                                    |
+| Filter controls  | The shelf-filter branch reinitialises the Q knob as gain instead of the gain knob.                                        | Filter-type-specific controls and ranges are explicit and tested.                                                               |
+| Delay saturation | It uses deprecated, main-thread `ScriptProcessorNode` and assumes stereo buffers.                                         | Prefer a native `WaveShaperNode`; use `AudioWorklet` only if custom DSP remains necessary.                                      |
+| Lifecycle        | `AfterViewChecked` repeatedly initialises knobs, registers targets, and forces change detection.                          | Initialise the graph and parameter registry exactly once; clean up listeners and nodes on disposal.                             |
+| Piano            | Keys are visual only; a delayed jQuery script adds highlighting but does not play notes.                                  | Render keys from note data and wire pointer, touch, keyboard, and MIDI state to the same note API.                              |
+| MIDI             | MIDI init is called manually as if it were a component lifecycle method; there is no hot-plug handling or visible status. | Request access deliberately, listen for device state changes, select inputs, and expose unsupported/denied/disconnected states. |
+| MIDI learn       | Mappings are in memory, targets can be registered repeatedly, and identifiers are label-derived.                          | Use stable parameter IDs, enforce one registry entry per ID, allow clearing mappings, and persist them locally.                 |
+| Keyboard input   | Global listeners are never removed and key repeats depend on downstream de-duplication.                                   | Ignore repeats, avoid capturing typing in form fields, handle blur/visibility loss, and dispose listeners.                      |
+| Typing           | `any`, `Function`, boxed `String`, global interfaces, and index access hide errors.                                       | Use strict TypeScript, discriminated event types, `string`, explicit function signatures, and module exports.                   |
+| UI/layout        | Fixed absolute positions at an 800 px width make the synth non-responsive.                                                | Use semantic panels and CSS Grid/Flexbox with desktop, tablet, and narrow-screen layouts.                                       |
+| Accessibility    | Custom knobs have no focus, keyboard operation, name, value text, or ARIA semantics.                                      | Provide native or correctly implemented slider semantics, full keyboard control, focus styling, and screen-reader labels.       |
+| Repository       | Generated output, dependencies, binaries, and IDE build files are committed.                                              | Track authored source and lockfile only; generate build/test artefacts locally as needed.                                       |
 
 ## 4. Scope and sequencing
 
@@ -574,18 +574,18 @@ The step sequencer/arpeggiator is the strongest technical follow-up because it b
 
 ## 9. Risks and mitigations
 
-| Risk | Mitigation |
-| --- | --- |
-| Framework rewrite and DSP changes happen simultaneously, making regressions hard to locate. | Build vertical slices, keep a parity checklist, and test the audio/domain layer without React. |
-| Browser autoplay policies make the app appear broken. | Use a prominent start overlay, lazy context creation, state feedback, and retry. |
-| Web MIDI is unavailable in some browsers or contexts. | Treat it as progressive enhancement, preserve keyboard/pointer operation, and document that the eventual host must use HTTPS. |
-| React Strict Mode or hot reload duplicates audio nodes. | Keep engine construction outside renders, make start/dispose idempotent, and test remounts. |
-| Custom knobs become inaccessible. | Start from slider semantics and keyboard interaction, then add visual styling. |
-| Feedback/detune/modulation values become unsafe or unpleasant. | Centralise bounds, clamp at the engine boundary, add master protection, and listening-test presets at safe volume. |
-| Polyphony multiplies nodes and CPU cost. | Add it only after monophonic parity, use a bounded voice allocator, share appropriate nodes, profile representative hardware, and keep mono mode. |
-| Scope expands into a DAW. | Hold the first release to parity, polyphony, polish, tests, presets, and a local production build. |
-| Old generated files dominate reviews and history. | Delete them in a dedicated cleanup commit after tagging legacy, separate from behaviour changes. |
-| Audio tests are flaky across headless browsers. | Put most logic behind pure functions/fakes, use offline rendering sparingly, and keep a documented manual audio/MIDI pass. |
+| Risk                                                                                        | Mitigation                                                                                                                                        |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework rewrite and DSP changes happen simultaneously, making regressions hard to locate. | Build vertical slices, keep a parity checklist, and test the audio/domain layer without React.                                                    |
+| Browser autoplay policies make the app appear broken.                                       | Use a prominent start overlay, lazy context creation, state feedback, and retry.                                                                  |
+| Web MIDI is unavailable in some browsers or contexts.                                       | Treat it as progressive enhancement, preserve keyboard/pointer operation, and document that the eventual host must use HTTPS.                     |
+| React Strict Mode or hot reload duplicates audio nodes.                                     | Keep engine construction outside renders, make start/dispose idempotent, and test remounts.                                                       |
+| Custom knobs become inaccessible.                                                           | Start from slider semantics and keyboard interaction, then add visual styling.                                                                    |
+| Feedback/detune/modulation values become unsafe or unpleasant.                              | Centralise bounds, clamp at the engine boundary, add master protection, and listening-test presets at safe volume.                                |
+| Polyphony multiplies nodes and CPU cost.                                                    | Add it only after monophonic parity, use a bounded voice allocator, share appropriate nodes, profile representative hardware, and keep mono mode. |
+| Scope expands into a DAW.                                                                   | Hold the first release to parity, polyphony, polish, tests, presets, and a local production build.                                                |
+| Old generated files dominate reviews and history.                                           | Delete them in a dedicated cleanup commit after tagging legacy, separate from behaviour changes.                                                  |
+| Audio tests are flaky across headless browsers.                                             | Put most logic behind pure functions/fakes, use offline rendering sparingly, and keep a documented manual audio/MIDI pass.                        |
 
 ## 10. Proposed issue/commit order
 

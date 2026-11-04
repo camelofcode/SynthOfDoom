@@ -51,11 +51,11 @@ These values describe the source code and visible control intent. Known initiali
 
 ### Oscillators (three identical modules)
 
-| Parameter | Default | Range/options |
-| --- | ---: | --- |
-| Waveform | Sawtooth | Sine, sawtooth, square, triangle |
-| Octave | 0 | -2, -1, 0, +1, +2 octaves |
-| Detune | 0 cents | -100 to +100 cents |
+| Parameter  |            Default | Range/options                    |
+| ---------- | -----------------: | -------------------------------- |
+| Waveform   |           Sawtooth | Sine, sawtooth, square, triangle |
+| Octave     |                  0 | -2, -1, 0, +1, +2 octaves        |
+| Detune     |            0 cents | -100 to +100 cents               |
 | Portamento | 0.05 time constant | Hard-coded; no legacy UI control |
 
 - Pitch uses MIDI note to equal-tempered frequency with A4/MIDI 69 at 440 Hz.
@@ -64,70 +64,70 @@ These values describe the source code and visible control intent. Known initiali
 
 ### Noise
 
-| Parameter | Default | Options |
-| --- | --- | --- |
-| Colour | White | White, pink, brown |
+| Parameter | Default | Options            |
+| --------- | ------- | ------------------ |
+| Colour    | White   | White, pink, brown |
 
 - Each colour is generated into a two-second mono looping `AudioBuffer`.
 
 ### Mixer and dual-filter routing
 
-| Parameter | Default | Range/options |
-| --- | ---: | --- |
-| Source level | 0.8 | 0–1 |
+| Parameter            |   Default | Range/options |
+| -------------------- | --------: | ------------- |
+| Source level         |       0.8 | 0–1           |
 | Filter 1/2 crossfade | 50% / 50% | Linear 0–100% |
-| Source enabled | On | On/off |
+| Source enabled       |        On | On/off        |
 
 - Channels are Oscillator 1, Oscillator 2, Oscillator 3, and Noise.
 - Each source has independent gains feeding both filter outputs.
 
 ### Filters (two identical modules)
 
-| Parameter | Default | Range/options |
-| --- | ---: | --- |
-| Type | Low-pass | Low-pass, high-pass, band-pass, low-shelf, high-shelf, peaking, notch, all-pass |
-| Cutoff | 1000 Hz | 60–10,000 Hz |
-| Resonance/Q | 2 | 1–16 |
-| Gain | 0 dB | -24 to +24 dB where applicable |
-| Envelope depth | 0 | -1 to +1 |
-| Envelope attack | 0.5 s | 0–2 s |
-| Envelope decay | 0.5 s | 0–2 s |
-| Envelope sustain | 0.5 | 0–1 |
-| Envelope release | Intended 0.5 s | 0–2 s |
+| Parameter        |        Default | Range/options                                                                   |
+| ---------------- | -------------: | ------------------------------------------------------------------------------- |
+| Type             |       Low-pass | Low-pass, high-pass, band-pass, low-shelf, high-shelf, peaking, notch, all-pass |
+| Cutoff           |        1000 Hz | 60–10,000 Hz                                                                    |
+| Resonance/Q      |              2 | 1–16                                                                            |
+| Gain             |           0 dB | -24 to +24 dB where applicable                                                  |
+| Envelope depth   |              0 | -1 to +1                                                                        |
+| Envelope attack  |          0.5 s | 0–2 s                                                                           |
+| Envelope decay   |          0.5 s | 0–2 s                                                                           |
+| Envelope sustain |            0.5 | 0–1                                                                             |
+| Envelope release | Intended 0.5 s | 0–2 s                                                                           |
 
 - Positive depth moves cutoff toward the upper bound; negative depth moves it toward the lower bound.
 
 ### Amplitude envelope
 
-| Parameter | Default | Range |
-| --- | ---: | --- |
-| Attack | 0.5 s | 0–2 s |
-| Decay | 0.5 s | 0–2 s |
-| Sustain | 0.5 | 0–1 |
-| Release | Intended 0.5 s | 0–2 s |
+| Parameter |        Default | Range |
+| --------- | -------------: | ----- |
+| Attack    |          0.5 s | 0–2 s |
+| Decay     |          0.5 s | 0–2 s |
+| Sustain   |            0.5 | 0–1   |
+| Release   | Intended 0.5 s | 0–2 s |
 
 - MIDI velocity is normalised from 0–127 and sets the peak amplitude.
 
 ### LFOs (three identical modules)
 
-| Parameter | Default | Range/options |
-| --- | ---: | --- |
-| Waveform | Sine | Sine, sawtooth, square, triangle |
-| Rate | 1 Hz | 0.1–20.1 Hz |
-| Depth | UI initially shows 0.5 | Target-dependent |
-| Target | None | Oscillator 1/2/3 detune; Filter 1/2 cutoff |
+| Parameter |                Default | Range/options                              |
+| --------- | ---------------------: | ------------------------------------------ |
+| Waveform  |                   Sine | Sine, sawtooth, square, triangle           |
+| Rate      |                   1 Hz | 0.1–20.1 Hz                                |
+| Depth     | UI initially shows 0.5 | Target-dependent                           |
+| Target    |                   None | Oscillator 1/2/3 detune; Filter 1/2 cutoff |
 
 - Each LFO is a continuously running oscillator feeding a gain node connected to the selected target `AudioParam`.
 
 ### Delay
 
-| Parameter | Default/control intent | Range/options |
-| --- | ---: | --- |
-| Enabled | Off | On/off |
-| Time | 0.5 s | 0.01–2 s |
-| Feedback | 0.5 | 0–1 |
-| Feedback low-pass | 1000 Hz | 200–5,000 Hz |
-| Wet/dry mix | Control shows 50% | 0–100% |
+| Parameter         | Default/control intent | Range/options |
+| ----------------- | ---------------------: | ------------- |
+| Enabled           |                    Off | On/off        |
+| Time              |                  0.5 s | 0.01–2 s      |
+| Feedback          |                    0.5 | 0–1           |
+| Feedback low-pass |                1000 Hz | 200–5,000 Hz  |
+| Wet/dry mix       |      Control shows 50% | 0–100%        |
 
 - The feedback loop is delay → feedback gain → low-pass filter → delay.
 - The wet path includes sigmoid saturation and makeup gain.
@@ -135,20 +135,20 @@ These values describe the source code and visible control intent. Known initiali
 ### Computer keyboard
 
 | Key | MIDI note | Note |
-| --- | ---: | --- |
-| Q | 60 | C4 |
-| 2 | 61 | C♯4 |
-| W | 62 | D4 |
-| 3 | 63 | D♯4 |
-| E | 64 | E4 |
-| R | 65 | F4 |
-| 5 | 66 | F♯4 |
-| T | 67 | G4 |
-| 6 | 68 | G♯4 |
-| Y | 69 | A4 |
-| 7 | 70 | A♯4 |
-| U | 71 | B4 |
-| I | 72 | C5 |
+| --- | --------: | ---- |
+| Q   |        60 | C4   |
+| 2   |        61 | C♯4  |
+| W   |        62 | D4   |
+| 3   |        63 | D♯4  |
+| E   |        64 | E4   |
+| R   |        65 | F4   |
+| 5   |        66 | F♯4  |
+| T   |        67 | G4   |
+| 6   |        68 | G♯4  |
+| Y   |        69 | A4   |
+| 7   |        70 | A♯4  |
+| U   |        71 | B4   |
+| I   |        72 | C5   |
 
 - Computer-key velocity is fixed at 100.
 

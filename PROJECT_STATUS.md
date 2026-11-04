@@ -7,8 +7,8 @@
 - Last updated: 4 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 0 complete
-- Overall status: ready to begin Phase 1 modern project scaffolding
+- Current phase: Phase 1 complete
+- Overall status: modern project foundation is verified; ready to begin Phase 2 domain and parameter contracts
 
 ## Completed
 
@@ -22,16 +22,31 @@
 - Created and pushed annotated tag `legacy-angular` at untouched baseline commit `4479d07`.
 - Documented the source-derived legacy behaviour, defaults, intentional design choices, known defects, and parity checklist in `LEGACY_BASELINE.md`.
 - Explicitly decided not to install or run the obsolete dependency stack just to capture legacy media.
+- Added the root React 19 + strict TypeScript + Vite application shell without modifying the tagged legacy application.
+- Pinned development to Node 24 LTS and npm 11, with engine enforcement and a committed npm lockfile for cross-machine installs.
+- Added the MIT licence and root project README.
+- Added Dart Sass with global design tokens, SCSS Modules, and an initial responsive application shell.
+- Added ESLint, accessibility/React rules, Prettier, Vitest, React Testing Library, and Playwright Chromium foundations.
+- Added a complete local `npm run verify` gate covering formatting, type-checking, linting, component tests, browser smoke tests, and the production build.
+- Confirmed the Vite production build emits a static, hosting-agnostic `dist` directory.
 
 ## Next actions
 
-1. Start Phase 1 by scaffolding the React + TypeScript + Vite application at the repository root using product name `SynthOfDoom` and package name `synth-of-doom`.
-2. Add the MIT licence, pinned Node version, npm lockfile, SCSS support, strict TypeScript, linting, formatting, and test foundations described in Phase 1.
-3. Establish the local `npm run verify` quality gate and confirm `npm run build` produces `dist`.
+1. Begin Phase 2 by defining strict types for notes, MIDI messages, waveforms, filter types, noise colours, parameter IDs, and LFO targets.
+2. Build the central parameter registry with stable IDs, ranges, defaults, scaling curves, units, formatting, modulation eligibility, and MIDI-learn eligibility.
+3. Define the versioned `SynthPatch` schema plus validation and migration helpers.
+4. Implement and unit-test pure note-frequency, parameter-scaling, MIDI-normalisation, formatting, and note-priority functions.
 
 ## Current blocker or required decision
 
 No current blocker or naming decision is outstanding.
+
+## Known dependency notes
+
+- ESLint is pinned to the newest 9.x release because `eslint-plugin-jsx-a11y` has not yet declared ESLint 10 compatibility. No peer dependency is forced or ignored.
+- `npm audit --omit=dev` reports zero production vulnerabilities.
+- The full development audit currently reports seven moderate transitive `minimatch` advisories through `typescript-eslint`. npm offers only a forced breaking downgrade, so no unsafe automated fix was applied.
+- npm may report optional Sass watcher/platform packages as extraneous at the top level; a clean `npm ci` reproduces the install and the verified Sass build succeeds.
 
 ## Agreed decisions
 
@@ -52,11 +67,16 @@ No current blocker or naming decision is outstanding.
 
 - Documentation whitespace check: passed.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
-- Modern application checks: not available yet because the Vite application has not been scaffolded.
+- Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
+- Full gate: `npm run verify` passed on 4 November 2026.
+- Component tests: 2 passed with Vitest/React Testing Library.
+- Browser tests: 1 passed in Playwright Chromium.
+- Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
+- Production dependency audit: zero vulnerabilities.
 
 ## Working-tree handover
 
-- Tracked planning/baseline files: `MODERNISATION_PLAN.md`, `PROJECT_STATUS.md`, and `LEGACY_BASELINE.md`.
+- The root now contains the modern Vite application, toolchain configuration, lockfile, tests, and documentation; the legacy application remains under `Angular2Audio/` until its planned cleanup phase.
 - Before changing machines, run `git status --short`, commit intended work, and push the active branch.
 - Generated directories such as `node_modules`, `dist`, coverage, and Playwright output must remain untracked.
 
