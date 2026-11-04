@@ -136,7 +136,7 @@ These are migration requirements, not reasons to reproduce the old implementatio
 
 The first modern release should reach feature parity with the useful parts of the current synth, plus polyphony, a polished responsive UI, tests, presets, and a production `dist` build.
 
-Keep the engine monophonic while establishing parity, then add polyphony as a distinct late phase before the first modern release is considered complete. Polyphony changes oscillator lifetime, voice allocation, envelopes, CPU use, and MIDI semantics; separating it from the initial port keeps those changes understandable and testable without pushing an important portfolio feature into an indefinite backlog.
+Keep the engine monophonic as an internal parity checkpoint, then add polyphony as a distinct late phase before the first modern release is considered complete. This is an engineering sequence, not a judgement on the original design or the final product goal: monophony was an intentional and conventional synthesiser architecture, while SynthOfDoom will default to polyphonic operation. Polyphony changes oscillator lifetime, voice allocation, envelopes, CPU use, and MIDI semantics; separating it from the initial port keeps those changes understandable and testable without pushing an important portfolio feature into an indefinite backlog.
 
 ### 4.2 Explicit non-goals for the first release
 
@@ -319,11 +319,11 @@ Control changes should update both the serialisable patch state and the engine t
 2. Rename the existing repository or remote in place so all current commits remain in the same Git history. This has been completed at `camelofcode/SynthOfDoom`; do not initialise a new repository or squash-import the old one.
 3. Update the remote URL locally if the hosting provider does not do so automatically; update the README title, `package.json` name, page metadata, and later screenshots to use the new identity.
 4. Create a migration branch and tag the existing commit, for example `legacy-angular`, before replacing the old application on `main`.
-5. Record a short screen capture and several audio examples if the legacy app can still be run safely.
-6. Write a feature inventory from Section 3.2 into issue checkboxes.
+5. Do not revive the old application solely to capture screenshots or audio. This personal project has no compatibility stakeholders, and installing the obsolete dependency tree provides little value.
+6. Record the source-derived feature/default inventory in [`LEGACY_BASELINE.md`](LEGACY_BASELINE.md).
 7. Document the current keyboard mapping (`Q, 2, W, 3, E, R, 5, T, 6, Y, 7, U, I`) and current defaults/ranges.
-8. Decide which quirks are intentional. Default decisions for this plan are initial monophonic parity, last-note priority, three oscillators, dual parallel filters, and three freely assignable LFOs.
-9. Do not block the rewrite on reviving the obsolete dependency tree. The source is clear enough to provide a behavioural reference if the old build cannot run on a supported Node version.
+8. Distinguish intentional legacy design choices from implementation defects. Monophony, last-note priority, three oscillators, dual parallel filters, and three freely assignable LFOs are design choices; the release/filter/piano/lifecycle problems in Section 3.3 are defects.
+9. Treat the source and Git tag as the legacy reference. Do not install or run the obsolete dependency tree merely to complete Phase 0.
 
 **Exit criteria:** the renamed repository retains its full history, the old code has a durable tag, the parity checklist exists, and intentional behaviour is distinguishable from known defects.
 

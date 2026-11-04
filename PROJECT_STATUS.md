@@ -7,8 +7,8 @@
 - Last updated: 4 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 0 in progress; repository rename complete
-- Overall status: `SynthOfDoom` is established; legacy tagging/baseline capture remain before Phase 1
+- Current phase: Phase 0 complete
+- Overall status: ready to begin Phase 1 modern project scaffolding
 
 ## Completed
 
@@ -19,12 +19,15 @@
 - Created the `modernisation` working branch from legacy baseline commit `4479d07`.
 - Renamed the GitHub repository in place from `camelofcode/Angular2Audio` to `camelofcode/SynthOfDoom`, preserving its complete history and branches.
 - Verified that local `origin` now uses `https://github.com/camelofcode/SynthOfDoom.git`.
+- Created and pushed annotated tag `legacy-angular` at untouched baseline commit `4479d07`.
+- Documented the source-derived legacy behaviour, defaults, intentional design choices, known defects, and parity checklist in `LEGACY_BASELINE.md`.
+- Explicitly decided not to install or run the obsolete dependency stack just to capture legacy media.
 
 ## Next actions
 
-1. Tag commit `4479d07` as the legacy Angular baseline.
-2. Record the legacy feature/default checklist and any useful screenshots/audio if the old app can be run safely.
-3. Start Phase 1 by scaffolding the React + TypeScript + Vite application at the repository root using product name `SynthOfDoom` and package name `synth-of-doom`.
+1. Start Phase 1 by scaffolding the React + TypeScript + Vite application at the repository root using product name `SynthOfDoom` and package name `synth-of-doom`.
+2. Add the MIT licence, pinned Node version, npm lockfile, SCSS support, strict TypeScript, linting, formatting, and test foundations described in Phase 1.
+3. Establish the local `npm run verify` quality gate and confirm `npm run build` produces `dist`.
 
 ## Current blocker or required decision
 
@@ -37,7 +40,7 @@ No current blocker or naming decision is outstanding.
 - Use npm with a committed `package-lock.json` and a repository-pinned active-LTS Node version.
 - Use SCSS Modules with Dart Sass and native CSS custom properties for design tokens.
 - Keep the Web Audio engine independent from React rendering.
-- Reach monophonic feature parity first, then add polyphony before the first modern release is complete.
+- Use a monophonic engine only as a migration checkpoint. Monophony is an intentional legacy synth design, not a defect; SynthOfDoom will default to polyphonic operation before its first modern release is complete.
 - Replace the old UI and its assets completely; create original SVG controls.
 - Use an MIT licence.
 - Do not use paid hosted CI. Provide a comprehensive local `npm run verify` command.
@@ -48,11 +51,12 @@ No current blocker or naming decision is outstanding.
 ## Last verification
 
 - Documentation whitespace check: passed.
+- Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Modern application checks: not available yet because the Vite application has not been scaffolded.
 
 ## Working-tree handover
 
-- Tracked planning files: `MODERNISATION_PLAN.md` and `PROJECT_STATUS.md`.
+- Tracked planning/baseline files: `MODERNISATION_PLAN.md`, `PROJECT_STATUS.md`, and `LEGACY_BASELINE.md`.
 - Before changing machines, run `git status --short`, commit intended work, and push the active branch.
 - Generated directories such as `node_modules`, `dist`, coverage, and Playwright output must remain untracked.
 
