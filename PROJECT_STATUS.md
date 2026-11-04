@@ -7,8 +7,8 @@
 - Last updated: 4 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: planning complete; Phase 0 not started
-- Overall status: ready to choose the new project name and begin the repository transition
+- Current phase: Phase 0 in progress; repository rename complete
+- Overall status: `SynthOfDoom` is established; legacy tagging/baseline capture remain before Phase 1
 
 ## Completed
 
@@ -17,24 +17,22 @@
 - Created the detailed React/Vite modernisation plan in `MODERNISATION_PLAN.md`.
 - Agreed the initial architecture, tooling, scope, testing approach, licensing, and runtime model.
 - Created the `modernisation` working branch from legacy baseline commit `4479d07`.
+- Renamed the GitHub repository in place from `camelofcode/Angular2Audio` to `camelofcode/SynthOfDoom`, preserving its complete history and branches.
+- Verified that local `origin` now uses `https://github.com/camelofcode/SynthOfDoom.git`.
 
 ## Next actions
 
-1. Choose the new product and repository name.
-2. Rename the existing hosted repository in place so its Git history is preserved.
-3. Update the local Git remote after the hosted rename if necessary.
-4. Tag commit `4479d07` as the legacy Angular baseline.
-5. Start Phase 1 by scaffolding the React + TypeScript + Vite application at the repository root.
+1. Tag commit `4479d07` as the legacy Angular baseline.
+2. Record the legacy feature/default checklist and any useful screenshots/audio if the old app can be run safely.
+3. Start Phase 1 by scaffolding the React + TypeScript + Vite application at the repository root using product name `SynthOfDoom` and package name `synth-of-doom`.
 
 ## Current blocker or required decision
 
-- A new product/repository name has not yet been chosen.
-
-No technical blocker prevents further planning or local investigation.
+No current blocker or naming decision is outstanding.
 
 ## Agreed decisions
 
-- Preserve the existing Git history while giving the repository and application a framework-independent name.
+- Use `SynthOfDoom` as the product/repository name and `synth-of-doom` as the npm package name, while preserving the existing Git history.
 - Use React, strict TypeScript, and Vite.
 - Use npm with a committed `package-lock.json` and a repository-pinned active-LTS Node version.
 - Use SCSS Modules with Dart Sass and native CSS custom properties for design tokens.

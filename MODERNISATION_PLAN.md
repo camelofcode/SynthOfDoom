@@ -1,4 +1,4 @@
-# Angular2Audio Modernisation Plan
+# SynthOfDoom Modernisation Plan
 
 > Status: proposed plan
 >
@@ -10,7 +10,7 @@
 
 Turn the original Angular 2-era synthesiser into a polished portfolio project that demonstrates modern React and TypeScript practices without losing the interesting part of the project: a modular Web Audio synth with keyboard, MIDI, modulation, filters, envelopes, mixing, and effects.
 
-The modern project should receive a new product and repository name because `Angular2Audio` describes an obsolete implementation detail. Rename the existing repository rather than starting a history-free replacement, so the original learning project and its evolution remain visible in Git.
+The modern project is named **SynthOfDoom** because `Angular2Audio` describes an obsolete implementation detail. The existing repository has been renamed in place rather than replaced, so the original learning project and its evolution remain visible in Git. Use `SynthOfDoom` for the product/display name and `synth-of-doom` where a lowercase npm-compatible package identifier is required.
 
 The recommended result is a client-only React application built with TypeScript and Vite. The audio engine should be framework-independent, while React owns presentation and user interaction. This separation is the most important architectural change in the plan.
 
@@ -315,8 +315,8 @@ Control changes should update both the serialisable patch state and the engine t
 
 ### Phase 0 — Preserve and characterise the legacy behaviour
 
-1. Choose a new product/repository name that describes the synth rather than its framework. Check that the desired repository slug and package name are sensible before changing references.
-2. Rename the existing repository or remote in place so all current commits remain in the same Git history. Do not initialise a new repository or squash-import the old one.
+1. Use the chosen product/repository name `SynthOfDoom`, with `synth-of-doom` as the npm package identifier.
+2. Rename the existing repository or remote in place so all current commits remain in the same Git history. This has been completed at `camelofcode/SynthOfDoom`; do not initialise a new repository or squash-import the old one.
 3. Update the remote URL locally if the hosting provider does not do so automatically; update the README title, `package.json` name, page metadata, and later screenshots to use the new identity.
 4. Create a migration branch and tag the existing commit, for example `legacy-angular`, before replacing the old application on `main`.
 5. Record a short screen capture and several audio examples if the legacy app can still be run safely.
