@@ -105,6 +105,65 @@
   line-height: 1.5;
 }
 
+.inputPanel {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-panel);
+  background: var(--colour-panel);
+}
+
+.inputHeader,
+.midiRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.inputHelp,
+.midiStatus {
+  color: var(--colour-text-muted);
+  font-size: 0.82rem;
+}
+
+.midiRow {
+  justify-content: flex-start;
+  margin-top: 1rem;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  select {
+    padding: 0.45rem;
+    border: 1px solid var(--colour-border);
+    border-radius: 0.35rem;
+    background: var(--colour-background);
+    color: var(--colour-text);
+  }
+}
+
+.secondaryButton {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--colour-accent-muted);
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--colour-accent-soft);
+  cursor: pointer;
+
+  &:focus-visible {
+    @include mixins.focus-ring;
+  }
+}
+
 .startButton {
   flex: 0 0 auto;
   min-width: 9rem;
@@ -175,6 +234,12 @@
   }
 
   .audioPanel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .inputHeader,
+  .midiRow {
     align-items: stretch;
     flex-direction: column;
   }

@@ -40,3 +40,42 @@ textarea {
   background: var(--colour-accent);
   color: var(--colour-background);
 }
+
+.pianoKeyboard {
+  display: grid;
+  grid-template-columns: repeat(13, minmax(2.5rem, 1fr));
+  gap: 0.25rem;
+  overflow-x: auto;
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.pianoKey {
+  min-height: 7rem;
+  border: 1px solid #aaa39a;
+  border-radius: 0 0 0.35rem 0.35rem;
+  background: #eee8dd;
+  color: #24211e;
+  cursor: pointer;
+  touch-action: none;
+
+  &[aria-pressed='true'] {
+    border-color: var(--colour-accent);
+    background: var(--colour-accent-soft);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--colour-focus);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+}
+
+.pianoKeySharp {
+  background: #292724;
+  color: var(--colour-text);
+}

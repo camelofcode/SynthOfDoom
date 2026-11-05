@@ -1,5 +1,10 @@
 import type { SynthEngineStatus } from '../audio/SynthEngine';
+import { PianoKeyboard } from '../components/keyboard/PianoKeyboard';
 import { useSynthEngine } from '../hooks/useSynthEngine';
+import { useMidi } from '../hooks/useMidi';
+import { useMidiLearn } from '../hooks/useMidiLearn';
+import { useNoteInput } from '../hooks/useNoteInput';
+import { PARAMETER_IDS, PARAMETER_REGISTRY } from '../synth/parameters';
 import styles from './App.module.scss';
 
 const plannedModules = [
@@ -24,8 +29,15 @@ const statusLabels: Record<SynthEngineStatus, string> = {
   disposed: 'Stopped',
 };
 
+const midiLearnableParameters = PARAMETER_IDS.filter(
+  (id) => PARAMETER_REGISTRY[id].midiLearnable,
+);
+
 export function App() {
   const audio = useSynthEngine();
+  const notes = useNoteInput(audio.status === 'running');
+  const midi = useMidi();
+  const learn = useMidiLearn();
   const canStart = !['starting', 'running', 'disposed'].includes(audio.status);
 
   const startAudio = () => {
@@ -41,17 +53,17 @@ export function App() {
           <p className={styles.eyebrow}>React · TypeScript · Web Audio</p>
           <h1>SynthOfDoom</h1>
         </div>
-        <span className={styles.phaseBadge}>Phase 3 · Audio engine</span>
+        <span className={styles.phaseBadge}>Phase 4 · Unified input</span>
       </header>
 
       <main>
         <section className={styles.intro} aria-labelledby="foundation-title">
-          <p className={styles.kicker}>Audio engine ready</p>
-          <h2 id="foundation-title">The signal path is alive.</h2>
+          <p className={styles.kicker}>Unified performance input</p>
+          <h2 id="foundation-title">Every gesture follows one path.</h2>
           <p>
-            The complete monophonic synth graph is independent from React and
-            remains silent until you explicitly start it. Unified note input and
-            performance controls arrive in the next phase.
+            Computer keys, pointer notes, and optional MIDI devices now share
+            ownership-aware note routing, visible state, and stuck-note
+            protection.
           </p>
         </section>
 
@@ -76,6 +88,87 @@ export function App() {
           </button>
         </section>
 
+        <section className={styles.inputPanel} aria-labelledby="input-title">
+          <div className={styles.inputHeader}>
+            <div>
+              <p className={styles.kicker}>Unified note input</p>
+              <h2 id="input-title">Keyboard and MIDI</h2>
+            </div>
+            <span aria-live="polite">
+              {notes.activeNotes.length} active note
+              {notes.activeNotes.length === 1 ? '' : 's'}
+            </span>
+          </div>
+          <PianoKeyboard
+            activeNotes={notes.activeNotes}
+            disabled={audio.status !== 'running'}
+          />
+          <p className={styles.inputHelp}>
+            Computer keys Q–I play C4–C5. Z/X shifts the keyboard octave.
+          </p>
+          <div className={styles.midiRow}>
+            <button
+              className={styles.secondaryButton}
+              type="button"
+              onClick={() => void midi.request()}
+              disabled={midi.status === 'requesting'}
+            >
+              {midi.status === 'ready' ? 'Refresh MIDI' : 'Enable MIDI'}
+            </button>
+            <label>
+              MIDI input
+              <select
+                value={midi.selectedInputId}
+                onChange={(event) => midi.selectInput(event.target.value)}
+                disabled={midi.status !== 'ready'}
+              >
+                <option value="all">All inputs</option>
+                {midi.inputs.map((input) => (
+                  <option key={input.id} value={input.id}>
+                    {input.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <span className={styles.midiStatus} aria-live="polite">
+              MIDI: {midi.error ?? midi.status}
+            </span>
+          </div>
+          <div className={styles.midiRow}>
+            <label>
+              MIDI learn target
+              <select
+                value={learn.learning ?? ''}
+                onChange={(event) => {
+                  const id = event.target.value;
+                  if (id) learn.begin(id as (typeof PARAMETER_IDS)[number]);
+                  else learn.cancel();
+                }}
+              >
+                <option value="">Not learning</option>
+                {midiLearnableParameters.map((id) => (
+                  <option key={id} value={id}>
+                    {PARAMETER_REGISTRY[id].group} ·{' '}
+                    {PARAMETER_REGISTRY[id].label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              className={styles.secondaryButton}
+              type="button"
+              onClick={() => learn.clear()}
+            >
+              Clear MIDI mappings
+            </button>
+            <span className={styles.midiStatus} aria-live="polite">
+              {learn.learning
+                ? 'Move a MIDI CC to bind it.'
+                : `${learn.bindings.length} MIDI mapping${learn.bindings.length === 1 ? '' : 's'}`}
+            </span>
+          </div>
+        </section>
+
         <section
           className={styles.moduleGrid}
           aria-label="Planned synth modules"
@@ -86,16 +179,16 @@ export function App() {
                 {String(index + 1).padStart(2, '0')}
               </span>
               <h3>{moduleName}</h3>
-              <p>Queued for a later implementation phase.</p>
+              <p>Modern implementation milestone tracked.</p>
             </article>
           ))}
         </section>
       </main>
 
       <footer className={styles.footer}>
-        <span>Audio engine ready</span>
+        <span>Unified input ready</span>
         <span aria-hidden="true">·</span>
-        <span>Unified input next</span>
+        <span>Accessible controls next</span>
       </footer>
     </div>
   );

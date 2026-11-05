@@ -7,8 +7,8 @@
 - Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 3 complete
-- Overall status: the complete framework-independent monophonic audio graph is verified; ready to begin Phase 4 unified note and control input
+- Current phase: Phase 4 complete
+- Overall status: computer, pointer, and optional MIDI input share a verified ownership-aware route; ready to begin Phase 5 accessible reusable controls
 
 ## Completed
 
@@ -43,13 +43,20 @@
 - Added current-time-relative ADSR scheduling with retrigger holds, safe zero-time handling, independent release controls, and release regression coverage.
 - Added a typed fake Web Audio context and deterministic tests for lifecycle, graph construction, note priority, pitch/glide, envelope scheduling, LFO rerouting, parameter/patch application, noise generation, and complete source disposal.
 - Added an explicit Start audio UI with visible lifecycle and actionable failure state; verified real browser context creation through Playwright.
+- Added an ownership-aware note router shared by computer keyboard, pointer keyboard, and MIDI so one source cannot release a note still held by another.
+- Added a disposable computer-keyboard adapter with the documented `Q`–`I` map, Z/X octave shifts, repeat/form-field guards, and blur/visibility stuck-note prevention.
+- Added a metadata-driven pointer keyboard with pointer capture, cancel/leave release handling, shared active-note highlighting, and touch-safe events.
+- Added deliberate Web MIDI permission, unsupported/denied/error states, input enumeration and selection, hot-plug refresh, device-scoped note ownership, and disconnect cleanup.
+- Added strict MIDI decoding for note-on, velocity-zero note-off, note-off, control-change, channel, malformed, and unsupported messages.
+- Added stable-ID MIDI learn with one-to-one collision handling, CC scaling through the parameter registry, visible learn/mapping state, clearing, and versioned local-storage persistence.
+- Added deterministic unit tests for multi-source ownership, keyboard cleanup, MIDI parsing/devices/CC, mapping persistence, and a Playwright smoke test for real keyboard and pointer note paths.
 
 ## Next actions
 
-1. Begin Phase 4 with one typed note-command path shared by computer keyboard, pointer keyboard, and Web MIDI adapters.
-2. Add the disposable computer keyboard adapter with repeat/form-field guards, octave shifting, blur/visibility all-notes-off, and the documented `Q`–`I` map.
-3. Build the pointer keyboard from note metadata with pointer capture/cancel handling and shared active-note state.
-4. Add deliberate Web MIDI access, device/status handling, message decoding, hot-plug support, stable-ID MIDI learn, and versioned mapping persistence.
+1. Begin Phase 5 with an accessible reusable `Knob` built on slider semantics and original SVG visuals.
+2. Add keyboard, pointer/touch, reset-to-default, clamping, visible value/unit, focus, reduced-motion, and high-contrast behaviour.
+3. Add reusable select, toggle, panel, value-readout, and connection/status components driven by the parameter registry.
+4. Cover accessible names, keyboard changes, reset, disabled state, clamping, and callbacks with user-focused component tests.
 
 ## Current blocker or required decision
 
@@ -83,7 +90,7 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 39 passed with Vitest/React Testing Library.
+- Unit/component tests: 49 passed with Vitest/React Testing Library.
 - Browser tests: 1 passed in Playwright Chromium.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
 - Production dependency audit: zero vulnerabilities.
