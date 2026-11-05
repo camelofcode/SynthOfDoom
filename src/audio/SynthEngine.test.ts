@@ -161,12 +161,12 @@ describe('SynthEngine graph and controls', () => {
       },
     });
     expect(loaded.parameters['filter.1.cutoff']).toBe(2400);
-    expect(context.filters[0]?.frequency.value).toBe(2400);
-    expect(context.waveShapers[0]?.curve).toHaveLength(1024);
+    expect(context.filters.at(-3)?.frequency.value).toBe(2400);
+    expect(context.waveShapers.at(-1)?.curve).toHaveLength(1024);
 
     engine.setParameter('delay.saturation', 0);
-    expect(context.waveShapers[0]?.curve?.[0]).toBe(-1);
-    expect(context.waveShapers[0]?.curve?.at(-1)).toBe(1);
+    expect(context.waveShapers.at(-1)?.curve?.[0]).toBe(-1);
+    expect(context.waveShapers.at(-1)?.curve?.at(-1)).toBe(1);
   });
 
   it('reroutes LFO modulation without duplicate target connections', async () => {
@@ -185,6 +185,31 @@ describe('SynthEngine graph and controls', () => {
       context.oscillators[0]?.detune,
     ]);
     expect(firstLfoDepth?.disconnectCalls).toBe(3);
+  });
+
+  it('replaces the live graph when loading a patch so no DSP state survives', async () => {
+    const context = new FakeAudioContext();
+    const engine = new SynthEngine({
+      createContext: () => context,
+      random: () => 0.5,
+    });
+    await engine.start();
+    engine.setParameter('lfo.1.target', 'filter.1.cutoff');
+    engine.setParameter('delay.enabled', true);
+    engine.setParameter('delay.feedback', 0.8);
+    engine.noteOn(60);
+
+    const previousAnalyser = engine.getAnalyser();
+    const previousSources = [...context.oscillators, ...context.bufferSources];
+
+    engine.loadPatch(createDefaultPatch());
+
+    expect(engine.getAnalyser()).not.toBe(previousAnalyser);
+    expect(previousSources.every((source) => source.stopCalls === 1)).toBe(
+      true,
+    );
+    expect(context.gains.at(-3)?.connections).toEqual([]);
+    expect(engine.getSnapshot().activeNote).toBe(60);
   });
 
   it('uses each independent release parameter from currentTime', async () => {

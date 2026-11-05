@@ -68,9 +68,11 @@
 - Added versioned local-storage persistence for user patches and the selected preset, complementing the existing versioned MIDI-learn storage.
 - Added visible saved/unsaved state plus confirmation before discarding edits or deleting a user patch.
 - Applied every preset through the engine's single validated `loadPatch` action so the live graph, serialisable patch, and rendered controls update together.
+- Made live preset loads replace and dispose the complete audio graph so delay memory, modulation connections, automation, and running sources from the previous patch cannot survive; held notes retrigger cleanly on the replacement graph.
 - Added safe recovery for corrupt stored preset data and strict validation for imported JSON without risking a blank screen or unsafe graph state.
 - Added regression coverage that verifies a rendered parameter change reaches the corresponding real browser `GainNode`, protecting against stale audio-graph wiring during development.
 - Added unit and browser coverage for factory loads, dirty tracking, user preset operations, JSON round trips, storage recovery, and reload persistence.
+- Made Playwright use the normal localhost Vite address so it can safely reuse a developer-run server regardless of whether localhost resolves to IPv4 or IPv6.
 
 ## Next actions
 
@@ -111,7 +113,7 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 59 passed with Vitest/React Testing Library.
+- Unit/component tests: 60 passed with Vitest/React Testing Library.
 - Browser tests: 3 passed in Playwright Chromium (desktop/audio interaction, narrow responsive layout, and preset reload persistence).
 - Manual physical MIDI keyboard check: passed on 5 November 2026.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.

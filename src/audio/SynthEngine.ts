@@ -207,7 +207,25 @@ export class SynthEngine {
 
   loadPatch(input: unknown): SynthPatch {
     this.patch = validateSynthPatch(input).patch;
-    this.graph?.applyPatch(this.patch.parameters);
+    if (this.context && this.graph) {
+      const previousGraph = this.graph;
+      const replacementGraph = new SynthGraph(
+        this.context,
+        this.patch.parameters,
+        this.random,
+      );
+      const activeNote = this.notes.activeNote;
+      if (activeNote) {
+        replacementGraph.triggerNote(
+          activeNote.note,
+          activeNote.velocity,
+          false,
+        );
+      }
+      this.graph = replacementGraph;
+      previousGraph.dispose();
+      this.updateSnapshot({ activeNote: activeNote?.note ?? null });
+    }
     for (const listener of this.patchListeners) listener();
     return this.patch;
   }

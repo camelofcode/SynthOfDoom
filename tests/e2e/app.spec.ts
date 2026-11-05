@@ -51,6 +51,29 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
     ),
   ).toBe(0);
 
+  const previousGainCount = await page.evaluate(
+    () =>
+      (window as Window & { __synthGainNodes?: GainNode[] }).__synthGainNodes
+        ?.length ?? 0,
+  );
+  await page
+    .getByRole('combobox', { name: 'LFO 1 Target' })
+    .selectOption('filter.1.cutoff');
+  page.once('dialog', (dialog) => void dialog.accept());
+  await page
+    .getByRole('combobox', { name: 'Preset', exact: true })
+    .selectOption('factory:doom-bass');
+  await expect(
+    page.getByRole('combobox', { name: 'LFO 1 Target' }),
+  ).toHaveValue('none');
+  expect(
+    await page.evaluate(
+      () =>
+        (window as Window & { __synthGainNodes?: GainNode[] }).__synthGainNodes
+          ?.length ?? 0,
+    ),
+  ).toBeGreaterThan(previousGainCount);
+
   await page.keyboard.down('q');
   await expect(page.getByRole('button', { name: 'C4' })).toHaveAttribute(
     'aria-pressed',
