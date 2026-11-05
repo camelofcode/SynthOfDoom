@@ -5,9 +5,11 @@ import styles from './Oscilloscope.module.scss';
 export function Oscilloscope({
   analyser,
   active,
+  accent,
 }: {
   readonly analyser: AnalyserNodePort | null;
   readonly active: boolean;
+  readonly accent: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -35,7 +37,7 @@ export function Oscilloscope({
       context.clearRect(0, 0, width, height);
       analyser.getByteTimeDomainData(samples);
       context.beginPath();
-      context.strokeStyle = '#ffae7c';
+      context.strokeStyle = accent;
       context.lineWidth = 2;
       for (let index = 0; index < samples.length; index += 1) {
         const x = (index / (samples.length - 1)) * width;
@@ -49,7 +51,7 @@ export function Oscilloscope({
 
     draw();
     return () => cancelAnimationFrame(frame);
-  }, [active, analyser]);
+  }, [accent, active, analyser]);
 
   return (
     <figure className={styles.scope}>

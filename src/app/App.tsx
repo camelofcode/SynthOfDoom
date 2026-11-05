@@ -164,6 +164,7 @@ export function App() {
         <Oscilloscope
           analyser={synthEngine.getAnalyser()}
           active={audio.status === 'running'}
+          accent={accent}
         />
       </main>
     </div>

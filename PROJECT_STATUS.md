@@ -92,6 +92,7 @@
 - Removed the redundant global MIDI-learn target selector while retaining per-control learn actions, mapping status, and clear-mappings control.
 - Expanded the pointer instrument to a two-octave C4–C6 keyboard with fifteen white keys and ten overlaid black keys, contained horizontal scrolling, active state, and unchanged shared note routing.
 - Made the interface accent themeable through the existing CSS custom-property system, with green as the default and the selected colour persisted locally.
+- Applied the selected accent to the canvas-rendered master oscilloscope as well as the CSS-rendered interface, updating the waveform immediately when the picker changes.
 
 ## Next actions
 

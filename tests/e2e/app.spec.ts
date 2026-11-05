@@ -8,11 +8,18 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
     const debugWindow = window as Window & {
       __synthGainNodes?: GainNode[];
       __synthOscillators?: OscillatorNode[];
+      __scopeStrokeStyles?: string[];
     };
     const gainNodes: GainNode[] = [];
     const oscillators: OscillatorNode[] = [];
     debugWindow.__synthGainNodes = gainNodes;
     debugWindow.__synthOscillators = oscillators;
+    debugWindow.__scopeStrokeStyles = [];
+    const nativeStroke = CanvasRenderingContext2D.prototype.stroke;
+    CanvasRenderingContext2D.prototype.stroke = function (path?: Path2D) {
+      debugWindow.__scopeStrokeStyles?.push(String(this.strokeStyle));
+      Reflect.apply(nativeStroke, this, path ? [path] : []);
+    };
     window.AudioContext = class extends BrowserAudioContext {
       override createGain(): GainNode {
         const node = super.createGain();
@@ -47,6 +54,25 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
     page.getByRole('heading', { name: 'Audio: Running' }),
   ).toBeVisible();
   await expect(page.getByRole('button', { name: 'C6' })).toBeEnabled();
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        (
+          window as Window & { __scopeStrokeStyles?: string[] }
+        ).__scopeStrokeStyles?.at(-1),
+      ),
+    )
+    .toBe('#76d04b');
+  await page.getByLabel('Synth accent colour').fill('#23b89a');
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        (
+          window as Window & { __scopeStrokeStyles?: string[] }
+        ).__scopeStrokeStyles?.at(-1),
+      ),
+    )
+    .toBe('#23b89a');
 
   const noiseEnabled = page.getByRole('button', {
     name: 'Noise mixer Enabled: On',
