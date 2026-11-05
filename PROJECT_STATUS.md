@@ -94,6 +94,8 @@
 - Made the interface accent themeable through the existing CSS custom-property system, with green as the default and the selected colour persisted locally.
 - Applied the selected accent to the canvas-rendered master oscilloscope as well as the CSS-rendered interface, updating the waveform immediately when the picker changes.
 - Allowed the mapped computer-note keys to pass through while a knob's range input retains focus, preserving slider arrow-key access without requiring a click elsewhere before playing.
+- Reflowed the three existing LFO modules into one compact desktop row alongside an even-width filter panel, preserving patch/audio compatibility while removing the modulation panel's excessive vertical stack.
+- Placed the Performance panel's Voices and Glide subgroups side by side on non-mobile layouts, eliminating another tall sparse stack while retaining the narrow-screen column fallback.
 
 ## Next actions
 

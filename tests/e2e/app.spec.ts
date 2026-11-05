@@ -285,6 +285,29 @@ test('keeps mixed controls on distinct aligned rows', async ({ page }) => {
   expect(
     Math.abs(noiseAlignment.rowCentre - noiseAlignment.subgroupCentre),
   ).toBeLessThan(1);
+
+  const lfoPositions = await Promise.all(
+    ['LFO 1', 'LFO 2', 'LFO 3'].map((name) =>
+      page
+        .getByRole('region', { name: `Modulation: ${name}` })
+        .evaluate((element) => {
+          const bounds = element.getBoundingClientRect();
+          return { left: bounds.left, top: bounds.top };
+        }),
+    ),
+  );
+  expect(new Set(lfoPositions.map(({ top }) => Math.round(top))).size).toBe(1);
+  expect(lfoPositions[0]!.left).toBeLessThan(lfoPositions[1]!.left);
+  expect(lfoPositions[1]!.left).toBeLessThan(lfoPositions[2]!.left);
+
+  const performanceTops = await Promise.all(
+    ['Voices', 'Glide'].map((name) =>
+      page
+        .getByRole('region', { name: `Performance: ${name}` })
+        .evaluate((element) => element.getBoundingClientRect().top),
+    ),
+  );
+  expect(new Set(performanceTops.map(Math.round)).size).toBe(1);
 });
 
 test('restores the selected factory preset across reload', async ({ page }) => {

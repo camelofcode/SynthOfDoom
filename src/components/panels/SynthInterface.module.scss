@@ -18,11 +18,11 @@
   grid-column: span 12;
 }
 
-.filters {
-  grid-column: span 7;
+.filters,
+.modulation {
+  grid-column: span 6;
 }
 
-.modulation,
 .effects {
   grid-column: span 5;
 }
@@ -52,6 +52,14 @@
   grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
   gap: 0.5rem;
   align-items: start;
+}
+
+.modulation .subgroupGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.performance .subgroupGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .subgroup {
@@ -151,7 +159,9 @@
 }
 
 @media (max-width: 36rem) {
-  .subgroupGrid {
+  .subgroupGrid,
+  .modulation .subgroupGrid,
+  .performance .subgroupGrid {
     grid-template-columns: 1fr;
   }
 
