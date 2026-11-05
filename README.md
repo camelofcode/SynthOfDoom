@@ -117,6 +117,6 @@ The production runtime is static. `npm run build` creates a hosting-agnostic `di
 
 The rewrite replaces Angular 2, SystemJS, Gulp, Express/Pug, jQuery, generated JavaScript, vendored packages, and Visual Studio project artefacts with a small Vite application and explicit domain boundaries. It also fixes legacy release-envelope wiring, unsafe delay feedback, note ownership and stuck-note behaviour, duplicated audio graphs, fixed-width layout, inaccessible controls, and the visual-only piano.
 
-The original source is recoverable with `git switch --detach legacy-angular`. The source-derived parity record is in [LEGACY_BASELINE.md](LEGACY_BASELINE.md), and the completed migration rationale is in [MODERNISATION_PLAN.md](MODERNISATION_PLAN.md).
+The original source and its historical implementation details remain recoverable with `git switch --detach legacy-angular`.
 
 All new interface artwork, including the SVG knob and favicon, is original to this rewrite. SynthOfDoom is released under the [MIT licence](LICENSE).
