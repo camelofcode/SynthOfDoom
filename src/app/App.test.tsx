@@ -4,15 +4,13 @@ import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
 describe('App', () => {
-  it('identifies the application and current accessible-controls phase', () => {
+  it('identifies the application and complete synth interface phase', () => {
     render(<App />);
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'SynthOfDoom' }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText('Phase 5 · Accessible controls'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Phase 6 · Full interface')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Start audio' })).toBeEnabled();
     expect(
       screen.getByRole('heading', { name: 'Audio: Ready to start' }),
@@ -22,22 +20,27 @@ describe('App', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'C4' })).toBeDisabled();
     expect(
-      screen.getByRole('region', { name: 'Control foundation' }),
+      screen.getByRole('region', { name: 'Oscillators' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('slider', { name: 'Cutoff' })).toBeInTheDocument();
     expect(
-      screen.getByRole('region', { name: 'Planned synth modules' }),
+      screen.getByRole('slider', { name: 'Filter 1 Cutoff' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('slider', { name: 'Filter 2 Cutoff' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: 'Delay & output' }),
     ).toBeInTheDocument();
   });
 
-  it('lists the planned audio and input modules', () => {
+  it('lists the complete audio and input modules', () => {
     render(<App />);
 
     expect(
-      screen.getByRole('heading', { name: 'Oscillator bank' }),
+      screen.getByRole('heading', { name: 'Oscillators' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { level: 3, name: 'Keyboard and MIDI' }),
+      screen.getByRole('heading', { level: 2, name: 'Keyboard and MIDI' }),
     ).toBeInTheDocument();
   });
 });

@@ -225,4 +225,17 @@ describe('SynthEngine graph and controls', () => {
     expect(() => engine.noteOn(60)).toThrow('Start the audio engine');
     expect(() => engine.noteOff(60)).toThrow('Start the audio engine');
   });
+
+  it('publishes one serialisable patch path for UI and MIDI changes', () => {
+    const engine = new SynthEngine();
+    const listener = vi.fn();
+    engine.subscribePatch(listener);
+
+    engine.setParameter('delay.mix', 0.25);
+    expect(listener).toHaveBeenCalledOnce();
+    expect(engine.getPatchSnapshot().parameters['delay.mix']).toBe(0.25);
+
+    engine.loadPatch(engine.getPatchSnapshot());
+    expect(listener).toHaveBeenCalledTimes(2);
+  });
 });

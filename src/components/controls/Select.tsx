@@ -8,12 +8,14 @@ export function Select<Value extends string>({
   options,
   onChange,
   disabled = false,
+  accessibleLabel,
 }: {
   readonly label: string;
   readonly value: Value;
   readonly options: readonly EnumOption<Value>[];
   readonly onChange: (value: Value) => void;
   readonly disabled?: boolean;
+  readonly accessibleLabel?: string;
 }) {
   const id = useId();
   return (
@@ -22,6 +24,7 @@ export function Select<Value extends string>({
       <select
         id={id}
         value={value}
+        aria-label={accessibleLabel}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value as Value)}
       >

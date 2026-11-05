@@ -64,22 +64,22 @@
   }
 }
 
-.moduleGrid {
+.signalFlow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
   margin-top: 1.5rem;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  overflow: hidden;
+  padding: 0.85rem;
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-panel);
-  background: var(--colour-border);
+  color: var(--colour-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
 
-  @include mixins.below(58rem) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @include mixins.below(34rem) {
-    grid-template-columns: 1fr;
+  span:nth-child(even) {
+    color: var(--colour-accent);
   }
 }
 

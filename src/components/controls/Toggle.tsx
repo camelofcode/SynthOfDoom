@@ -5,18 +5,20 @@ export function Toggle({
   checked,
   onChange,
   disabled = false,
+  accessibleLabel,
 }: {
   readonly label: string;
   readonly checked: boolean;
   readonly onChange: (checked: boolean) => void;
   readonly disabled?: boolean;
+  readonly accessibleLabel?: string;
 }) {
   return (
     <button
       className={styles.toggle}
       type="button"
       aria-pressed={checked}
-      aria-label={`${label}: ${checked ? 'On' : 'Off'}`}
+      aria-label={`${accessibleLabel ?? label}: ${checked ? 'On' : 'Off'}`}
       disabled={disabled}
       onClick={() => onChange(!checked)}
     >

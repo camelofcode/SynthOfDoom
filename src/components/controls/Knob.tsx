@@ -10,6 +10,7 @@ export interface KnobProps {
   readonly onChange: (value: number) => void;
   readonly disabled?: boolean;
   readonly id?: string;
+  readonly accessibleLabel?: string;
 }
 
 function clampAndStep(
@@ -30,6 +31,7 @@ export function Knob({
   onChange,
   disabled = false,
   id,
+  accessibleLabel,
 }: KnobProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
@@ -90,6 +92,7 @@ export function Knob({
           max={definition.maximum}
           step={definition.step}
           value={safeValue}
+          aria-label={accessibleLabel}
           aria-valuetext={valueText}
           disabled={disabled}
           onChange={(event) => onChange(Number(event.target.value))}
@@ -105,7 +108,7 @@ export function Knob({
         type="button"
         disabled={disabled || safeValue === definition.defaultValue}
         onClick={() => onChange(definition.defaultValue)}
-        aria-label={`Reset ${definition.label} to default`}
+        aria-label={`Reset ${accessibleLabel ?? definition.label} to default`}
       >
         Reset
       </button>

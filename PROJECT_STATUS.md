@@ -7,8 +7,8 @@
 - Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 5 complete
-- Overall status: accessible registry-driven control primitives are verified and connected to the engine; ready to begin Phase 6 full responsive synth interface
+- Current phase: Phase 6 complete
+- Overall status: the complete responsive signal-flow interface controls all 63 parameters through one observable patch path; ready to begin Phase 7 presets and persistence
 
 ## Completed
 
@@ -56,13 +56,20 @@
 - Added explicit focus styling, reduced-motion behaviour, forced-colour support, and state text/icons so controls do not rely on colour alone.
 - Connected a small control foundation to live oscillator waveform, filter cutoff, and delay parameters through the same engine command path.
 - Added user-focused component and browser coverage for accessible names, bounds, value text, keyboard changes, range changes, resets, disabled state, callbacks, and live engine updates.
+- Replaced the milestone cards/control showcase with the complete signal-flow instrument: oscillators/noise, four-channel mixer routing, dual filters and envelopes, three LFOs, amp ADSR, portamento, delay, and output.
+- Added one observable serialisable patch action path so UI, MIDI CC, and future preset loads update both the engine and every rendered control consistently.
+- Added unique accessible names for repeated controls and per-control visible MIDI-learn status/mapping actions.
+- Added a compact dual-filter signal-flow explanation and a live analyser-driven master oscilloscope that pauses drawing while the page is hidden.
+- Added responsive twelve-column desktop, stacked tablet, and two-control narrow-screen panel layouts while preserving the horizontally contained piano keyboard.
+- Completed a visible local browser review of the top-level instrument and deep modulation panels; retained the existing local-only Vite/deployment model.
+- Added desktop and narrow-viewport Playwright coverage including horizontal-overflow detection.
 
 ## Next actions
 
-1. Begin Phase 6 by replacing the milestone cards/showcase with the complete signal-flow-oriented synth panel grid.
-2. Assemble sources, mixer/routing, filters, modulation, amp, effects/output, lifecycle, MIDI, and keyboard controls through one serialisable patch action path.
-3. Add clear bypass/active/routing states, concise specialist help, a compact dual-filter signal-flow explanation, and responsive desktop/tablet/mobile layouts.
-4. Add an analyser-driven oscilloscope that pauses while hidden, then verify representative widths, 200% zoom, reduced motion, and high contrast.
+1. Begin Phase 7 with authored factory patches and an initialise/reset action that applies through the existing batched patch path.
+2. Add preset selection, save-as, rename, duplicate, delete, import JSON, and export JSON with visible unsaved changes and destructive-action confirmation.
+3. Persist versioned user patches and MIDI mappings with validation and safe fallbacks for malformed storage.
+4. Test batched application, storage recovery, import/export round trips, and preset operations without audible intermediate graph states.
 
 ## Current blocker or required decision
 
@@ -96,8 +103,8 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 54 passed with Vitest/React Testing Library.
-- Browser tests: 1 passed in Playwright Chromium.
+- Unit/component tests: 55 passed with Vitest/React Testing Library.
+- Browser tests: 2 passed in Playwright Chromium (desktop interaction and narrow responsive layout).
 - Manual physical MIDI keyboard check: passed on 5 November 2026.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
 - Production dependency audit: zero vulnerabilities.

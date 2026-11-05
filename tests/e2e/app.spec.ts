@@ -8,10 +8,10 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   await expect(
     page.getByRole('heading', { level: 1, name: 'SynthOfDoom' }),
   ).toBeVisible();
-  await expect(page.getByText('Phase 5 · Accessible controls')).toBeVisible();
+  await expect(page.getByText('Phase 6 · Full interface')).toBeVisible();
   await expect(
     page.getByRole('heading', {
-      name: 'The instrument has a tactile language.',
+      name: 'Shape the sound from source to space.',
     }),
   ).toBeVisible();
   await expect(
@@ -40,10 +40,30 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   await d4.dispatchEvent('pointerup', { pointerId: 7, buttons: 0 });
   await expect(d4).toHaveAttribute('aria-pressed', 'false');
 
-  const cutoff = page.getByRole('slider', { name: 'Cutoff' });
+  const cutoff = page.getByRole('slider', { name: 'Filter 1 Cutoff' });
   await cutoff.focus();
   await page.keyboard.press('End');
   await expect(cutoff).toHaveValue('10000');
-  await page.getByRole('button', { name: 'Reset Cutoff to default' }).click();
+  await page
+    .getByRole('button', { name: 'Reset Filter 1 Cutoff to default' })
+    .click();
   await expect(cutoff).toHaveValue('1000');
+});
+
+test('keeps the full synth operable at a narrow viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  await expect(page.getByRole('region', { name: 'Oscillators' })).toBeVisible();
+  await expect(
+    page.getByRole('region', { name: 'Delay & output' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('slider', { name: 'Filter 1 Cutoff' }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
 });

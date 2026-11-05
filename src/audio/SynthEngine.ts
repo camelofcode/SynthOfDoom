@@ -49,6 +49,7 @@ export class SynthEngine {
   private readonly createContext: AudioContextFactory;
   private readonly random: RandomSource;
   private readonly listeners = new Set<Listener>();
+  private readonly patchListeners = new Set<Listener>();
   private context: AudioContextPort | null = null;
   private graph: SynthGraph | null = null;
   private patch: SynthPatch;
@@ -73,6 +74,13 @@ export class SynthEngine {
   getPatch(): SynthPatch {
     return this.patch;
   }
+
+  getPatchSnapshot = (): SynthPatch => this.patch;
+
+  subscribePatch = (listener: Listener): (() => void) => {
+    this.patchListeners.add(listener);
+    return () => this.patchListeners.delete(listener);
+  };
 
   getAnalyser(): AnalyserNodePort | null {
     return this.graph?.analyser ?? null;
@@ -193,12 +201,14 @@ export class SynthEngine {
     });
     this.patch = result.patch;
     this.graph?.applyParameter(id, this.patch.parameters);
+    for (const listener of this.patchListeners) listener();
     return this.patch.parameters[id];
   }
 
   loadPatch(input: unknown): SynthPatch {
     this.patch = validateSynthPatch(input).patch;
     this.graph?.applyPatch(this.patch.parameters);
+    for (const listener of this.patchListeners) listener();
     return this.patch;
   }
 
@@ -224,5 +234,6 @@ export class SynthEngine {
 
     this.updateSnapshot({ status: 'disposed', error: null, activeNote: null });
     this.listeners.clear();
+    this.patchListeners.clear();
   }
 }

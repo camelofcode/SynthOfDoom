@@ -1,23 +1,14 @@
 import type { SynthEngineStatus } from '../audio/SynthEngine';
+import { synthEngine } from '../audio/engineInstance';
 import { PianoKeyboard } from '../components/keyboard/PianoKeyboard';
-import { ControlShowcase } from '../components/controls/ControlShowcase';
+import { SynthInterface } from '../components/panels/SynthInterface';
+import { Oscilloscope } from '../components/visualisers/Oscilloscope';
 import { useSynthEngine } from '../hooks/useSynthEngine';
 import { useMidi } from '../hooks/useMidi';
 import { useMidiLearn } from '../hooks/useMidiLearn';
 import { useNoteInput } from '../hooks/useNoteInput';
 import { PARAMETER_IDS, PARAMETER_REGISTRY } from '../synth/parameters';
 import styles from './App.module.scss';
-
-const plannedModules = [
-  'Oscillator bank',
-  'Noise generator',
-  'Mixer and routing',
-  'Dual filters',
-  'Envelopes',
-  'LFO modulation',
-  'Delay and output',
-  'Keyboard and MIDI',
-];
 
 const statusLabels: Record<SynthEngineStatus, string> = {
   idle: 'Ready to start',
@@ -54,16 +45,17 @@ export function App() {
           <p className={styles.eyebrow}>React · TypeScript · Web Audio</p>
           <h1>SynthOfDoom</h1>
         </div>
-        <span className={styles.phaseBadge}>Phase 5 · Accessible controls</span>
+        <span className={styles.phaseBadge}>Phase 6 · Full interface</span>
       </header>
 
       <main>
         <section className={styles.intro} aria-labelledby="foundation-title">
-          <p className={styles.kicker}>Accessible control foundation</p>
-          <h2 id="foundation-title">The instrument has a tactile language.</h2>
+          <p className={styles.kicker}>Complete signal path</p>
+          <h2 id="foundation-title">Shape the sound from source to space.</h2>
           <p>
-            Original scalable controls now expose the same precise values to
-            pointer, touch, keyboard, high-contrast, and screen-reader users.
+            Three oscillators and noise split across parallel filters, move
+            through independent envelopes and modulation, then meet a protected
+            delay and master output.
           </p>
         </section>
 
@@ -169,28 +161,29 @@ export function App() {
           </div>
         </section>
 
-        <ControlShowcase />
-
-        <section
-          className={styles.moduleGrid}
-          aria-label="Planned synth modules"
-        >
-          {plannedModules.map((moduleName, index) => (
-            <article className={styles.moduleCard} key={moduleName}>
-              <span className={styles.moduleNumber}>
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <h3>{moduleName}</h3>
-              <p>Modern implementation milestone tracked.</p>
-            </article>
-          ))}
+        <section className={styles.signalFlow} aria-label="Synth signal flow">
+          <span>Oscillators + noise</span>
+          <span aria-hidden="true">→</span>
+          <span>Mixer crossfades</span>
+          <span aria-hidden="true">→</span>
+          <span>Filter 1 ∥ Filter 2</span>
+          <span aria-hidden="true">→</span>
+          <span>Amp ADSR</span>
+          <span aria-hidden="true">→</span>
+          <span>Delay + master</span>
         </section>
+
+        <SynthInterface />
+        <Oscilloscope
+          analyser={synthEngine.getAnalyser()}
+          active={audio.status === 'running'}
+        />
       </main>
 
       <footer className={styles.footer}>
-        <span>Accessible controls ready</span>
+        <span>Full signal path ready</span>
         <span aria-hidden="true">·</span>
-        <span>Full interface next</span>
+        <span>Presets next</span>
       </footer>
     </div>
   );
