@@ -31,4 +31,22 @@ describe('NoteRouter', () => {
     router.allNotesOff();
     expect(synth.allNotesOff).toHaveBeenCalledOnce();
   });
+
+  it('counts repeated note-ons from one owner until every press releases', () => {
+    const synth = target();
+    const router = new NoteRouter(synth);
+    const midi = { source: 'midi' as const, sourceId: 'device' };
+
+    router.noteOn(midi, 60, 0.7);
+    router.noteOn(midi, 60, 0.9);
+    expect(synth.noteOn).toHaveBeenCalledOnce();
+
+    router.noteOff(midi, 60);
+    expect(synth.noteOff).not.toHaveBeenCalled();
+    expect(router.getSnapshot().activeNotes).toEqual([60]);
+
+    router.noteOff(midi, 60);
+    expect(synth.noteOff).toHaveBeenCalledWith(60);
+    expect(router.getSnapshot().activeNotes).toEqual([]);
+  });
 });

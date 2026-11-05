@@ -46,18 +46,18 @@ export function App() {
           <p className={styles.eyebrow}>React · TypeScript · Web Audio</p>
           <h1>SynthOfDoom</h1>
         </div>
-        <span className={styles.phaseBadge}>Phase 7 · Presets</span>
+        <span className={styles.phaseBadge}>Phase 8 · Polyphony</span>
       </header>
 
       <PresetBar />
 
       <main>
         <section className={styles.intro} aria-labelledby="foundation-title">
-          <p className={styles.kicker}>Patch memory</p>
-          <h2 id="foundation-title">Build a sound. Keep it.</h2>
+          <p className={styles.kicker}>Eight independent voices</p>
+          <h2 id="foundation-title">Play chords. Keep the glide.</h2>
           <p>
-            Start from authored factory patches, save your own variations, and
-            move validated patch files safely between browsers.
+            Polyphonic patches allocate independent envelopes while mono mode
+            preserves last-note priority and intentional portamento.
           </p>
         </section>
 
@@ -183,9 +183,9 @@ export function App() {
       </main>
 
       <footer className={styles.footer}>
-        <span>Preset memory ready</span>
+        <span>Polyphonic voices ready</span>
         <span aria-hidden="true">·</span>
-        <span>Polyphony next</span>
+        <span>Browser hardening next</span>
       </footer>
     </div>
   );

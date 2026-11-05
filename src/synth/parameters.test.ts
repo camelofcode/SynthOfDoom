@@ -10,8 +10,8 @@ import {
 } from './parameters';
 
 describe('parameter registry', () => {
-  it('contains one internally consistent definition for every Phase 2 ID', () => {
-    expect(PARAMETER_IDS).toHaveLength(63);
+  it('contains one internally consistent definition for every parameter ID', () => {
+    expect(PARAMETER_IDS).toHaveLength(65);
     expect(new Set(PARAMETER_IDS).size).toBe(PARAMETER_IDS.length);
 
     for (const id of PARAMETER_IDS) {
@@ -51,6 +51,7 @@ describe('parameter registry', () => {
     expect(formatParameterValue('filter.1.cutoff', 2500)).toBe('2.5 kHz');
     expect(formatParameterValue('oscillator.1.detune', 12)).toBe('+12 ct');
     expect(formatParameterValue('delay.enabled', true)).toBe('On');
+    expect(formatParameterValue('performance.voiceCount', 8)).toBe('8 voices');
     expect(formatParameterValue('filter.1.type', 'highpass')).toBe('High-pass');
     expect(formatParameterValue('mixer.noise.filterBalance', 0)).toBe(
       '50% F1 / 50% F2',

@@ -268,13 +268,14 @@ export class PresetManager {
             typeof value.name !== 'string'
           )
             return [];
-          if (!value.id.startsWith('user:') || !isSynthPatch(value.patch))
+          const validation = validateSynthPatch(value.patch);
+          if (!value.id.startsWith('user:') || validation.issues.length > 0)
             return [];
           return [
             {
               id: value.id,
               name: value.name.slice(0, 80),
-              patch: clonePatch(value.patch),
+              patch: clonePatch(validation.patch),
             },
           ];
         });

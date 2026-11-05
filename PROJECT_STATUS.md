@@ -7,8 +7,8 @@
 - Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 7 complete
-- Overall status: authored factory and user presets now persist, import, export, and apply through the observable patch path; ready to begin Phase 8 polyphonic voice architecture
+- Current phase: Phase 8 complete
+- Overall status: eight-voice polyphony, deterministic voice stealing, and intentional mono/portamento mode now share the existing effects and patch path; ready to begin Phase 9 verification and browser hardening
 
 ## Completed
 
@@ -63,7 +63,7 @@
 - Added responsive twelve-column desktop, stacked tablet, and two-control narrow-screen panel layouts while preserving the horizontally contained piano keyboard.
 - Completed a visible local browser review of the top-level instrument and deep modulation panels; retained the existing local-only Vite/deployment model.
 - Added desktop and narrow-viewport Playwright coverage including horizontal-overflow detection.
-- Added four authored factory patches covering the initial state, dark bass, spacious lead, and noise percussion while retaining registry validation and safe parameter bounds.
+- Added five authored factory patches covering the initial state, dark mono bass, spacious mono lead, eight-voice chord pad, and polyphonic noise percussion while retaining registry validation and safe parameter bounds.
 - Added a framework-independent preset manager with initialise, selection, save-as, rename, duplicate, delete, import, and export operations.
 - Added versioned local-storage persistence for user patches and the selected preset, complementing the existing versioned MIDI-learn storage.
 - Added visible saved/unsaved state plus confirmation before discarding edits or deleting a user patch.
@@ -73,13 +73,22 @@
 - Added regression coverage that verifies a rendered parameter change reaches the corresponding real browser `GainNode`, protecting against stale audio-graph wiring during development.
 - Added unit and browser coverage for factory loads, dirty tracking, user preset operations, JSON round trips, storage recovery, and reload persistence.
 - Made Playwright use the normal localhost Vite address so it can safely reuse a developer-run server regardless of whether localhost resolves to IPv4 or IPv6.
+- Added patch schema version 2 with validated voice mode and one-to-eight voice count parameters plus lossless migration of existing version-1 factory, stored, and imported patches to the eight-voice polyphonic default.
+- Split the former monolithic graph into reusable per-note `Voice` signal paths with independent oscillators, mixer routing, dual filters, filter envelopes, and amplitude envelopes.
+- Kept noise buffers, three free-running LFOs, delay, saturation, compressor, master, and analyser shared; each graph now creates only three noise buffers regardless of voice count and normalises the summed voice bus conservatively.
+- Added a deterministic allocator that chooses an idle voice, then the oldest released voice, then the oldest active voice, with a 5 ms fade before stealing an active/releasing voice.
+- Preserved last-note priority and portamento in mono mode while polyphonic voices start directly at their requested pitch and release independently.
+- Made live voice-mode/count changes rebuild cleanly and replay every held polyphonic note or only the last-priority monophonic note through the existing observable patch action.
+- Counted repeated note-ons per input owner so one MIDI note-off cannot prematurely release a multiply-held note.
+- Added focused allocator, migration, polyphonic envelope, stealing, held-patch-change, mode-switch, shared-modulation, repeated-note, and complete-disposal coverage.
+- Extended the Chromium interaction test to prove simultaneous keyboard notes reach distinct native oscillator frequencies in a real Web Audio graph.
 
 ## Next actions
 
-1. Begin Phase 8 by separating the current monophonic signal path into per-note `Voice` nodes and genuinely shared effects/output nodes.
-2. Add a deterministic voice allocator with configurable polyphonic and monophonic modes, repeated-note ownership, and click-resistant stealing.
-3. Extend the patch schema with voice mode/count and update factory patches for chords as well as intentional mono lead/bass behaviour.
-4. Add allocation, stealing, held-patch-change, disposal, and sustained-chord tests before profiling representative hardware.
+1. Begin Phase 9 with browser failure-state and permission-denial coverage, then complete the remaining keyboard-only and accessibility smoke checks.
+2. Review desktop, tablet, mobile, 200% zoom, reduced-motion, and forced-colour behaviour against the full seven-panel interface.
+3. Profile sustained eight-note chords and rapid stealing on representative desktop/mobile hardware, adjusting the default voice count only if drop-outs occur.
+4. Complete the manual release checklist and document supported browser/Web MIDI requirements before the cleanup and portfolio-documentation phases.
 
 ## Current blocker or required decision
 
@@ -113,9 +122,10 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 60 passed with Vitest/React Testing Library.
-- Browser tests: 3 passed in Playwright Chromium (desktop/audio interaction, narrow responsive layout, and preset reload persistence).
+- Unit/component tests: 70 passed with Vitest/React Testing Library.
+- Browser tests: 3 passed in Playwright Chromium (native polyphonic audio interaction, narrow responsive layout, and preset reload persistence).
 - Manual physical MIDI keyboard check: passed on 5 November 2026.
+- Manual sustained eight-note chord and rapid-stealing performance check: pending on representative hardware.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
 - Production dependency audit: zero vulnerabilities.
 

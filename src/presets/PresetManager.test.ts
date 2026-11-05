@@ -22,7 +22,7 @@ describe('PresetManager', () => {
     const engine = new SynthEngine();
     const manager = new PresetManager(engine, undefined, () => 'one');
 
-    expect(manager.getSnapshot().presets).toHaveLength(4);
+    expect(manager.getSnapshot().presets).toHaveLength(5);
     manager.select('factory:doom-bass');
     expect(engine.getPatch().parameters['filter.1.cutoff']).toBe(420);
     expect(manager.getSnapshot().dirty).toBe(false);
@@ -99,6 +99,37 @@ describe('PresetManager', () => {
     expect(manager.getSnapshot().error).toBe(
       'Invalid stored presets were ignored.',
     );
+    manager.dispose();
+  });
+
+  it('migrates stored version-one user patches without losing them', () => {
+    const storage = new MemoryStorage();
+    const current = createDefaultPatch();
+    const parameters = { ...current.parameters } as Record<string, unknown>;
+    delete parameters['performance.voiceMode'];
+    delete parameters['performance.voiceCount'];
+    storage.setItem(
+      'synth-of-doom.presets',
+      JSON.stringify({
+        version: 1,
+        selectedId: 'user:legacy',
+        userPresets: [
+          {
+            id: 'user:legacy',
+            name: 'Legacy patch',
+            patch: { schemaVersion: 1, parameters },
+          },
+        ],
+      }),
+    );
+
+    const engine = new SynthEngine();
+    const manager = new PresetManager(engine, storage, () => 'id');
+
+    expect(manager.getSnapshot().selectedId).toBe('user:legacy');
+    expect(engine.getPatch().schemaVersion).toBe(2);
+    expect(engine.getPatch().parameters['performance.voiceMode']).toBe('poly');
+    expect(engine.getPatch().parameters['performance.voiceCount']).toBe(8);
     manager.dispose();
   });
 });

@@ -2,11 +2,13 @@ import {
   FILTER_TYPES,
   NOISE_COLOURS,
   OSCILLATOR_WAVEFORMS,
+  VOICE_MODES,
   type FilterType,
   type LfoTarget,
   type NoiseColour,
   type OscillatorWaveform,
   type ParameterId,
+  type VoiceMode,
 } from './types';
 
 export type ParameterScale =
@@ -24,7 +26,8 @@ export type ParameterUnit =
   | 'octaves'
   | 'percent'
   | 'q'
-  | 'seconds';
+  | 'seconds'
+  | 'voices';
 
 interface ParameterDefinitionBase<Id extends ParameterId> {
   readonly id: Id;
@@ -107,6 +110,8 @@ const formatters = {
     value < 1
       ? `${Math.round(value * 1000)} ms`
       : `${formatNumber(value, 2)} s`,
+  voices: (value: number) =>
+    `${Math.round(value)} voice${Math.round(value) === 1 ? '' : 's'}`,
 } as const;
 
 function formatFilterBalance(value: number): string {
@@ -178,6 +183,16 @@ const noiseColourOptions = NOISE_COLOURS.map((value) => ({
   value,
   label: `${value.charAt(0).toUpperCase()}${value.slice(1)}`,
 })) satisfies readonly EnumOption<NoiseColour>[];
+
+const voiceModeLabels: Record<VoiceMode, string> = {
+  poly: 'Polyphonic',
+  mono: 'Monophonic',
+};
+
+const voiceModeOptions = VOICE_MODES.map((value) => ({
+  value,
+  label: voiceModeLabels[value],
+})) satisfies readonly EnumOption<VoiceMode>[];
 
 const octaveOptions = [-2, -1, 0, 1, 2] as const;
 
@@ -724,6 +739,29 @@ export const PARAMETER_REGISTRY = Object.freeze({
     modulationRange: null,
     midiLearnable: true,
     formatValue: formatters.percent,
+  }),
+
+  'performance.voiceMode': enumeration({
+    id: 'performance.voiceMode',
+    label: 'Voice mode',
+    group: 'Performance',
+    defaultValue: 'poly',
+    options: voiceModeOptions,
+    midiLearnable: false,
+  }),
+  'performance.voiceCount': numeric({
+    id: 'performance.voiceCount',
+    label: 'Voice count',
+    group: 'Performance',
+    unit: 'voices',
+    minimum: 1,
+    maximum: 8,
+    defaultValue: 8,
+    step: 1,
+    scale: linear,
+    modulationRange: null,
+    midiLearnable: false,
+    formatValue: formatters.voices,
   }),
 
   'performance.portamento': numeric({

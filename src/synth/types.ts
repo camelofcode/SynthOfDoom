@@ -24,6 +24,10 @@ export const NOISE_COLOURS = ['white', 'pink', 'brown'] as const;
 
 export type NoiseColour = (typeof NOISE_COLOURS)[number];
 
+export const VOICE_MODES = ['poly', 'mono'] as const;
+
+export type VoiceMode = (typeof VOICE_MODES)[number];
+
 export type OscillatorIndex = 1 | 2 | 3;
 export type FilterIndex = 1 | 2;
 export type LfoIndex = 1 | 2 | 3;
@@ -61,6 +65,9 @@ export type LfoParameterId =
 export type DelayParameterId =
   `delay.${'enabled' | 'time' | 'feedback' | 'feedbackCutoff' | 'mix' | 'saturation'}`;
 
+export type PerformanceParameterId =
+  `performance.${'voiceMode' | 'voiceCount' | 'portamento'}`;
+
 export type ParameterId =
   | OscillatorParameterId
   | 'noise.colour'
@@ -69,7 +76,7 @@ export type ParameterId =
   | AmpParameterId
   | LfoParameterId
   | DelayParameterId
-  | 'performance.portamento';
+  | PerformanceParameterId;
 
 export type NoteInputSource = 'computer' | 'pointer' | 'midi';
 

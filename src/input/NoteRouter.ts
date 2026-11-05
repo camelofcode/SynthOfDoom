@@ -24,7 +24,7 @@ function ownerKey(owner: NoteOwner): string {
 export class NoteRouter {
   private readonly owners = new Map<
     number,
-    Map<string, { owner: NoteOwner; velocity: number }>
+    Map<string, { owner: NoteOwner; velocity: number; presses: number }>
   >();
   private readonly listeners = new Set<Listener>();
   private snapshot: NoteRouterSnapshot = { activeNotes: [] };
@@ -41,9 +41,18 @@ export class NoteRouter {
   noteOn(owner: NoteOwner, note: number, velocity = 1): void {
     const noteOwners =
       this.owners.get(note) ??
-      new Map<string, { owner: NoteOwner; velocity: number }>();
+      new Map<
+        string,
+        { owner: NoteOwner; velocity: number; presses: number }
+      >();
     const wasHeld = noteOwners.size > 0;
-    noteOwners.set(ownerKey(owner), { owner, velocity });
+    const key = ownerKey(owner);
+    const existing = noteOwners.get(key);
+    noteOwners.set(key, {
+      owner,
+      velocity,
+      presses: (existing?.presses ?? 0) + 1,
+    });
     this.owners.set(note, noteOwners);
     if (!wasHeld) this.target.noteOn(note, velocity);
     this.publish();
@@ -52,7 +61,14 @@ export class NoteRouter {
   noteOff(owner: NoteOwner, note: number): void {
     const noteOwners = this.owners.get(note);
     if (!noteOwners) return;
-    noteOwners.delete(ownerKey(owner));
+    const key = ownerKey(owner);
+    const existing = noteOwners.get(key);
+    if (!existing) return;
+    if (existing.presses > 1) {
+      noteOwners.set(key, { ...existing, presses: existing.presses - 1 });
+    } else {
+      noteOwners.delete(key);
+    }
     if (noteOwners.size === 0) {
       this.owners.delete(note);
       this.target.noteOff(note);

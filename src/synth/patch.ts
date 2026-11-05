@@ -8,7 +8,7 @@ import {
 } from './parameters';
 import type { ParameterId } from './types';
 
-export const CURRENT_PATCH_VERSION = 1 as const;
+export const CURRENT_PATCH_VERSION = 2 as const;
 
 export interface SynthPatch {
   readonly schemaVersion: typeof CURRENT_PATCH_VERSION;
@@ -127,6 +127,25 @@ function readParameterCandidate(input: unknown): {
       parameters: isRecord(input.parameters) ? input.parameters : null,
       migratedFrom: null,
       rootIssue: isRecord(input.parameters)
+        ? null
+        : { path: 'parameters', reason: 'Parameters must be an object.' },
+    };
+  }
+
+  if (input.schemaVersion === 1) {
+    const versionOneParameters = isRecord(input.parameters)
+      ? input.parameters
+      : null;
+    return {
+      parameters: versionOneParameters
+        ? {
+            ...versionOneParameters,
+            'performance.voiceMode': 'poly',
+            'performance.voiceCount': 8,
+          }
+        : null,
+      migratedFrom: 1,
+      rootIssue: versionOneParameters
         ? null
         : { path: 'parameters', reason: 'Parameters must be an object.' },
     };

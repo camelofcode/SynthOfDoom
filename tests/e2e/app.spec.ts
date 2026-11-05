@@ -5,13 +5,24 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
 }) => {
   await page.addInitScript(() => {
     const BrowserAudioContext = window.AudioContext;
-    const debugWindow = window as Window & { __synthGainNodes?: GainNode[] };
+    const debugWindow = window as Window & {
+      __synthGainNodes?: GainNode[];
+      __synthOscillators?: OscillatorNode[];
+    };
     const gainNodes: GainNode[] = [];
+    const oscillators: OscillatorNode[] = [];
     debugWindow.__synthGainNodes = gainNodes;
+    debugWindow.__synthOscillators = oscillators;
     window.AudioContext = class extends BrowserAudioContext {
       override createGain(): GainNode {
         const node = super.createGain();
         gainNodes.push(node);
+        return node;
+      }
+
+      override createOscillator(): OscillatorNode {
+        const node = super.createOscillator();
+        oscillators.push(node);
         return node;
       }
     };
@@ -21,10 +32,10 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   await expect(
     page.getByRole('heading', { level: 1, name: 'SynthOfDoom' }),
   ).toBeVisible();
-  await expect(page.getByText('Phase 7 · Presets')).toBeVisible();
+  await expect(page.getByText('Phase 8 · Polyphony')).toBeVisible();
   await expect(
     page.getByRole('heading', {
-      name: 'Build a sound. Keep it.',
+      name: 'Play chords. Keep the glide.',
     }),
   ).toBeVisible();
   await expect(
@@ -39,17 +50,28 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   const noiseEnabled = page.getByRole('button', {
     name: 'Noise mixer Enabled: On',
   });
+  const gainValuesBeforeNoise = await page.evaluate(
+    () =>
+      (
+        window as Window & { __synthGainNodes?: GainNode[] }
+      ).__synthGainNodes?.map((node) => node.gain.value) ?? [],
+  );
   await noiseEnabled.click();
   await expect(
     page.getByRole('button', { name: 'Noise mixer Enabled: Off' }),
   ).toHaveAttribute('aria-pressed', 'false');
+  await page.waitForTimeout(25);
+  const gainValuesAfterNoise = await page.evaluate(
+    () =>
+      (
+        window as Window & { __synthGainNodes?: GainNode[] }
+      ).__synthGainNodes?.map((node) => node.gain.value) ?? [],
+  );
   expect(
-    await page.evaluate(
-      () =>
-        (window as Window & { __synthGainNodes?: GainNode[] })
-          .__synthGainNodes?.[16]?.gain.value,
+    gainValuesBeforeNoise.some(
+      (value, index) => value > 0 && gainValuesAfterNoise[index] === 0,
     ),
-  ).toBe(0);
+  ).toBe(true);
 
   const previousGainCount = await page.evaluate(
     () =>
@@ -62,7 +84,7 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   page.once('dialog', (dialog) => void dialog.accept());
   await page
     .getByRole('combobox', { name: 'Preset', exact: true })
-    .selectOption('factory:doom-bass');
+    .selectOption('factory:storm-noise');
   await expect(
     page.getByRole('combobox', { name: 'LFO 1 Target' }),
   ).toHaveValue('none');
@@ -75,15 +97,41 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   ).toBeGreaterThan(previousGainCount);
 
   await page.keyboard.down('q');
+  await page.keyboard.down('e');
   await expect(page.getByRole('button', { name: 'C4' })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
+  await expect(page.getByRole('button', { name: 'E4' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  const soundingFrequencies = await page.evaluate(
+    () =>
+      (
+        window as Window & { __synthOscillators?: OscillatorNode[] }
+      ).__synthOscillators?.map((node) => node.frequency.value) ?? [],
+  );
+  expect(
+    soundingFrequencies.some(
+      (frequency) => Math.abs(frequency - 261.6256) < 0.01,
+    ),
+  ).toBe(true);
+  expect(
+    soundingFrequencies.some(
+      (frequency) => Math.abs(frequency - 329.6276) < 0.01,
+    ),
+  ).toBe(true);
   await page.keyboard.up('q');
   await expect(page.getByRole('button', { name: 'C4' })).toHaveAttribute(
     'aria-pressed',
     'false',
   );
+  await expect(page.getByRole('button', { name: 'E4' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await page.keyboard.up('e');
 
   const d4 = page.getByRole('button', { name: 'D4' });
   await d4.dispatchEvent('pointerdown', { pointerId: 7, buttons: 1 });

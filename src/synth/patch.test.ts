@@ -68,6 +68,20 @@ describe('SynthPatch validation and migration', () => {
     });
   });
 
+  it('migrates version-one patches to the polyphonic defaults', () => {
+    const current = createDefaultPatch();
+    const parameters = { ...current.parameters } as Record<string, unknown>;
+    delete parameters['performance.voiceMode'];
+    delete parameters['performance.voiceCount'];
+
+    const result = validateSynthPatch({ schemaVersion: 1, parameters });
+
+    expect(result.migratedFrom).toBe(1);
+    expect(result.issues).toEqual([]);
+    expect(result.patch.parameters['performance.voiceMode']).toBe('poly');
+    expect(result.patch.parameters['performance.voiceCount']).toBe(8);
+  });
+
   it('falls back safely for unsupported or non-object patches', () => {
     const unsupported = validateSynthPatch({ schemaVersion: 99 });
     const nonObject = migrateSynthPatch('not a patch');

@@ -165,15 +165,26 @@ export class SynthEngine {
     );
     const active = this.notes.activeNote;
     if (!active) return;
-    graph.triggerNote(active.note, active.velocity, hadActiveNote);
+    if (this.patch.parameters['performance.voiceMode'] === 'mono') {
+      graph.triggerNote(active.note, active.velocity, hadActiveNote);
+    } else {
+      graph.triggerNote(safeNote, normaliseNoteVelocity(velocity), false);
+    }
     this.updateSnapshot({ activeNote: active.note });
   }
 
   noteOff(note: number): void {
     const graph = this.requireRunningGraph();
     const previousActive = this.notes.activeNote?.note ?? null;
-    this.notes = releaseNote(this.notes, clampMidiNote(note));
+    const safeNote = clampMidiNote(note);
+    this.notes = releaseNote(this.notes, safeNote);
     const active = this.notes.activeNote;
+
+    if (this.patch.parameters['performance.voiceMode'] === 'poly') {
+      graph.releaseNote(safeNote);
+      this.updateSnapshot({ activeNote: active?.note ?? null });
+      return;
+    }
 
     if (previousActive === active?.note) return;
     if (active) {
@@ -187,7 +198,7 @@ export class SynthEngine {
   allNotesOff(): void {
     if (!this.graph) return;
     this.notes = releaseAllNotes();
-    this.graph.releaseNote();
+    this.graph.releaseAllNotes();
     this.updateSnapshot({ activeNote: null });
   }
 
@@ -200,13 +211,23 @@ export class SynthEngine {
       parameters: { ...this.patch.parameters, [id]: value },
     });
     this.patch = result.patch;
-    this.graph?.applyParameter(id, this.patch.parameters);
+    if (id === 'performance.voiceMode' || id === 'performance.voiceCount') {
+      this.replaceGraph();
+    } else {
+      this.graph?.applyParameter(id, this.patch.parameters);
+    }
     for (const listener of this.patchListeners) listener();
     return this.patch.parameters[id];
   }
 
   loadPatch(input: unknown): SynthPatch {
     this.patch = validateSynthPatch(input).patch;
+    this.replaceGraph();
+    for (const listener of this.patchListeners) listener();
+    return this.patch;
+  }
+
+  private replaceGraph(): void {
     if (this.context && this.graph) {
       const previousGraph = this.graph;
       const replacementGraph = new SynthGraph(
@@ -215,19 +236,23 @@ export class SynthEngine {
         this.random,
       );
       const activeNote = this.notes.activeNote;
-      if (activeNote) {
-        replacementGraph.triggerNote(
-          activeNote.note,
-          activeNote.velocity,
-          false,
-        );
+      if (this.patch.parameters['performance.voiceMode'] === 'mono') {
+        if (activeNote) {
+          replacementGraph.triggerNote(
+            activeNote.note,
+            activeNote.velocity,
+            false,
+          );
+        }
+      } else {
+        for (const heldNote of this.notes.heldNotes) {
+          replacementGraph.triggerNote(heldNote.note, heldNote.velocity, false);
+        }
       }
       this.graph = replacementGraph;
       previousGraph.dispose();
       this.updateSnapshot({ activeNote: activeNote?.note ?? null });
     }
-    for (const listener of this.patchListeners) listener();
-    return this.patch;
   }
 
   private requireRunningGraph(): SynthGraph {

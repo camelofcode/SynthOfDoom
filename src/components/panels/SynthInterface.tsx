@@ -93,6 +93,15 @@ const groups: readonly {
       'lfo.3.rate',
       'lfo.3.depth',
       'lfo.3.target',
+    ],
+  },
+  {
+    title: 'Performance',
+    eyebrow: 'Polyphony & glide',
+    className: styles.performance,
+    ids: [
+      'performance.voiceMode',
+      'performance.voiceCount',
       'performance.portamento',
     ],
   },
