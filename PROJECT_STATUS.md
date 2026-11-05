@@ -7,8 +7,8 @@
 - Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 2 complete
-- Overall status: typed domain and parameter contracts are verified; ready to begin Phase 3 framework-independent audio engine
+- Current phase: Phase 3 complete
+- Overall status: the complete framework-independent monophonic audio graph is verified; ready to begin Phase 4 unified note and control input
 
 ## Completed
 
@@ -35,13 +35,21 @@
 - Added pure MIDI note/frequency, octave transpose, velocity, percentage, MIDI CC, linear, logarithmic, exponential, and bipolar conversion helpers.
 - Added immutable last-note-priority state transitions with duplicate note-on protection, ordered fallback, and all-notes-off behaviour.
 - Added focused unit tests for registry integrity, formatting, conversion boundaries, patch round trips/migration, malformed data, and note-priority ordering.
+- Added a lazy, injectable `AudioContext` lifecycle with idle, starting, running, suspended, interrupted, closed, failed, and disposed states plus retry support.
+- Added the framework-independent `SynthEngine` API for start, note-on/off, all-notes-off, typed parameter changes, validated patch loading, analyser access, subscriptions, and idempotent disposal.
+- Built the complete monophonic audio graph: three oscillators, deterministic white/pink/brown noise, four mixer sources with equal-power dual-filter routing, two filters, independent filter ADSRs, amp ADSR, three reroutable LFOs, and global portamento.
+- Rebuilt delay from native `DelayNode`, feedback gain/filter, and `WaveShaperNode` saturation, with equal-power wet/dry mix and bypass.
+- Added conservative compressor/master output protection and an analyser output for later visualisation.
+- Added current-time-relative ADSR scheduling with retrigger holds, safe zero-time handling, independent release controls, and release regression coverage.
+- Added a typed fake Web Audio context and deterministic tests for lifecycle, graph construction, note priority, pitch/glide, envelope scheduling, LFO rerouting, parameter/patch application, noise generation, and complete source disposal.
+- Added an explicit Start audio UI with visible lifecycle and actionable failure state; verified real browser context creation through Playwright.
 
 ## Next actions
 
-1. Begin Phase 3 with lazy `AudioContext` creation and explicit running, suspended, interrupted, closed, and failure states.
-2. Add the `SynthEngine` lifecycle API (`start`, `noteOn`, `noteOff`, `setParameter`, `loadPatch`, and `dispose`) without coupling it to React.
-3. Build the first audible vertical slice: one oscillator, amplitude control, conservative master output, and deterministic fake-context tests.
-4. Extend the graph incrementally through the oscillator bank, noise, mixer, filters, envelopes, modulation, delay, analyser, and complete disposal.
+1. Begin Phase 4 with one typed note-command path shared by computer keyboard, pointer keyboard, and Web MIDI adapters.
+2. Add the disposable computer keyboard adapter with repeat/form-field guards, octave shifting, blur/visibility all-notes-off, and the documented `Q`–`I` map.
+3. Build the pointer keyboard from note metadata with pointer capture/cancel handling and shared active-note state.
+4. Add deliberate Web MIDI access, device/status handling, message decoding, hot-plug support, stable-ID MIDI learn, and versioned mapping persistence.
 
 ## Current blocker or required decision
 
@@ -75,7 +83,7 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 25 passed with Vitest/React Testing Library.
+- Unit/component tests: 39 passed with Vitest/React Testing Library.
 - Browser tests: 1 passed in Playwright Chromium.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
 - Production dependency audit: zero vulnerabilities.

@@ -2,7 +2,7 @@
 
 SynthOfDoom is a modern React and Web Audio synthesiser. It is a ground-up modernisation of the original Angular/Web Audio learning project preserved at the `legacy-angular` tag.
 
-The modern shell and typed domain contracts are complete; the framework-independent audio engine is next. See [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current handover and [MODERNISATION_PLAN.md](MODERNISATION_PLAN.md) for the full roadmap.
+The modern shell, typed domain contracts, and framework-independent monophonic audio engine are complete; unified keyboard, pointer, and MIDI input is next. See [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current handover and [MODERNISATION_PLAN.md](MODERNISATION_PLAN.md) for the full roadmap.
 
 ## Requirements
 

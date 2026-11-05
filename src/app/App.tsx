@@ -1,3 +1,5 @@
+import type { SynthEngineStatus } from '../audio/SynthEngine';
+import { useSynthEngine } from '../hooks/useSynthEngine';
 import styles from './App.module.scss';
 
 const plannedModules = [
@@ -11,7 +13,27 @@ const plannedModules = [
   'Keyboard and MIDI',
 ];
 
+const statusLabels: Record<SynthEngineStatus, string> = {
+  idle: 'Ready to start',
+  starting: 'Starting',
+  running: 'Running',
+  suspended: 'Suspended',
+  interrupted: 'Interrupted',
+  closed: 'Closed',
+  failed: 'Start failed',
+  disposed: 'Stopped',
+};
+
 export function App() {
+  const audio = useSynthEngine();
+  const canStart = !['starting', 'running', 'disposed'].includes(audio.status);
+
+  const startAudio = () => {
+    void audio.start().catch(() => {
+      // The engine publishes an actionable failure message through its snapshot.
+    });
+  };
+
   return (
     <div className={styles.appShell}>
       <header className={styles.header}>
@@ -19,18 +41,39 @@ export function App() {
           <p className={styles.eyebrow}>React · TypeScript · Web Audio</p>
           <h1>SynthOfDoom</h1>
         </div>
-        <span className={styles.phaseBadge}>Phase 2 · Domain model</span>
+        <span className={styles.phaseBadge}>Phase 3 · Audio engine</span>
       </header>
 
       <main>
         <section className={styles.intro} aria-labelledby="foundation-title">
-          <p className={styles.kicker}>Domain contracts ready</p>
-          <h2 id="foundation-title">The signal path has a contract.</h2>
+          <p className={styles.kicker}>Audio engine ready</p>
+          <h2 id="foundation-title">The signal path is alive.</h2>
           <p>
-            Every parameter now has a stable identity, safe range, display
-            format, and versioned patch value. Audio remains deliberately
-            disconnected until the framework-independent synth engine is built.
+            The complete monophonic synth graph is independent from React and
+            remains silent until you explicitly start it. Unified note input and
+            performance controls arrive in the next phase.
           </p>
+        </section>
+
+        <section className={styles.audioPanel} aria-labelledby="audio-title">
+          <div>
+            <p className={styles.kicker}>Web Audio lifecycle</p>
+            <h2 id="audio-title">Audio: {statusLabels[audio.status]}</h2>
+            <p className={styles.audioMessage} aria-live="polite">
+              {audio.error ??
+                (audio.status === 'running'
+                  ? 'The engine is running and ready for note input.'
+                  : 'Audio begins only after your explicit gesture.')}
+            </p>
+          </div>
+          <button
+            className={styles.startButton}
+            type="button"
+            onClick={startAudio}
+            disabled={!canStart}
+          >
+            {audio.status === 'failed' ? 'Retry audio' : 'Start audio'}
+          </button>
         </section>
 
         <section
@@ -50,9 +93,9 @@ export function App() {
       </main>
 
       <footer className={styles.footer}>
-        <span>Domain model ready</span>
+        <span>Audio engine ready</span>
         <span aria-hidden="true">·</span>
-        <span>Audio engine pending</span>
+        <span>Unified input next</span>
       </footer>
     </div>
   );

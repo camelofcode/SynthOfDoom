@@ -82,6 +82,56 @@
   }
 }
 
+.audioPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-panel);
+  background: var(--colour-panel);
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+  }
+}
+
+.audioMessage {
+  margin: 0.6rem 0 0;
+  color: var(--colour-text-muted);
+  line-height: 1.5;
+}
+
+.startButton {
+  flex: 0 0 auto;
+  min-width: 9rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--colour-accent);
+  border-radius: 0.45rem;
+  background: var(--colour-accent);
+  color: var(--colour-background);
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--colour-accent-soft);
+  }
+
+  &:focus-visible {
+    @include mixins.focus-ring;
+  }
+
+  &:disabled {
+    border-color: var(--colour-border);
+    background: var(--colour-border);
+    color: var(--colour-text-subtle);
+    cursor: not-allowed;
+  }
+}
+
 .moduleCard {
   min-height: 10rem;
   padding: 1.25rem;
@@ -122,5 +172,10 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 1rem;
+  }
+
+  .audioPanel {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
