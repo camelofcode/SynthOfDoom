@@ -27,10 +27,9 @@ export interface ComputerKeyboardOptions {
 
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
-  return (
-    target.isContentEditable ||
-    ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
-  );
+  if (target.isContentEditable) return true;
+  if (target instanceof HTMLInputElement) return target.type !== 'range';
+  return ['TEXTAREA', 'SELECT'].includes(target.tagName);
 }
 
 export function attachComputerKeyboard({

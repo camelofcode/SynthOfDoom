@@ -53,4 +53,34 @@ describe('computer keyboard adapter', () => {
     dispose();
     input.remove();
   });
+
+  it('continues playing notes while a range slider has focus', () => {
+    const target: NoteTarget = {
+      noteOn: vi.fn(),
+      noteOff: vi.fn(),
+      allNotesOff: vi.fn(),
+    };
+    const router = new NoteRouter(target);
+    const range = document.createElement('input');
+    range.type = 'range';
+    document.body.append(range);
+    const dispose = attachComputerKeyboard({
+      window,
+      document,
+      router,
+      isActive: () => true,
+    });
+
+    range.dispatchEvent(
+      new KeyboardEvent('keydown', { code: 'KeyQ', bubbles: true }),
+    );
+    range.dispatchEvent(
+      new KeyboardEvent('keyup', { code: 'KeyQ', bubbles: true }),
+    );
+
+    expect(target.noteOn).toHaveBeenCalledWith(60, 100 / 127);
+    expect(target.noteOff).toHaveBeenCalledWith(60);
+    dispose();
+    range.remove();
+  });
 });

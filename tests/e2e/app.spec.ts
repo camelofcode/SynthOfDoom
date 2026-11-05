@@ -181,6 +181,12 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   );
   await page.mouse.up();
   await expect(cutoff).not.toHaveValue('1000');
+  await page.keyboard.down('q');
+  await expect(page.getByRole('button', { name: 'C4' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await page.keyboard.up('q');
   await cutoff.focus();
   await page.keyboard.press('End');
   await expect(cutoff).toHaveValue('10000');

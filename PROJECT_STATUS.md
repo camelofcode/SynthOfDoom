@@ -93,6 +93,7 @@
 - Expanded the pointer instrument to a two-octave C4–C6 keyboard with fifteen white keys and ten overlaid black keys, contained horizontal scrolling, active state, and unchanged shared note routing.
 - Made the interface accent themeable through the existing CSS custom-property system, with green as the default and the selected colour persisted locally.
 - Applied the selected accent to the canvas-rendered master oscilloscope as well as the CSS-rendered interface, updating the waveform immediately when the picker changes.
+- Allowed the mapped computer-note keys to pass through while a knob's range input retains focus, preserving slider arrow-key access without requiring a click elsewhere before playing.
 
 ## Next actions
 
@@ -133,7 +134,7 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 71 passed with Vitest/React Testing Library.
+- Unit/component tests: 72 passed with Vitest/React Testing Library.
 - Browser tests: 3 passed in Playwright Chromium (native polyphonic audio interaction, narrow responsive layout, and preset reload persistence).
 - Manual physical MIDI keyboard check: passed on 5 November 2026.
 - Manual sustained chord, rapid-stealing, mono glide, and representative-hardware polyphony check: passed on 5 November 2026.
