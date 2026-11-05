@@ -7,8 +7,8 @@
 - Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 4 complete
-- Overall status: computer, pointer, and optional MIDI input share a verified ownership-aware route; ready to begin Phase 5 accessible reusable controls
+- Current phase: Phase 5 complete
+- Overall status: accessible registry-driven control primitives are verified and connected to the engine; ready to begin Phase 6 full responsive synth interface
 
 ## Completed
 
@@ -50,13 +50,19 @@
 - Added strict MIDI decoding for note-on, velocity-zero note-off, note-off, control-change, channel, malformed, and unsupported messages.
 - Added stable-ID MIDI learn with one-to-one collision handling, CC scaling through the parameter registry, visible learn/mapping state, clearing, and versioned local-storage persistence.
 - Added deterministic unit tests for multi-source ownership, keyboard cleanup, MIDI parsing/devices/CC, mapping persistence, and a Playwright smoke test for real keyboard and pointer note paths.
+- Confirmed pointer, computer-keyboard, and physical MIDI-keyboard input manually on representative hardware.
+- Added an accessible `Knob` built on native slider semantics with original inline SVG artwork, registry-driven ranges/formatting, visible values, pointer/touch input, Arrow/Page/Home/End keys, clamping, disabled state, and reset button/double-click gestures.
+- Added reusable accessible select, toggle, semantic panel, value-readout, and textual status-indicator components.
+- Added explicit focus styling, reduced-motion behaviour, forced-colour support, and state text/icons so controls do not rely on colour alone.
+- Connected a small control foundation to live oscillator waveform, filter cutoff, and delay parameters through the same engine command path.
+- Added user-focused component and browser coverage for accessible names, bounds, value text, keyboard changes, range changes, resets, disabled state, callbacks, and live engine updates.
 
 ## Next actions
 
-1. Begin Phase 5 with an accessible reusable `Knob` built on slider semantics and original SVG visuals.
-2. Add keyboard, pointer/touch, reset-to-default, clamping, visible value/unit, focus, reduced-motion, and high-contrast behaviour.
-3. Add reusable select, toggle, panel, value-readout, and connection/status components driven by the parameter registry.
-4. Cover accessible names, keyboard changes, reset, disabled state, clamping, and callbacks with user-focused component tests.
+1. Begin Phase 6 by replacing the milestone cards/showcase with the complete signal-flow-oriented synth panel grid.
+2. Assemble sources, mixer/routing, filters, modulation, amp, effects/output, lifecycle, MIDI, and keyboard controls through one serialisable patch action path.
+3. Add clear bypass/active/routing states, concise specialist help, a compact dual-filter signal-flow explanation, and responsive desktop/tablet/mobile layouts.
+4. Add an analyser-driven oscilloscope that pauses while hidden, then verify representative widths, 200% zoom, reduced motion, and high contrast.
 
 ## Current blocker or required decision
 
@@ -90,8 +96,9 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 49 passed with Vitest/React Testing Library.
+- Unit/component tests: 54 passed with Vitest/React Testing Library.
 - Browser tests: 1 passed in Playwright Chromium.
+- Manual physical MIDI keyboard check: passed on 5 November 2026.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
 - Production dependency audit: zero vulnerabilities.
 

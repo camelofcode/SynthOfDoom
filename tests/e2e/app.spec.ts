@@ -8,9 +8,11 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   await expect(
     page.getByRole('heading', { level: 1, name: 'SynthOfDoom' }),
   ).toBeVisible();
-  await expect(page.getByText('Phase 4 · Unified input')).toBeVisible();
+  await expect(page.getByText('Phase 5 · Accessible controls')).toBeVisible();
   await expect(
-    page.getByRole('heading', { name: 'Every gesture follows one path.' }),
+    page.getByRole('heading', {
+      name: 'The instrument has a tactile language.',
+    }),
   ).toBeVisible();
   await expect(
     page.getByRole('heading', { name: 'Audio: Ready to start' }),
@@ -37,4 +39,11 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   await expect(d4).toHaveAttribute('aria-pressed', 'true');
   await d4.dispatchEvent('pointerup', { pointerId: 7, buttons: 0 });
   await expect(d4).toHaveAttribute('aria-pressed', 'false');
+
+  const cutoff = page.getByRole('slider', { name: 'Cutoff' });
+  await cutoff.focus();
+  await page.keyboard.press('End');
+  await expect(cutoff).toHaveValue('10000');
+  await page.getByRole('button', { name: 'Reset Cutoff to default' }).click();
+  await expect(cutoff).toHaveValue('1000');
 });

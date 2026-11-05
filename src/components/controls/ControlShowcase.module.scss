@@ -1,0 +1,12 @@
+.controlRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.simpleControls {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}

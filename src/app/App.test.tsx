@@ -4,13 +4,15 @@ import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
 describe('App', () => {
-  it('identifies the application and current unified-input phase', () => {
+  it('identifies the application and current accessible-controls phase', () => {
     render(<App />);
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'SynthOfDoom' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Phase 4 · Unified input')).toBeInTheDocument();
+    expect(
+      screen.getByText('Phase 5 · Accessible controls'),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Start audio' })).toBeEnabled();
     expect(
       screen.getByRole('heading', { name: 'Audio: Ready to start' }),
@@ -19,6 +21,10 @@ describe('App', () => {
       screen.getByRole('group', { name: 'Piano keyboard' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'C4' })).toBeDisabled();
+    expect(
+      screen.getByRole('region', { name: 'Control foundation' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('slider', { name: 'Cutoff' })).toBeInTheDocument();
     expect(
       screen.getByRole('region', { name: 'Planned synth modules' }),
     ).toBeInTheDocument();

@@ -1,5 +1,6 @@
 import type { SynthEngineStatus } from '../audio/SynthEngine';
 import { PianoKeyboard } from '../components/keyboard/PianoKeyboard';
+import { ControlShowcase } from '../components/controls/ControlShowcase';
 import { useSynthEngine } from '../hooks/useSynthEngine';
 import { useMidi } from '../hooks/useMidi';
 import { useMidiLearn } from '../hooks/useMidiLearn';
@@ -53,17 +54,16 @@ export function App() {
           <p className={styles.eyebrow}>React · TypeScript · Web Audio</p>
           <h1>SynthOfDoom</h1>
         </div>
-        <span className={styles.phaseBadge}>Phase 4 · Unified input</span>
+        <span className={styles.phaseBadge}>Phase 5 · Accessible controls</span>
       </header>
 
       <main>
         <section className={styles.intro} aria-labelledby="foundation-title">
-          <p className={styles.kicker}>Unified performance input</p>
-          <h2 id="foundation-title">Every gesture follows one path.</h2>
+          <p className={styles.kicker}>Accessible control foundation</p>
+          <h2 id="foundation-title">The instrument has a tactile language.</h2>
           <p>
-            Computer keys, pointer notes, and optional MIDI devices now share
-            ownership-aware note routing, visible state, and stuck-note
-            protection.
+            Original scalable controls now expose the same precise values to
+            pointer, touch, keyboard, high-contrast, and screen-reader users.
           </p>
         </section>
 
@@ -169,6 +169,8 @@ export function App() {
           </div>
         </section>
 
+        <ControlShowcase />
+
         <section
           className={styles.moduleGrid}
           aria-label="Planned synth modules"
@@ -186,9 +188,9 @@ export function App() {
       </main>
 
       <footer className={styles.footer}>
-        <span>Unified input ready</span>
+        <span>Accessible controls ready</span>
         <span aria-hidden="true">·</span>
-        <span>Accessible controls next</span>
+        <span>Full interface next</span>
       </footer>
     </div>
   );
