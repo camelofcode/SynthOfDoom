@@ -75,6 +75,38 @@ describe('Knob', () => {
       screen.getByRole('button', { name: 'Reset Cutoff to default' }),
     ).toBeDisabled();
   });
+
+  it('uses relative horizontal and vertical pointer movement', () => {
+    render(<ControlledKnob />);
+    const slider = screen.getByRole('slider', { name: 'Cutoff' });
+
+    fireEvent.pointerDown(slider, {
+      pointerId: 4,
+      clientX: 100,
+      clientY: 100,
+    });
+    fireEvent.pointerMove(slider, {
+      pointerId: 4,
+      clientX: 124,
+      clientY: 100,
+    });
+    const afterRight = Number((slider as HTMLInputElement).value);
+    expect(afterRight).toBeGreaterThan(1000);
+    fireEvent.pointerUp(slider, { pointerId: 4 });
+
+    fireEvent.pointerDown(slider, {
+      pointerId: 5,
+      clientX: 100,
+      clientY: 100,
+    });
+    fireEvent.pointerMove(slider, {
+      pointerId: 5,
+      clientX: 100,
+      clientY: 124,
+    });
+    expect(Number((slider as HTMLInputElement).value)).toBeLessThan(afterRight);
+    fireEvent.pointerCancel(slider, { pointerId: 5 });
+  });
 });
 
 describe('control primitives', () => {

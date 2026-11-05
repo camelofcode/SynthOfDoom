@@ -1,85 +1,22 @@
 @use '../styles/mixins' as mixins;
 
 .appShell {
-  width: min(100% - 2rem, 72rem);
+  width: min(100% - 1.25rem, 84rem);
   margin: 0 auto;
-  padding: clamp(1.25rem, 4vw, 3rem) 0 2rem;
+  padding: 0.65rem 0 1rem;
 }
 
 .header {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2rem;
-  padding-bottom: 1.5rem;
+  align-items: center;
+  padding: 0.35rem 0 0.65rem;
   border-bottom: 1px solid var(--colour-border);
 
   h1 {
     margin: 0;
-    font-size: clamp(2.5rem, 8vw, 5rem);
-    line-height: 0.9;
-    letter-spacing: -0.06em;
-  }
-}
-
-.eyebrow,
-.kicker {
-  margin: 0 0 0.75rem;
-  color: var(--colour-accent);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.phaseBadge {
-  flex: 0 0 auto;
-  padding: 0.55rem 0.75rem;
-  border: 1px solid var(--colour-accent-muted);
-  border-radius: 999px;
-  color: var(--colour-accent-soft);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.intro {
-  max-width: 48rem;
-  padding: clamp(3rem, 10vw, 7rem) 0;
-
-  h2 {
-    margin: 0;
-    font-size: clamp(2rem, 6vw, 4rem);
+    font-size: clamp(1.35rem, 3vw, 1.85rem);
     line-height: 1;
-    letter-spacing: -0.04em;
-  }
-
-  p:last-child {
-    max-width: 42rem;
-    margin: 1.5rem 0 0;
-    color: var(--colour-text-muted);
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    line-height: 1.7;
-  }
-}
-
-.signalFlow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1.5rem;
-  padding: 0.85rem;
-  border: 1px solid var(--colour-border);
-  border-radius: var(--radius-panel);
-  color: var(--colour-text-muted);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-
-  span:nth-child(even) {
-    color: var(--colour-accent);
+    letter-spacing: -0.035em;
   }
 }
 
@@ -87,28 +24,28 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+  padding: 0.65rem 0.8rem;
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-panel);
   background: var(--colour-panel);
 
   h2 {
     margin: 0;
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-size: 0.95rem;
   }
 }
 
-.audioMessage {
-  margin: 0.6rem 0 0;
-  color: var(--colour-text-muted);
-  line-height: 1.5;
+.audioError {
+  margin: 0.3rem 0 0;
+  color: #ffd166;
+  font-size: 0.78rem;
 }
 
 .inputPanel {
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
+  margin-bottom: 0.65rem;
+  padding: 0.8rem;
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-panel);
   background: var(--colour-panel);
@@ -123,18 +60,24 @@
 
   h2 {
     margin: 0;
+    font-size: 1rem;
   }
 }
 
 .inputHelp,
 .midiStatus {
   color: var(--colour-text-muted);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
+}
+
+.inputHelp {
+  margin: 0.5rem 0 0;
 }
 
 .midiRow {
   justify-content: flex-start;
-  margin-top: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.65rem;
 
   label {
     display: flex;
@@ -167,8 +110,8 @@
 
 .startButton {
   flex: 0 0 auto;
-  min-width: 9rem;
-  padding: 0.8rem 1rem;
+  min-width: 7.5rem;
+  padding: 0.55rem 0.75rem;
   border: 1px solid var(--colour-accent);
   border-radius: 0.45rem;
   background: var(--colour-accent);
@@ -192,48 +135,7 @@
   }
 }
 
-.moduleCard {
-  min-height: 10rem;
-  padding: 1.25rem;
-  background: var(--colour-panel);
-
-  h3 {
-    margin: 2rem 0 0.4rem;
-    font-size: 1rem;
-  }
-
-  p {
-    margin: 0;
-    color: var(--colour-text-subtle);
-    font-size: 0.85rem;
-    line-height: 1.5;
-  }
-}
-
-.moduleNumber {
-  color: var(--colour-accent);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-}
-
-.footer {
-  display: flex;
-  gap: 0.65rem;
-  justify-content: center;
-  padding-top: 2rem;
-  color: var(--colour-text-subtle);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-}
-
 @include mixins.below(34rem) {
-  .header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
   .audioPanel {
     align-items: stretch;
     flex-direction: column;

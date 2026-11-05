@@ -32,12 +32,6 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   await expect(
     page.getByRole('heading', { level: 1, name: 'SynthOfDoom' }),
   ).toBeVisible();
-  await expect(page.getByText('Phase 8 · Polyphony')).toBeVisible();
-  await expect(
-    page.getByRole('heading', {
-      name: 'Play chords. Keep the glide.',
-    }),
-  ).toBeVisible();
   await expect(
     page.getByRole('heading', { name: 'Audio: Ready to start' }),
   ).toBeVisible();
@@ -140,6 +134,20 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   await expect(d4).toHaveAttribute('aria-pressed', 'false');
 
   const cutoff = page.getByRole('slider', { name: 'Filter 1 Cutoff' });
+  const cutoffBox = await cutoff.boundingBox();
+  if (!cutoffBox) throw new Error('Filter cutoff knob was not rendered.');
+  await page.mouse.move(
+    cutoffBox.x + cutoffBox.width / 2,
+    cutoffBox.y + cutoffBox.height / 2,
+  );
+  await page.mouse.down();
+  await page.mouse.move(
+    cutoffBox.x + cutoffBox.width / 2,
+    cutoffBox.y + cutoffBox.height / 2 - 24,
+    { steps: 3 },
+  );
+  await page.mouse.up();
+  await expect(cutoff).not.toHaveValue('1000');
   await cutoff.focus();
   await page.keyboard.press('End');
   await expect(cutoff).toHaveValue('10000');
@@ -153,9 +161,11 @@ test('keeps the full synth operable at a narrow viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
-  await expect(page.getByRole('region', { name: 'Oscillators' })).toBeVisible();
   await expect(
-    page.getByRole('region', { name: 'Delay & output' }),
+    page.getByRole('region', { name: 'Sources & mixer', exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('region', { name: 'Delay & output', exact: true }),
   ).toBeVisible();
   await expect(
     page.getByRole('slider', { name: 'Filter 1 Cutoff' }),

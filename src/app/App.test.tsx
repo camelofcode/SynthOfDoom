@@ -4,13 +4,12 @@ import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
 describe('App', () => {
-  it('identifies the application and polyphonic voice phase', () => {
+  it('identifies the application and operational synth interface', () => {
     render(<App />);
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'SynthOfDoom' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Phase 8 · Polyphony')).toBeInTheDocument();
     expect(
       screen.getByRole('region', { name: 'Preset controls' }),
     ).toBeInTheDocument();
@@ -25,7 +24,17 @@ describe('App', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'C4' })).toBeDisabled();
     expect(
-      screen.getByRole('region', { name: 'Oscillators' }),
+      screen.getByRole('region', { name: 'Sources & mixer' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', {
+        name: 'Sources & mixer: Oscillator 1',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', {
+        name: 'Sources & mixer: Noise',
+      }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('slider', { name: 'Filter 1 Cutoff' }),
@@ -42,7 +51,7 @@ describe('App', () => {
     render(<App />);
 
     expect(
-      screen.getByRole('heading', { name: 'Oscillators' }),
+      screen.getByRole('heading', { name: 'Sources & mixer' }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { level: 2, name: 'Keyboard and MIDI' }),

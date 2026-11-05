@@ -7,8 +7,8 @@
 - Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 8 complete
-- Overall status: eight-voice polyphony, deterministic voice stealing, and intentional mono/portamento mode now share the existing effects and patch path; ready to begin Phase 9 verification and browser hardening
+- Current phase: Phase 9 in progress
+- Overall status: the instrument UI is now compact, operational, subgrouped by synth module, and uses DAW-style relative knob dragging; cross-browser, accessibility, and lifecycle hardening remain
 
 ## Completed
 
@@ -82,13 +82,17 @@
 - Counted repeated note-ons per input owner so one MIDI note-off cannot prematurely release a multiply-held note.
 - Added focused allocator, migration, polyphonic envelope, stealing, held-patch-change, mode-switch, shared-modulation, repeated-note, and complete-disposal coverage.
 - Extended the Chromium interaction test to prove simultaneous keyboard notes reach distinct native oscillator frequencies in a real Web Audio graph.
+- Replaced native coordinate-based range dragging with pointer-captured relative knob movement: up/right increases and down/left decreases while native slider keyboard semantics remain intact.
+- Reduced desktop knob, panel, piano, preset, audio, and spacing dimensions and reorganised the seven synth panels into a denser three-row signal-flow layout.
+- Removed portfolio-style hero copy, implementation badges, explanatory signal-flow copy, and milestone footer so the standalone page presents only functional synth content and status.
+- Combined each oscillator/noise source with its enable, level, and dual-filter routing controls in four visible and accessible channel strips; filters, LFOs, voice/glide, amplitude, and delay retain their own labelled subgroups.
 
 ## Next actions
 
-1. Begin Phase 9 with browser failure-state and permission-denial coverage, then complete the remaining keyboard-only and accessibility smoke checks.
-2. Review desktop, tablet, mobile, 200% zoom, reduced-motion, and forced-colour behaviour against the full seven-panel interface.
-3. Profile sustained eight-note chords and rapid stealing on representative desktop/mobile hardware, adjusting the default voice count only if drop-outs occur.
-4. Complete the manual release checklist and document supported browser/Web MIDI requirements before the cleanup and portfolio-documentation phases.
+1. Add browser failure-state and permission-denial coverage, then complete the remaining keyboard-only and accessibility smoke checks.
+2. Run the general UI suite in Firefox and WebKit as well as Chromium.
+3. Review tablet, mobile, 200% zoom, reduced-motion, and forced-colour behaviour against the compact six-panel interface.
+4. Test long-session lifecycle behaviour, rapid preset changes, suspend/resume, backgrounding, MIDI hot-plug, and window-blur cleanup before Phase 10.
 
 ## Current blocker or required decision
 
@@ -122,10 +126,10 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 70 passed with Vitest/React Testing Library.
+- Unit/component tests: 71 passed with Vitest/React Testing Library.
 - Browser tests: 3 passed in Playwright Chromium (native polyphonic audio interaction, narrow responsive layout, and preset reload persistence).
 - Manual physical MIDI keyboard check: passed on 5 November 2026.
-- Manual sustained eight-note chord and rapid-stealing performance check: pending on representative hardware.
+- Manual sustained chord, rapid-stealing, mono glide, and representative-hardware polyphony check: passed on 5 November 2026.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
 - Production dependency audit: zero vulnerabilities.
 

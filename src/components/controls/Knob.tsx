@@ -1,8 +1,13 @@
-import { useId, type KeyboardEvent } from 'react';
+import { useId, useRef, type KeyboardEvent, type PointerEvent } from 'react';
 
-import { parameterValueToNormalised } from '../../synth/parameterMapping';
+import {
+  normalisedToParameterValue,
+  parameterValueToNormalised,
+} from '../../synth/parameterMapping';
 import type { NumericParameterDefinition } from '../../synth/parameters';
 import styles from './Controls.module.scss';
+
+const FULL_RANGE_DRAG_PIXELS = 160;
 
 export interface KnobProps {
   readonly definition: NumericParameterDefinition;
@@ -39,6 +44,56 @@ export function Knob({
   const position = parameterValueToNormalised(definition, safeValue);
   const angle = -135 + position * 270;
   const valueText = definition.formatValue(safeValue);
+  const drag = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    startPosition: number;
+  } | null>(null);
+
+  const pointerDown = (event: PointerEvent<HTMLInputElement>) => {
+    if (disabled) return;
+    event.preventDefault();
+    event.currentTarget.focus();
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      // Synthetic pointers may not be registered as active.
+    }
+    drag.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startPosition: position,
+    };
+  };
+
+  const pointerMove = (event: PointerEvent<HTMLInputElement>) => {
+    const activeDrag = drag.current;
+    if (!activeDrag || activeDrag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    const horizontal = event.clientX - activeDrag.startX;
+    const vertical = activeDrag.startY - event.clientY;
+    const nextPosition = Math.min(
+      1,
+      Math.max(
+        0,
+        activeDrag.startPosition +
+          (horizontal + vertical) / FULL_RANGE_DRAG_PIXELS,
+      ),
+    );
+    onChange(normalisedToParameterValue(definition, nextPosition));
+  };
+
+  const pointerEnd = (event: PointerEvent<HTMLInputElement>) => {
+    if (drag.current?.pointerId !== event.pointerId) return;
+    drag.current = null;
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {
+      // The pointer capture may already have been released by the browser.
+    }
+  };
 
   const keyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     let next: number | null = null;
@@ -97,6 +152,10 @@ export function Knob({
           disabled={disabled}
           onChange={(event) => onChange(Number(event.target.value))}
           onKeyDown={keyDown}
+          onPointerDown={pointerDown}
+          onPointerMove={pointerMove}
+          onPointerUp={pointerEnd}
+          onPointerCancel={pointerEnd}
           onDoubleClick={() => onChange(definition.defaultValue)}
         />
       </div>

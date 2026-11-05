@@ -1,11 +1,11 @@
 .knob {
   display: grid;
   justify-items: center;
-  gap: 0.4rem;
-  width: 8rem;
-  padding: 0.75rem;
+  gap: 0.22rem;
+  width: min(100%, 5.75rem);
+  padding: 0.4rem 0.35rem;
   border: 1px solid var(--colour-border);
-  border-radius: 0.65rem;
+  border-radius: 0.5rem;
   background: rgb(0 0 0 / 12%);
 
   &[data-disabled] {
@@ -14,14 +14,17 @@
 }
 
 .controlLabel {
-  font-size: 0.78rem;
+  min-height: 1.7em;
+  font-size: 0.68rem;
   font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
 }
 
 .knobFace {
   position: relative;
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 3.75rem;
+  height: 3.75rem;
 }
 
 .knobTrack {
@@ -62,6 +65,11 @@
   margin: 0;
   cursor: grab;
   opacity: 0;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
 
   &:focus-visible + * {
     outline: none;
@@ -79,14 +87,14 @@
 .standaloneReadout output {
   color: var(--colour-accent-soft);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.68rem;
 }
 
 .resetButton {
   border: 0;
   background: transparent;
   color: var(--colour-text-subtle);
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   cursor: pointer;
 
   &:focus-visible {
@@ -97,9 +105,9 @@
 .toggle {
   display: inline-grid;
   grid-template-columns: auto 1fr auto;
-  gap: 0.5rem;
+  gap: 0.4rem;
   align-items: center;
-  padding: 0.65rem 0.8rem;
+  padding: 0.45rem 0.6rem;
   border: 1px solid var(--colour-border);
   border-radius: 0.45rem;
   background: var(--colour-background);
@@ -127,13 +135,13 @@
 
 .selectLabel {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.25rem;
   color: var(--colour-text-muted);
   font-size: 0.75rem;
 
   select {
-    min-width: 10rem;
-    padding: 0.55rem;
+    min-width: 7.5rem;
+    padding: 0.42rem;
     border: 1px solid var(--colour-border);
     border-radius: 0.4rem;
     background: var(--colour-background);
@@ -147,7 +155,7 @@
 }
 
 .panel {
-  padding: 1.25rem;
+  padding: 0.85rem;
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-panel);
   background: var(--colour-panel);
@@ -156,8 +164,8 @@
 .panelHeader {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
 
   p,
   h2 {

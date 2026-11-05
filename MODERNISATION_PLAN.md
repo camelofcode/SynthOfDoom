@@ -1,6 +1,6 @@
 # SynthOfDoom Modernisation Plan
 
-> Status: active; Phase 8 complete, Phase 9 next
+> Status: active; Phase 9 in progress
 >
 > Audit date: 4 November 2026
 >

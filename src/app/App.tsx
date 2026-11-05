@@ -42,35 +42,20 @@ export function App() {
   return (
     <div className={styles.appShell}>
       <header className={styles.header}>
-        <div>
-          <p className={styles.eyebrow}>React · TypeScript · Web Audio</p>
-          <h1>SynthOfDoom</h1>
-        </div>
-        <span className={styles.phaseBadge}>Phase 8 · Polyphony</span>
+        <h1>SynthOfDoom</h1>
       </header>
 
       <PresetBar />
 
       <main>
-        <section className={styles.intro} aria-labelledby="foundation-title">
-          <p className={styles.kicker}>Eight independent voices</p>
-          <h2 id="foundation-title">Play chords. Keep the glide.</h2>
-          <p>
-            Polyphonic patches allocate independent envelopes while mono mode
-            preserves last-note priority and intentional portamento.
-          </p>
-        </section>
-
         <section className={styles.audioPanel} aria-labelledby="audio-title">
           <div>
-            <p className={styles.kicker}>Web Audio lifecycle</p>
             <h2 id="audio-title">Audio: {statusLabels[audio.status]}</h2>
-            <p className={styles.audioMessage} aria-live="polite">
-              {audio.error ??
-                (audio.status === 'running'
-                  ? 'The engine is running and ready for note input.'
-                  : 'Audio begins only after your explicit gesture.')}
-            </p>
+            {audio.error ? (
+              <p className={styles.audioError} role="alert">
+                {audio.error}
+              </p>
+            ) : null}
           </div>
           <button
             className={styles.startButton}
@@ -84,10 +69,7 @@ export function App() {
 
         <section className={styles.inputPanel} aria-labelledby="input-title">
           <div className={styles.inputHeader}>
-            <div>
-              <p className={styles.kicker}>Unified note input</p>
-              <h2 id="input-title">Keyboard and MIDI</h2>
-            </div>
+            <h2 id="input-title">Keyboard and MIDI</h2>
             <span aria-live="polite">
               {notes.activeNotes.length} active note
               {notes.activeNotes.length === 1 ? '' : 's'}
@@ -163,30 +145,12 @@ export function App() {
           </div>
         </section>
 
-        <section className={styles.signalFlow} aria-label="Synth signal flow">
-          <span>Oscillators + noise</span>
-          <span aria-hidden="true">→</span>
-          <span>Mixer crossfades</span>
-          <span aria-hidden="true">→</span>
-          <span>Filter 1 ∥ Filter 2</span>
-          <span aria-hidden="true">→</span>
-          <span>Amp ADSR</span>
-          <span aria-hidden="true">→</span>
-          <span>Delay + master</span>
-        </section>
-
         <SynthInterface />
         <Oscilloscope
           analyser={synthEngine.getAnalyser()}
           active={audio.status === 'running'}
         />
       </main>
-
-      <footer className={styles.footer}>
-        <span>Polyphonic voices ready</span>
-        <span aria-hidden="true">·</span>
-        <span>Browser hardening next</span>
-      </footer>
     </div>
   );
 }
