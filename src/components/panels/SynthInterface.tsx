@@ -11,7 +11,7 @@ import styles from './SynthInterface.module.scss';
 
 interface ControlSubgroup {
   readonly title: string;
-  readonly ids: readonly ParameterId[];
+  readonly rows: readonly (readonly ParameterId[])[];
 }
 
 const groups: readonly {
@@ -27,44 +27,49 @@ const groups: readonly {
     subgroups: [
       {
         title: 'Oscillator 1',
-        ids: [
-          'mixer.oscillator.1.enabled',
-          'oscillator.1.waveform',
-          'oscillator.1.octave',
-          'oscillator.1.detune',
-          'mixer.oscillator.1.level',
-          'mixer.oscillator.1.filterBalance',
+        rows: [
+          ['mixer.oscillator.1.enabled'],
+          ['oscillator.1.waveform'],
+          [
+            'oscillator.1.octave',
+            'oscillator.1.detune',
+            'mixer.oscillator.1.level',
+            'mixer.oscillator.1.filterBalance',
+          ],
         ],
       },
       {
         title: 'Oscillator 2',
-        ids: [
-          'mixer.oscillator.2.enabled',
-          'oscillator.2.waveform',
-          'oscillator.2.octave',
-          'oscillator.2.detune',
-          'mixer.oscillator.2.level',
-          'mixer.oscillator.2.filterBalance',
+        rows: [
+          ['mixer.oscillator.2.enabled'],
+          ['oscillator.2.waveform'],
+          [
+            'oscillator.2.octave',
+            'oscillator.2.detune',
+            'mixer.oscillator.2.level',
+            'mixer.oscillator.2.filterBalance',
+          ],
         ],
       },
       {
         title: 'Oscillator 3',
-        ids: [
-          'mixer.oscillator.3.enabled',
-          'oscillator.3.waveform',
-          'oscillator.3.octave',
-          'oscillator.3.detune',
-          'mixer.oscillator.3.level',
-          'mixer.oscillator.3.filterBalance',
+        rows: [
+          ['mixer.oscillator.3.enabled'],
+          ['oscillator.3.waveform'],
+          [
+            'oscillator.3.octave',
+            'oscillator.3.detune',
+            'mixer.oscillator.3.level',
+            'mixer.oscillator.3.filterBalance',
+          ],
         ],
       },
       {
         title: 'Noise',
-        ids: [
-          'mixer.noise.enabled',
-          'noise.colour',
-          'mixer.noise.level',
-          'mixer.noise.filterBalance',
+        rows: [
+          ['mixer.noise.enabled'],
+          ['noise.colour'],
+          ['mixer.noise.level', 'mixer.noise.filterBalance'],
         ],
       },
     ],
@@ -76,30 +81,38 @@ const groups: readonly {
     subgroups: [
       {
         title: 'Filter 1',
-        ids: [
-          'filter.1.type',
-          'filter.1.cutoff',
-          'filter.1.resonance',
-          'filter.1.gain',
-          'filter.1.envelope.amount',
-          'filter.1.envelope.attack',
-          'filter.1.envelope.decay',
-          'filter.1.envelope.sustain',
-          'filter.1.envelope.release',
+        rows: [
+          ['filter.1.type'],
+          [
+            'filter.1.cutoff',
+            'filter.1.resonance',
+            'filter.1.gain',
+            'filter.1.envelope.amount',
+          ],
+          [
+            'filter.1.envelope.attack',
+            'filter.1.envelope.decay',
+            'filter.1.envelope.sustain',
+            'filter.1.envelope.release',
+          ],
         ],
       },
       {
         title: 'Filter 2',
-        ids: [
-          'filter.2.type',
-          'filter.2.cutoff',
-          'filter.2.resonance',
-          'filter.2.gain',
-          'filter.2.envelope.amount',
-          'filter.2.envelope.attack',
-          'filter.2.envelope.decay',
-          'filter.2.envelope.sustain',
-          'filter.2.envelope.release',
+        rows: [
+          ['filter.2.type'],
+          [
+            'filter.2.cutoff',
+            'filter.2.resonance',
+            'filter.2.gain',
+            'filter.2.envelope.amount',
+          ],
+          [
+            'filter.2.envelope.attack',
+            'filter.2.envelope.decay',
+            'filter.2.envelope.sustain',
+            'filter.2.envelope.release',
+          ],
         ],
       },
     ],
@@ -111,15 +124,27 @@ const groups: readonly {
     subgroups: [
       {
         title: 'LFO 1',
-        ids: ['lfo.1.waveform', 'lfo.1.target', 'lfo.1.rate', 'lfo.1.depth'],
+        rows: [
+          ['lfo.1.waveform'],
+          ['lfo.1.target'],
+          ['lfo.1.rate', 'lfo.1.depth'],
+        ],
       },
       {
         title: 'LFO 2',
-        ids: ['lfo.2.waveform', 'lfo.2.target', 'lfo.2.rate', 'lfo.2.depth'],
+        rows: [
+          ['lfo.2.waveform'],
+          ['lfo.2.target'],
+          ['lfo.2.rate', 'lfo.2.depth'],
+        ],
       },
       {
         title: 'LFO 3',
-        ids: ['lfo.3.waveform', 'lfo.3.target', 'lfo.3.rate', 'lfo.3.depth'],
+        rows: [
+          ['lfo.3.waveform'],
+          ['lfo.3.target'],
+          ['lfo.3.rate', 'lfo.3.depth'],
+        ],
       },
     ],
   },
@@ -130,9 +155,9 @@ const groups: readonly {
     subgroups: [
       {
         title: 'Voices',
-        ids: ['performance.voiceMode', 'performance.voiceCount'],
+        rows: [['performance.voiceMode'], ['performance.voiceCount']],
       },
-      { title: 'Glide', ids: ['performance.portamento'] },
+      { title: 'Glide', rows: [['performance.portamento']] },
     ],
   },
   {
@@ -142,11 +167,13 @@ const groups: readonly {
     subgroups: [
       {
         title: 'Envelope',
-        ids: [
-          'amp.envelope.attack',
-          'amp.envelope.decay',
-          'amp.envelope.sustain',
-          'amp.envelope.release',
+        rows: [
+          [
+            'amp.envelope.attack',
+            'amp.envelope.decay',
+            'amp.envelope.sustain',
+            'amp.envelope.release',
+          ],
         ],
       },
     ],
@@ -158,13 +185,15 @@ const groups: readonly {
     subgroups: [
       {
         title: 'Delay',
-        ids: [
-          'delay.enabled',
-          'delay.time',
-          'delay.feedback',
-          'delay.feedbackCutoff',
-          'delay.mix',
-          'delay.saturation',
+        rows: [
+          ['delay.enabled'],
+          [
+            'delay.time',
+            'delay.feedback',
+            'delay.feedbackCutoff',
+            'delay.mix',
+            'delay.saturation',
+          ],
         ],
       },
     ],
@@ -194,22 +223,26 @@ export function SynthInterface() {
                   key={subgroup.title}
                 >
                   <h3>{subgroup.title}</h3>
-                  <div className={styles.controlGrid}>
-                    {subgroup.ids.map((id) => {
-                      const definition = PARAMETER_REGISTRY[id];
-                      return (
-                        <ParameterControl
-                          key={id}
-                          definition={definition}
-                          value={patch.parameters[id]}
-                          learnedCc={ccById.get(id)}
-                          learning={learn.learning === id}
-                          onChange={(value: ParameterValue) =>
-                            setParameter(id, value)
-                          }
-                        />
-                      );
-                    })}
+                  <div className={styles.controlRows}>
+                    {subgroup.rows.map((row) => (
+                      <div className={styles.controlGrid} key={row.join('|')}>
+                        {row.map((id) => {
+                          const definition = PARAMETER_REGISTRY[id];
+                          return (
+                            <ParameterControl
+                              key={id}
+                              definition={definition}
+                              value={patch.parameters[id]}
+                              learnedCc={ccById.get(id)}
+                              learning={learn.learning === id}
+                              onChange={(value: ParameterValue) =>
+                                setParameter(id, value)
+                              }
+                            />
+                          );
+                        })}
+                      </div>
+                    ))}
                   </div>
                 </section>
               ))}

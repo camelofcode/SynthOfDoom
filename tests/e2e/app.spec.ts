@@ -212,6 +212,40 @@ test('keeps mixed controls on distinct aligned rows', async ({ page }) => {
     Math.max(...knobs.map(({ surfaceHeight }) => surfaceHeight)) -
       Math.min(...knobs.map(({ surfaceHeight }) => surfaceHeight)),
   ).toBeLessThan(1);
+
+  const filter = page.getByRole('region', {
+    name: 'Dual filters: Filter 1',
+  });
+  const toneRowTop = await filter
+    .getByRole('slider', { name: 'Filter 1 envelope Envelope amount' })
+    .evaluate((element) => element.getBoundingClientRect().top);
+  const adsrTops = await Promise.all(
+    ['Attack', 'Decay', 'Sustain', 'Release'].map((name) =>
+      filter
+        .getByRole('slider', { name: `Filter 1 envelope ${name}` })
+        .evaluate((element) => element.getBoundingClientRect().top),
+    ),
+  );
+  expect(new Set(adsrTops.map(Math.round)).size).toBe(1);
+  expect(adsrTops[0]).toBeGreaterThan(toneRowTop);
+
+  const noise = page.getByRole('region', {
+    name: 'Sources & mixer: Noise',
+  });
+  const noiseAlignment = await noise.evaluate((element) => {
+    const subgroup = element.getBoundingClientRect();
+    const knobs = Array.from(
+      element.querySelectorAll<HTMLElement>('[data-control-kind="number"]'),
+    ).map((control) => control.getBoundingClientRect());
+    const rowCentre = (knobs.at(0)!.left + knobs.at(-1)!.right) / 2;
+    return {
+      subgroupCentre: subgroup.left + subgroup.width / 2,
+      rowCentre,
+    };
+  });
+  expect(
+    Math.abs(noiseAlignment.rowCentre - noiseAlignment.subgroupCentre),
+  ).toBeLessThan(1);
 });
 
 test('restores the selected factory preset across reload', async ({ page }) => {

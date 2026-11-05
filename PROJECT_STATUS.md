@@ -87,6 +87,7 @@
 - Removed portfolio-style hero copy, implementation badges, explanatory signal-flow copy, and milestone footer so the standalone page presents only functional synth content and status.
 - Combined each oscillator/noise source with its enable, level, and dual-filter routing controls in four visible and accessible channel strips; filters, LFOs, voice/glide, amplitude, and delay retain their own labelled subgroups.
 - Separated every toggle and selector into a full-width subgroup row ahead of its numeric controls, with evenly stretched knob cards on each row to prevent mixed-size controls from overlapping.
+- Replaced automatic mixed-control placement with explicit semantic rows, keeping filter ADSR controls together and centring sparse and dense knob groups consistently.
 
 ## Next actions
 
