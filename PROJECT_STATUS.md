@@ -7,8 +7,8 @@
 - Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 9 in progress
-- Overall status: the instrument UI is now compact, operational, subgrouped by synth module, and uses DAW-style relative knob dragging; cross-browser, accessibility, and lifecycle hardening remain
+- Current phase: Phases 0–10 complete
+- Overall status: the modernisation milestone is complete; the branch contains only the tested React/Web Audio application and portfolio documentation
 
 ## Completed
 
@@ -97,13 +97,21 @@
 - Reflowed the three existing LFO modules into one compact desktop row alongside an even-width filter panel, preserving patch/audio compatibility while removing the modulation panel's excessive vertical stack.
 - Combined Voices and Glide into one compact subgroup and made the Voices knob authoritative: one voice selects monophonic priority/glide, while two-to-eight voices select polyphony in one atomic graph update.
 - Made the pointer piano an additional browser-authorised audio-start gesture: the first held key starts the engine and plays safely, while quick releases during startup are cancelled and the explicit Start audio control remains available.
+- Added browser-level audio failure/retry coverage and an automated axe accessibility scan.
+- Ran the complete seven-scenario UI suite in Chromium, Firefox, and WebKit, with WebKit executed in Playwright's official container on unsupported Fedora.
+- Fixed toggle accessible names so their visible state text is included while retaining contextual synth-module names.
+- Removed the complete Angular 2, SystemJS, Gulp, Express/Pug, jQuery, vendored-library, generated-output, and Visual Studio application from the modern branch; it remains preserved at `legacy-angular`.
+- Removed unused control-showcase components and their dead styles/tests from the modern application.
+- Replaced the transitional README with a portfolio-quality guide covering features, playing, MIDI learn, architecture, signal flow, setup, scripts, testing, browser limitations, hosting, and migration history.
+- Added an original SVG favicon, full-interface README screenshot, 1200×630 social image, page description, Open Graph metadata, and useful title.
+- Completed every item in the source-derived modern parity checklist.
 
 ## Next actions
 
-1. Add browser failure-state and permission-denial coverage, then complete the remaining keyboard-only and accessibility smoke checks.
-2. Run the general UI suite in Firefox and WebKit as well as Chromium.
-3. Review tablet, mobile, 200% zoom, reduced-motion, and forced-colour behaviour against the compact six-panel interface.
-4. Test long-session lifecycle behaviour, rapid preset changes, suspend/resume, backgrounding, MIDI hot-plug, and window-blur cleanup before Phase 10.
+1. Push the completed `modernisation` branch and merge it when ready.
+2. Add the eventual HTTPS portfolio subdomain and deployment configuration in the portfolio project.
+3. Optionally capture a short sound-design/MIDI demo video for the portfolio.
+4. Treat sequencer, recording, URL patch sharing, and AudioWorklet effects as post-release enhancements rather than migration work.
 
 ## Current blocker or required decision
 
@@ -138,15 +146,16 @@ No current blocker or naming decision is outstanding.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
 - Unit/component tests: 75 passed with Vitest/React Testing Library.
-- Browser tests: 5 passed in Playwright Chromium (explicit and piano-triggered audio startup, native polyphonic interaction, narrow responsive layout, control alignment, and preset/theme reload persistence).
+- Browser tests: 21 passed across Playwright Chromium, Firefox, and WebKit (audio startup/failure recovery, native polyphonic interaction, pointer input, responsive layout, control alignment, preset/theme persistence, and axe accessibility scan).
 - Manual physical MIDI keyboard check: passed on 5 November 2026.
 - Manual sustained chord, rapid-stealing, mono glide, and representative-hardware polyphony check: passed on 5 November 2026.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
+- Production preview: `npm run preview` served the exact generated HTML, hashed JavaScript/CSS, and public preview assets successfully.
 - Production dependency audit: zero vulnerabilities.
 
 ## Working-tree handover
 
-- The root now contains the modern Vite application, toolchain configuration, lockfile, tests, and documentation; the legacy application remains under `Angular2Audio/` until its planned cleanup phase.
+- The root contains only the modern Vite application, toolchain configuration, lockfile, tests, assets, and documentation. The removed application is recoverable from `legacy-angular`.
 - Before changing machines, run `git status --short`, commit intended work, and push the active branch.
 - Generated directories such as `node_modules`, `dist`, coverage, and Playwright output must remain untracked.
 

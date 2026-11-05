@@ -185,21 +185,21 @@ These values describe the source code and visible control intent. Known initiali
 
 This checklist tracks functional intent, not legacy implementation details:
 
-- [ ] Three oscillators support waveform, octave, and detune.
-- [ ] Pitch and velocity respond correctly to unified note input.
-- [ ] White, pink, and brown noise are available.
-- [ ] Four source channels support level, enable, and dual-filter routing.
-- [ ] Both filters support the useful legacy filter types and appropriate Q/gain controls.
-- [ ] Amp and filter ADSR envelopes schedule cleanly and expose working release controls.
-- [ ] Three LFOs can route safely to oscillator detune and filter cutoff.
-- [ ] Delay provides time, feedback, feedback filtering, saturation, mix, and bypass using modern nodes.
-- [ ] Computer keyboard note input works without stuck notes.
-- [ ] The on-screen keyboard plays notes by pointer/touch and reflects all active-note sources.
-- [ ] Web MIDI notes work when supported, with visible permission/device status.
-- [ ] MIDI CC learn uses stable parameter IDs and persisted mappings.
-- [ ] Polyphonic voices have independent filters/envelopes and deterministic voice stealing.
-- [ ] Polyphony is the modern default; optional mono/legato mode preserves useful classic behaviour.
-- [ ] All legacy defects listed above are fixed or deliberately superseded.
+- [x] Three oscillators support waveform, octave, and detune.
+- [x] Pitch and velocity respond correctly to unified note input.
+- [x] White, pink, and brown noise are available.
+- [x] Four source channels support level, enable, and dual-filter routing.
+- [x] Both filters support the useful legacy filter types and appropriate Q/gain controls.
+- [x] Amp and filter ADSR envelopes schedule cleanly and expose working release controls.
+- [x] Three LFOs can route safely to oscillator detune and filter cutoff.
+- [x] Delay provides time, feedback, feedback filtering, saturation, mix, and bypass using modern nodes.
+- [x] Computer keyboard note input works without stuck notes.
+- [x] The on-screen keyboard plays notes by pointer/touch and reflects all active-note sources.
+- [x] Web MIDI notes work when supported, with visible permission/device status.
+- [x] MIDI CC learn uses stable parameter IDs and persisted mappings.
+- [x] Polyphonic voices have independent filters/envelopes and deterministic voice stealing.
+- [x] Polyphony is the modern default; one voice preserves useful classic mono behaviour.
+- [x] All legacy defects listed above are fixed or deliberately superseded.
 
 ## Phase 0 conclusion
 
