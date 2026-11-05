@@ -70,6 +70,12 @@ jobs:
       - name: Install ${{ matrix.browser }}
         run: npx playwright install --with-deps ${{ matrix.browser }}
 
+      - name: Start Firefox audio server
+        if: matrix.browser == 'firefox'
+        run: |
+          sudo apt-get install --yes pulseaudio
+          pulseaudio --start --exit-idle-time=-1
+
       - name: Run ${{ matrix.browser }} tests
         run: npm run test:e2e:all -- --project=${{ matrix.browser }}
 
