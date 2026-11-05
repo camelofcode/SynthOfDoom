@@ -80,9 +80,8 @@ textarea {
     outline-offset: 2px;
   }
 
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
+  &[data-audio-locked] {
+    opacity: 0.65;
   }
 }
 

@@ -44,7 +44,10 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   ).toBeVisible();
   const piano = page.getByRole('group', { name: 'Piano keyboard' });
   await expect(piano.getByRole('button')).toHaveCount(25);
-  await expect(page.getByRole('button', { name: 'C6' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'C6' })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'C6' })).toHaveAttribute(
+    'data-audio-locked',
+  );
   await page.getByText('Preset actions', { exact: true }).click();
   await expect(page.getByRole('button', { name: 'Initialise' })).toBeVisible();
   await page.getByText('Preset actions', { exact: true }).click();
@@ -54,6 +57,9 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
     page.getByRole('heading', { name: 'Audio: Running' }),
   ).toBeVisible();
   await expect(page.getByRole('button', { name: 'C6' })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'C6' })).not.toHaveAttribute(
+    'data-audio-locked',
+  );
   await expect
     .poll(() =>
       page.evaluate(() =>
@@ -194,6 +200,28 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
     .getByRole('button', { name: 'Reset Filter 1 Cutoff to default' })
     .click();
   await expect(cutoff).toHaveValue('1000');
+});
+
+test('starts audio from the first piano pointer gesture', async ({ page }) => {
+  await page.goto('/');
+
+  const c4 = page.getByRole('button', { name: 'C4' });
+  const bounds = await c4.boundingBox();
+  if (!bounds) throw new Error('The C4 piano key was not rendered.');
+  await page.mouse.move(
+    bounds.x + bounds.width / 2,
+    bounds.y + bounds.height * 0.82,
+  );
+  await page.mouse.down();
+  await expect(
+    page.getByRole('heading', { name: 'Audio: Running' }),
+  ).toBeVisible();
+  await expect(c4).toHaveAttribute('aria-pressed', 'true');
+  await page.mouse.up();
+  await expect(c4).toHaveAttribute('aria-pressed', 'false');
+  await expect(
+    page.getByRole('button', { name: 'Start audio' }),
+  ).toBeDisabled();
 });
 
 test('keeps the full synth operable at a narrow viewport', async ({ page }) => {

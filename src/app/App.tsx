@@ -113,10 +113,12 @@ export function App() {
           </div>
           <PianoKeyboard
             activeNotes={notes.activeNotes}
-            disabled={audio.status !== 'running'}
+            audioReady={audio.status === 'running'}
+            onRequestAudio={audio.start}
           />
           <p className={styles.inputHelp}>
-            Computer keys Q–I play C4–C5. Z/X shifts the keyboard octave.
+            Click a piano key or use Start audio to enable sound. Computer keys
+            Q–I play C4–C5; Z/X shifts the keyboard octave.
           </p>
           <div className={styles.midiRow}>
             <button

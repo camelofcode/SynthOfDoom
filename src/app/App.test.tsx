@@ -29,8 +29,11 @@ describe('App', () => {
     expect(
       screen.getByRole('group', { name: 'Piano keyboard' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'C4' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'C6' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'C4' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'C4' })).toHaveAttribute(
+      'data-audio-locked',
+    );
+    expect(screen.getByRole('button', { name: 'C6' })).toBeEnabled();
     expect(
       screen.queryByLabelText('MIDI learn target'),
     ).not.toBeInTheDocument();

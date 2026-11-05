@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { useRef, type CSSProperties } from 'react';
 import { noteRouter } from '../../input/inputInstance';
 
 const WHITE_KEYS = [
@@ -34,16 +34,46 @@ const BLACK_KEYS = [
 
 export function PianoKeyboard({
   activeNotes,
-  disabled,
+  audioReady,
+  onRequestAudio,
 }: {
   readonly activeNotes: readonly number[];
-  readonly disabled: boolean;
+  readonly audioReady: boolean;
+  readonly onRequestAudio: () => Promise<void>;
 }) {
-  const release = (pointerId: number, note: number) =>
+  const pendingPointers = useRef(new Map<number, number>());
+  const playingPointers = useRef(new Map<number, number>());
+
+  const play = (pointerId: number, note: number) => {
+    playingPointers.current.set(pointerId, note);
+    noteRouter.noteOn(
+      { source: 'pointer', sourceId: String(pointerId) },
+      note,
+      100 / 127,
+    );
+  };
+
+  const release = (pointerId: number) => {
+    pendingPointers.current.delete(pointerId);
+    const note = playingPointers.current.get(pointerId);
+    if (note === undefined) return;
+    playingPointers.current.delete(pointerId);
     noteRouter.noteOff(
       { source: 'pointer', sourceId: String(pointerId) },
       note,
     );
+  };
+
+  const startAndPlay = (pointerId: number, note: number) => {
+    pendingPointers.current.set(pointerId, note);
+    void onRequestAudio()
+      .then(() => {
+        if (pendingPointers.current.get(pointerId) !== note) return;
+        pendingPointers.current.delete(pointerId);
+        play(pointerId, note);
+      })
+      .catch(() => pendingPointers.current.delete(pointerId));
+  };
 
   const renderKey = (
     note: number,
@@ -62,23 +92,21 @@ export function PianoKeyboard({
       }
       aria-label={label}
       aria-pressed={activeNotes.includes(note)}
-      disabled={disabled}
+      data-audio-locked={!audioReady || undefined}
+      title={!audioReady ? 'Start audio and play this note' : undefined}
       onPointerDown={(event) => {
-        noteRouter.noteOn(
-          { source: 'pointer', sourceId: String(event.pointerId) },
-          note,
-          100 / 127,
-        );
         try {
           event.currentTarget.setPointerCapture(event.pointerId);
         } catch {
           // Synthetic/test pointers may not be registered as active.
         }
+        if (audioReady) play(event.pointerId, note);
+        else startAndPlay(event.pointerId, note);
       }}
-      onPointerUp={(event) => release(event.pointerId, note)}
-      onPointerCancel={(event) => release(event.pointerId, note)}
+      onPointerUp={(event) => release(event.pointerId)}
+      onPointerCancel={(event) => release(event.pointerId)}
       onPointerLeave={(event) => {
-        if (event.buttons > 0) release(event.pointerId, note);
+        if (event.buttons > 0) release(event.pointerId);
       }}
     >
       {label}
