@@ -1,0 +1,8 @@
+Angular2Audio/
+Angular2Audio.sln
+dist/
+coverage/
+node_modules/
+package-lock.json
+playwright-report/
+test-results/

@@ -1,0 +1,193 @@
+@use '../styles/mixins' as mixins;
+
+.appShell {
+  width: min(100% - 1.25rem, 84rem);
+  margin: 0 auto;
+  padding: 0.65rem 0 1rem;
+}
+
+.header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.75rem;
+  align-items: center;
+  margin-bottom: 0.65rem;
+  padding: 0.35rem 0 0.6rem;
+  border-bottom: 1px solid var(--colour-border);
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.35rem, 3vw, 1.85rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+}
+
+.accentPicker {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  color: var(--colour-text-muted);
+  font-size: 0.7rem;
+
+  input {
+    width: 2.25rem;
+    height: 2rem;
+    padding: 0.15rem;
+    border: 1px solid var(--colour-border);
+    border-radius: 0.4rem;
+    background: var(--colour-panel);
+    cursor: pointer;
+
+    &:focus-visible {
+      @include mixins.focus-ring;
+    }
+  }
+}
+
+.audioControl {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-left: auto;
+  padding: 0.3rem;
+  border: 1px solid var(--colour-border);
+  border-radius: 0.5rem;
+  background: var(--colour-panel);
+
+  &[data-needs-action] {
+    border-color: var(--colour-accent);
+    box-shadow: 0 0 0 1px
+      color-mix(in srgb, var(--colour-accent), transparent 70%);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+}
+
+.audioStatus {
+  padding-left: 0.35rem;
+}
+
+.audioError {
+  max-width: 16rem;
+  margin: 0.2rem 0 0;
+  color: #ffd166;
+  font-size: 0.68rem;
+}
+
+.inputPanel {
+  margin-bottom: 0.65rem;
+  padding: 0.8rem;
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-panel);
+  background: var(--colour-panel);
+}
+
+.inputHeader,
+.midiRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.inputHelp,
+.midiStatus {
+  color: var(--colour-text-muted);
+  font-size: 0.72rem;
+}
+
+.inputHelp {
+  margin: 0.5rem 0 0;
+}
+
+.midiRow {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 0.65rem;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  select {
+    padding: 0.45rem;
+    border: 1px solid var(--colour-border);
+    border-radius: 0.35rem;
+    background: var(--colour-background);
+    color: var(--colour-text);
+  }
+}
+
+.secondaryButton {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--colour-accent-muted);
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--colour-accent-soft);
+  cursor: pointer;
+
+  &:focus-visible {
+    @include mixins.focus-ring;
+  }
+}
+
+.startButton {
+  flex: 0 0 auto;
+  min-width: 6.5rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--colour-accent);
+  border-radius: 0.45rem;
+  background: var(--colour-accent);
+  color: var(--colour-background);
+  font-weight: 800;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--colour-accent-soft);
+  }
+
+  &:focus-visible {
+    @include mixins.focus-ring;
+  }
+
+  &:disabled {
+    border-color: var(--colour-border);
+    background: var(--colour-border);
+    color: var(--colour-text-subtle);
+    cursor: not-allowed;
+  }
+}
+
+@include mixins.below(34rem) {
+  .header h1 {
+    flex: 1;
+  }
+
+  .audioControl {
+    order: 2;
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+
+  .inputHeader,
+  .midiRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
