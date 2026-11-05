@@ -1,5 +1,7 @@
 # SynthOfDoom
 
+[![CI](https://github.com/camelofcode/SynthOfDoom/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/camelofcode/SynthOfDoom/actions/workflows/ci.yml)
+
 SynthOfDoom is a playable polyphonic synthesiser that runs entirely in the browser. Three oscillators, coloured noise, dual filters, envelopes, modulation, delay, presets, computer-keyboard input, Web MIDI, and per-control MIDI learn are driven by a typed Web Audio engine rather than samples or a server.
 
 ![SynthOfDoom interface](public/synthofdoom-preview.png)
