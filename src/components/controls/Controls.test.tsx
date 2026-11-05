@@ -114,7 +114,7 @@ describe('control primitives', () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<Toggle label="Delay" checked={false} onChange={onChange} />);
-    const toggle = screen.getByRole('button', { name: 'Delay: Off' });
+    const toggle = screen.getByRole('button', { name: 'Delay Off' });
     expect(toggle).toHaveAttribute('aria-pressed', 'false');
     await user.click(toggle);
     expect(onChange).toHaveBeenCalledWith(true);

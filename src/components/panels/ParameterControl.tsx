@@ -35,7 +35,7 @@ export function ParameterControl({
         label={definition.label}
         checked={value}
         onChange={onChange}
-        accessibleLabel={`${definition.group} ${definition.label}`}
+        accessibleLabel={definition.group}
       />
     ) : definition.kind === 'enum' && typeof value === 'string' ? (
       <Select

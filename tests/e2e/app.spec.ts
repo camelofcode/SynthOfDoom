@@ -81,7 +81,7 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
     .toBe('#23b89a');
 
   const noiseEnabled = page.getByRole('button', {
-    name: 'Noise mixer Enabled: On',
+    name: 'Enabled On Noise mixer',
   });
   const gainValuesBeforeNoise = await page.evaluate(
     () =>
@@ -91,7 +91,7 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   );
   await noiseEnabled.click();
   await expect(
-    page.getByRole('button', { name: 'Noise mixer Enabled: Off' }),
+    page.getByRole('button', { name: 'Enabled Off Noise mixer' }),
   ).toHaveAttribute('aria-pressed', 'false');
   await page.waitForTimeout(25);
   const gainValuesAfterNoise = await page.evaluate(
@@ -222,6 +222,36 @@ test('starts audio from the first piano pointer gesture', async ({ page }) => {
   await expect(
     page.getByRole('button', { name: 'Start audio' }),
   ).toBeDisabled();
+});
+
+test('reports an audio startup failure and recovers on retry', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const BrowserAudioContext = window.AudioContext;
+    let attempts = 0;
+    window.AudioContext = class extends BrowserAudioContext {
+      constructor(options?: AudioContextOptions) {
+        attempts += 1;
+        if (attempts === 1) throw new Error('Test audio startup failure');
+        super(options);
+      }
+    };
+  });
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'Start audio' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Audio: Start failed' }),
+  ).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveText(
+    'Test audio startup failure',
+  );
+
+  await page.getByRole('button', { name: 'Retry audio' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Audio: Running' }),
+  ).toBeVisible();
 });
 
 test('keeps the full synth operable at a narrow viewport', async ({ page }) => {

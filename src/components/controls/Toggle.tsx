@@ -13,20 +13,27 @@ export function Toggle({
   readonly disabled?: boolean;
   readonly accessibleLabel?: string;
 }) {
+  const stateLabel = checked ? 'On' : 'Off';
+
   return (
     <button
       className={styles.toggle}
       type="button"
       aria-pressed={checked}
-      aria-label={`${accessibleLabel ?? label}: ${checked ? 'On' : 'Off'}`}
       disabled={disabled}
       onClick={() => onChange(!checked)}
     >
       <span className={styles.toggleState} aria-hidden="true">
         {checked ? '●' : '○'}
       </span>
-      <span>{label}</span>
-      <span className={styles.stateText}>{checked ? 'On' : 'Off'}</span>
+      <span>{label}</span>{' '}
+      <span className={styles.stateText}>{stateLabel}</span>
+      {accessibleLabel ? (
+        <>
+          {' '}
+          <span className={styles.accessibleContext}>{accessibleLabel}</span>
+        </>
+      ) : null}
     </button>
   );
 }
