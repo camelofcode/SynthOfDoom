@@ -154,10 +154,9 @@ const groups: readonly {
     className: styles.performance,
     subgroups: [
       {
-        title: 'Voices',
-        rows: [['performance.voiceMode'], ['performance.voiceCount']],
+        title: 'Voice & glide',
+        rows: [['performance.voiceCount', 'performance.portamento']],
       },
-      { title: 'Glide', rows: [['performance.portamento']] },
     ],
   },
   {

@@ -16,7 +16,12 @@ describe('App', () => {
     expect(screen.getByLabelText('Preset')).toHaveValue('factory:init');
     expect(screen.getByText('Preset actions')).toBeInTheDocument();
     expect(screen.getByLabelText('Synth accent colour')).toHaveValue('#76d04b');
-    expect(screen.getByLabelText('Performance Voice mode')).toHaveValue('poly');
+    expect(
+      screen.queryByLabelText('Performance Voice mode'),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('slider', { name: 'Performance Voices' }),
+    ).toHaveValue('8');
     expect(screen.getByRole('button', { name: 'Start audio' })).toBeEnabled();
     expect(
       screen.getByRole('heading', { name: 'Audio: Ready to start' }),

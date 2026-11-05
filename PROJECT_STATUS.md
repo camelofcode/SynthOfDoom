@@ -95,7 +95,7 @@
 - Applied the selected accent to the canvas-rendered master oscilloscope as well as the CSS-rendered interface, updating the waveform immediately when the picker changes.
 - Allowed the mapped computer-note keys to pass through while a knob's range input retains focus, preserving slider arrow-key access without requiring a click elsewhere before playing.
 - Reflowed the three existing LFO modules into one compact desktop row alongside an even-width filter panel, preserving patch/audio compatibility while removing the modulation panel's excessive vertical stack.
-- Placed the Performance panel's Voices and Glide subgroups side by side on non-mobile layouts, eliminating another tall sparse stack while retaining the narrow-screen column fallback.
+- Combined Voices and Glide into one compact subgroup and made the Voices knob authoritative: one voice selects monophonic priority/glide, while two-to-eight voices select polyphony in one atomic graph update.
 
 ## Next actions
 
@@ -136,7 +136,7 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 72 passed with Vitest/React Testing Library.
+- Unit/component tests: 73 passed with Vitest/React Testing Library.
 - Browser tests: 3 passed in Playwright Chromium (native polyphonic audio interaction, narrow responsive layout, and preset reload persistence).
 - Manual physical MIDI keyboard check: passed on 5 November 2026.
 - Manual sustained chord, rapid-stealing, mono glide, and representative-hardware polyphony check: passed on 5 November 2026.

@@ -70,6 +70,8 @@ export function ParameterControl({
               ? 'MIDI learn'
               : `CC ${learnedCc}`}
         </button>
+      ) : definition.kind === 'number' ? (
+        <span className={styles.learnPlaceholder} aria-hidden="true" />
       ) : null}
     </div>
   );

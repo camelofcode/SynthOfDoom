@@ -379,4 +379,38 @@ describe('SynthEngine graph and controls', () => {
     engine.loadPatch(engine.getPatchSnapshot());
     expect(listener).toHaveBeenCalledTimes(2);
   });
+
+  it('treats one voice as mono and higher counts as poly atomically', () => {
+    const engine = new SynthEngine();
+    const listener = vi.fn();
+    engine.subscribePatch(listener);
+
+    engine.setParameter('performance.voiceCount', 1);
+    expect(engine.getPatchSnapshot().parameters['performance.voiceMode']).toBe(
+      'mono',
+    );
+    expect(engine.getPatchSnapshot().parameters['performance.voiceCount']).toBe(
+      1,
+    );
+    expect(listener).toHaveBeenCalledOnce();
+
+    engine.setParameter('performance.voiceCount', 4);
+    expect(engine.getPatchSnapshot().parameters['performance.voiceMode']).toBe(
+      'poly',
+    );
+    expect(engine.getPatchSnapshot().parameters['performance.voiceCount']).toBe(
+      4,
+    );
+    expect(listener).toHaveBeenCalledTimes(2);
+
+    engine.loadPatch(
+      createPatch({
+        'performance.voiceMode': 'mono',
+        'performance.voiceCount': 8,
+      }),
+    );
+    expect(engine.getPatchSnapshot().parameters['performance.voiceCount']).toBe(
+      1,
+    );
+  });
 });

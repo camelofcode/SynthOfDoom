@@ -751,7 +751,7 @@ export const PARAMETER_REGISTRY = Object.freeze({
   }),
   'performance.voiceCount': numeric({
     id: 'performance.voiceCount',
-    label: 'Voice count',
+    label: 'Voices',
     group: 'Performance',
     unit: 'voices',
     minimum: 1,

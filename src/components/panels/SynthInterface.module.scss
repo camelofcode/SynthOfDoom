@@ -58,10 +58,6 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.performance .subgroupGrid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
 .subgroup {
   min-width: 0;
   padding: 0.45rem;
@@ -100,10 +96,6 @@
   &[data-control-kind='number'] {
     grid-template-rows: 1fr auto;
     height: 100%;
-
-    > :first-child {
-      height: 100%;
-    }
   }
 }
 
@@ -125,6 +117,10 @@
     outline: 2px solid var(--colour-focus);
     outline-offset: 2px;
   }
+}
+
+.learnPlaceholder {
+  min-height: 1.5rem;
 }
 
 @media (max-width: 60rem) {
@@ -160,8 +156,7 @@
 
 @media (max-width: 36rem) {
   .subgroupGrid,
-  .modulation .subgroupGrid,
-  .performance .subgroupGrid {
+  .modulation .subgroupGrid {
     grid-template-columns: 1fr;
   }
 

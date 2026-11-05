@@ -300,14 +300,26 @@ test('keeps mixed controls on distinct aligned rows', async ({ page }) => {
   expect(lfoPositions[0]!.left).toBeLessThan(lfoPositions[1]!.left);
   expect(lfoPositions[1]!.left).toBeLessThan(lfoPositions[2]!.left);
 
-  const performanceTops = await Promise.all(
-    ['Voices', 'Glide'].map((name) =>
-      page
-        .getByRole('region', { name: `Performance: ${name}` })
-        .evaluate((element) => element.getBoundingClientRect().top),
+  const performance = page.getByRole('region', {
+    name: 'Performance: Voice & glide',
+  });
+  const performanceControls = await Promise.all(
+    ['Performance Voices', 'Performance Portamento'].map((name) =>
+      performance.getByRole('slider', { name }).evaluate((element) => {
+        const surface = element.closest(
+          '[data-control-kind]',
+        )?.firstElementChild;
+        const bounds = surface?.getBoundingClientRect();
+        return { height: bounds?.height ?? 0, top: bounds?.top ?? 0 };
+      }),
     ),
   );
-  expect(new Set(performanceTops.map(Math.round)).size).toBe(1);
+  expect(
+    new Set(performanceControls.map(({ top }) => Math.round(top))).size,
+  ).toBe(1);
+  expect(
+    Math.abs(performanceControls[0]!.height - performanceControls[1]!.height),
+  ).toBeLessThan(1);
 });
 
 test('restores the selected factory preset across reload', async ({ page }) => {
@@ -322,6 +334,9 @@ test('restores the selected factory preset across reload', async ({ page }) => {
   await expect(page.getByRole('slider', { name: 'Delay Mix' })).toHaveValue(
     '0.32',
   );
+  await expect(
+    page.getByRole('slider', { name: 'Performance Voices' }),
+  ).toHaveValue('1');
 
   await page.reload();
   await expect(
@@ -331,4 +346,7 @@ test('restores the selected factory preset across reload', async ({ page }) => {
   await expect(page.getByRole('slider', { name: 'Delay Mix' })).toHaveValue(
     '0.32',
   );
+  await expect(
+    page.getByRole('slider', { name: 'Performance Voices' }),
+  ).toHaveValue('1');
 });

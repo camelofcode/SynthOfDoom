@@ -45,6 +45,29 @@ function normaliseNoteVelocity(velocity: number): number {
   return Math.min(1, Math.max(0, velocity));
 }
 
+function normaliseVoiceConfiguration(patch: SynthPatch): SynthPatch {
+  const parameters = patch.parameters;
+  const mono =
+    parameters['performance.voiceMode'] === 'mono' ||
+    parameters['performance.voiceCount'] === 1;
+  const voiceMode = mono ? 'mono' : 'poly';
+  const voiceCount = mono ? 1 : parameters['performance.voiceCount'];
+  if (
+    parameters['performance.voiceMode'] === voiceMode &&
+    parameters['performance.voiceCount'] === voiceCount
+  ) {
+    return patch;
+  }
+  return {
+    ...patch,
+    parameters: {
+      ...parameters,
+      'performance.voiceMode': voiceMode,
+      'performance.voiceCount': voiceCount,
+    },
+  };
+}
+
 export class SynthEngine {
   private readonly createContext: AudioContextFactory;
   private readonly random: RandomSource;
@@ -64,9 +87,11 @@ export class SynthEngine {
   constructor(options: SynthEngineOptions = {}) {
     this.createContext = options.createContext ?? createBrowserAudioContext;
     this.random = options.random ?? Math.random;
-    this.patch = options.initialPatch
-      ? validateSynthPatch(options.initialPatch).patch
-      : createDefaultPatch();
+    this.patch = normaliseVoiceConfiguration(
+      options.initialPatch
+        ? validateSynthPatch(options.initialPatch).patch
+        : createDefaultPatch(),
+    );
   }
 
   getSnapshot = (): SynthEngineSnapshot => this.snapshot;
@@ -211,6 +236,32 @@ export class SynthEngine {
       parameters: { ...this.patch.parameters, [id]: value },
     });
     this.patch = result.patch;
+    if (id === 'performance.voiceCount') {
+      this.patch = {
+        ...this.patch,
+        parameters: {
+          ...this.patch.parameters,
+          'performance.voiceMode':
+            this.patch.parameters['performance.voiceCount'] === 1
+              ? 'mono'
+              : 'poly',
+        },
+      };
+    } else if (id === 'performance.voiceMode') {
+      const voiceMode = this.patch.parameters['performance.voiceMode'];
+      this.patch = {
+        ...this.patch,
+        parameters: {
+          ...this.patch.parameters,
+          'performance.voiceCount':
+            voiceMode === 'mono'
+              ? 1
+              : this.patch.parameters['performance.voiceCount'] === 1
+                ? 8
+                : this.patch.parameters['performance.voiceCount'],
+        },
+      };
+    }
     if (id === 'performance.voiceMode' || id === 'performance.voiceCount') {
       this.replaceGraph();
     } else {
@@ -221,7 +272,7 @@ export class SynthEngine {
   }
 
   loadPatch(input: unknown): SynthPatch {
-    this.patch = validateSynthPatch(input).patch;
+    this.patch = normaliseVoiceConfiguration(validateSynthPatch(input).patch);
     this.replaceGraph();
     for (const listener of this.patchListeners) listener();
     return this.patch;
