@@ -4,13 +4,17 @@ import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
 describe('App', () => {
-  it('identifies the application and complete synth interface phase', () => {
+  it('identifies the application and preset memory phase', () => {
     render(<App />);
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'SynthOfDoom' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Phase 6 · Full interface')).toBeInTheDocument();
+    expect(screen.getByText('Phase 7 · Presets')).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: 'Preset controls' }),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText('Preset')).toHaveValue('factory:init');
     expect(screen.getByRole('button', { name: 'Start audio' })).toBeEnabled();
     expect(
       screen.getByRole('heading', { name: 'Audio: Ready to start' }),

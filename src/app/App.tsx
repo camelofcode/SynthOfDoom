@@ -2,6 +2,7 @@ import type { SynthEngineStatus } from '../audio/SynthEngine';
 import { synthEngine } from '../audio/engineInstance';
 import { PianoKeyboard } from '../components/keyboard/PianoKeyboard';
 import { SynthInterface } from '../components/panels/SynthInterface';
+import { PresetBar } from '../components/presets/PresetBar';
 import { Oscilloscope } from '../components/visualisers/Oscilloscope';
 import { useSynthEngine } from '../hooks/useSynthEngine';
 import { useMidi } from '../hooks/useMidi';
@@ -45,17 +46,18 @@ export function App() {
           <p className={styles.eyebrow}>React · TypeScript · Web Audio</p>
           <h1>SynthOfDoom</h1>
         </div>
-        <span className={styles.phaseBadge}>Phase 6 · Full interface</span>
+        <span className={styles.phaseBadge}>Phase 7 · Presets</span>
       </header>
+
+      <PresetBar />
 
       <main>
         <section className={styles.intro} aria-labelledby="foundation-title">
-          <p className={styles.kicker}>Complete signal path</p>
-          <h2 id="foundation-title">Shape the sound from source to space.</h2>
+          <p className={styles.kicker}>Patch memory</p>
+          <h2 id="foundation-title">Build a sound. Keep it.</h2>
           <p>
-            Three oscillators and noise split across parallel filters, move
-            through independent envelopes and modulation, then meet a protected
-            delay and master output.
+            Start from authored factory patches, save your own variations, and
+            move validated patch files safely between browsers.
           </p>
         </section>
 
@@ -181,9 +183,9 @@ export function App() {
       </main>
 
       <footer className={styles.footer}>
-        <span>Full signal path ready</span>
+        <span>Preset memory ready</span>
         <span aria-hidden="true">·</span>
-        <span>Presets next</span>
+        <span>Polyphony next</span>
       </footer>
     </div>
   );

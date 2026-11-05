@@ -7,8 +7,8 @@
 - Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 6 complete
-- Overall status: the complete responsive signal-flow interface controls all 63 parameters through one observable patch path; ready to begin Phase 7 presets and persistence
+- Current phase: Phase 7 complete
+- Overall status: authored factory and user presets now persist, import, export, and apply through the observable patch path; ready to begin Phase 8 polyphonic voice architecture
 
 ## Completed
 
@@ -63,13 +63,21 @@
 - Added responsive twelve-column desktop, stacked tablet, and two-control narrow-screen panel layouts while preserving the horizontally contained piano keyboard.
 - Completed a visible local browser review of the top-level instrument and deep modulation panels; retained the existing local-only Vite/deployment model.
 - Added desktop and narrow-viewport Playwright coverage including horizontal-overflow detection.
+- Added four authored factory patches covering the initial state, dark bass, spacious lead, and noise percussion while retaining registry validation and safe parameter bounds.
+- Added a framework-independent preset manager with initialise, selection, save-as, rename, duplicate, delete, import, and export operations.
+- Added versioned local-storage persistence for user patches and the selected preset, complementing the existing versioned MIDI-learn storage.
+- Added visible saved/unsaved state plus confirmation before discarding edits or deleting a user patch.
+- Applied every preset through the engine's single validated `loadPatch` action so the live graph, serialisable patch, and rendered controls update together.
+- Added safe recovery for corrupt stored preset data and strict validation for imported JSON without risking a blank screen or unsafe graph state.
+- Added regression coverage that verifies a rendered parameter change reaches the corresponding real browser `GainNode`, protecting against stale audio-graph wiring during development.
+- Added unit and browser coverage for factory loads, dirty tracking, user preset operations, JSON round trips, storage recovery, and reload persistence.
 
 ## Next actions
 
-1. Begin Phase 7 with authored factory patches and an initialise/reset action that applies through the existing batched patch path.
-2. Add preset selection, save-as, rename, duplicate, delete, import JSON, and export JSON with visible unsaved changes and destructive-action confirmation.
-3. Persist versioned user patches and MIDI mappings with validation and safe fallbacks for malformed storage.
-4. Test batched application, storage recovery, import/export round trips, and preset operations without audible intermediate graph states.
+1. Begin Phase 8 by separating the current monophonic signal path into per-note `Voice` nodes and genuinely shared effects/output nodes.
+2. Add a deterministic voice allocator with configurable polyphonic and monophonic modes, repeated-note ownership, and click-resistant stealing.
+3. Extend the patch schema with voice mode/count and update factory patches for chords as well as intentional mono lead/bass behaviour.
+4. Add allocation, stealing, held-patch-change, disposal, and sustained-chord tests before profiling representative hardware.
 
 ## Current blocker or required decision
 
@@ -103,8 +111,8 @@ No current blocker or naming decision is outstanding.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
 - Full gate: `npm run verify` passed on 5 November 2026.
-- Unit/component tests: 55 passed with Vitest/React Testing Library.
-- Browser tests: 2 passed in Playwright Chromium (desktop interaction and narrow responsive layout).
+- Unit/component tests: 59 passed with Vitest/React Testing Library.
+- Browser tests: 3 passed in Playwright Chromium (desktop/audio interaction, narrow responsive layout, and preset reload persistence).
 - Manual physical MIDI keyboard check: passed on 5 November 2026.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
 - Production dependency audit: zero vulnerabilities.

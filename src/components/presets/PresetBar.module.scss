@@ -1,0 +1,82 @@
+.presetBar {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: end;
+  margin: 0.75rem 0 1.5rem;
+  padding: 0.8rem;
+  border: 1px solid var(--colour-border);
+  border-radius: 0.6rem;
+  background: rgb(17 16 15 / 94%);
+  backdrop-filter: blur(10px);
+
+  label {
+    display: grid;
+    gap: 0.25rem;
+    color: var(--colour-text-muted);
+    font-size: 0.7rem;
+  }
+
+  select,
+  button {
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--colour-border);
+    border-radius: 0.35rem;
+    background: var(--colour-panel);
+    color: var(--colour-text);
+  }
+
+  button {
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+  }
+
+  select:focus-visible,
+  button:focus-visible {
+    outline: 3px solid var(--colour-focus);
+    outline-offset: 2px;
+  }
+}
+
+.dirtyState {
+  align-self: center;
+  color: var(--colour-accent-soft);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+
+.actions {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.error {
+  flex-basis: 100%;
+  margin: 0;
+  color: #ffd166;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 36rem) {
+  .presetBar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
