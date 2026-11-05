@@ -48,7 +48,10 @@ export function ParameterControl({
     ) : null;
 
   return (
-    <div className={styles.parameterControl}>
+    <div
+      className={styles.parameterControl}
+      data-control-kind={definition.kind}
+    >
       {control}
       {definition.midiLearnable ? (
         <button

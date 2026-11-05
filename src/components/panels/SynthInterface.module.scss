@@ -37,9 +37,9 @@
 
 .controlGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(4.75rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(3.9rem, 1fr));
   gap: 0.4rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 .subgroupGrid {
@@ -73,6 +73,25 @@
   gap: 0.2rem;
   min-width: 0;
   padding-bottom: 0.35rem;
+
+  &[data-control-kind='boolean'],
+  &[data-control-kind='enum'] {
+    grid-column: 1 / -1;
+    justify-items: stretch;
+
+    > :first-child {
+      width: 100%;
+    }
+  }
+
+  &[data-control-kind='number'] {
+    grid-template-rows: 1fr auto;
+    height: 100%;
+
+    > :first-child {
+      height: 100%;
+    }
+  }
 }
 
 .learnButton {

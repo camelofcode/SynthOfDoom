@@ -28,10 +28,10 @@ const groups: readonly {
       {
         title: 'Oscillator 1',
         ids: [
+          'mixer.oscillator.1.enabled',
           'oscillator.1.waveform',
           'oscillator.1.octave',
           'oscillator.1.detune',
-          'mixer.oscillator.1.enabled',
           'mixer.oscillator.1.level',
           'mixer.oscillator.1.filterBalance',
         ],
@@ -39,10 +39,10 @@ const groups: readonly {
       {
         title: 'Oscillator 2',
         ids: [
+          'mixer.oscillator.2.enabled',
           'oscillator.2.waveform',
           'oscillator.2.octave',
           'oscillator.2.detune',
-          'mixer.oscillator.2.enabled',
           'mixer.oscillator.2.level',
           'mixer.oscillator.2.filterBalance',
         ],
@@ -50,10 +50,10 @@ const groups: readonly {
       {
         title: 'Oscillator 3',
         ids: [
+          'mixer.oscillator.3.enabled',
           'oscillator.3.waveform',
           'oscillator.3.octave',
           'oscillator.3.detune',
-          'mixer.oscillator.3.enabled',
           'mixer.oscillator.3.level',
           'mixer.oscillator.3.filterBalance',
         ],
@@ -61,8 +61,8 @@ const groups: readonly {
       {
         title: 'Noise',
         ids: [
-          'noise.colour',
           'mixer.noise.enabled',
+          'noise.colour',
           'mixer.noise.level',
           'mixer.noise.filterBalance',
         ],
@@ -111,15 +111,15 @@ const groups: readonly {
     subgroups: [
       {
         title: 'LFO 1',
-        ids: ['lfo.1.waveform', 'lfo.1.rate', 'lfo.1.depth', 'lfo.1.target'],
+        ids: ['lfo.1.waveform', 'lfo.1.target', 'lfo.1.rate', 'lfo.1.depth'],
       },
       {
         title: 'LFO 2',
-        ids: ['lfo.2.waveform', 'lfo.2.rate', 'lfo.2.depth', 'lfo.2.target'],
+        ids: ['lfo.2.waveform', 'lfo.2.target', 'lfo.2.rate', 'lfo.2.depth'],
       },
       {
         title: 'LFO 3',
-        ids: ['lfo.3.waveform', 'lfo.3.rate', 'lfo.3.depth', 'lfo.3.target'],
+        ids: ['lfo.3.waveform', 'lfo.3.target', 'lfo.3.rate', 'lfo.3.depth'],
       },
     ],
   },

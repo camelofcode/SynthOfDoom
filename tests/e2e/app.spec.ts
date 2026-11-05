@@ -177,6 +177,43 @@ test('keeps the full synth operable at a narrow viewport', async ({ page }) => {
   ).toBe(true);
 });
 
+test('keeps mixed controls on distinct aligned rows', async ({ page }) => {
+  await page.goto('/');
+
+  const oscillator = page.getByRole('region', {
+    name: 'Sources & mixer: Oscillator 1',
+  });
+  const layout = await oscillator.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const controlBounds = Array.from(
+      element.querySelectorAll<HTMLElement>('[data-control-kind]'),
+    ).map((control) => {
+      const controlBox = control.getBoundingClientRect();
+      const controlSurface = control.firstElementChild?.getBoundingClientRect();
+      return {
+        kind: control.dataset.controlKind,
+        top: controlBox.top,
+        width: controlBox.width,
+        surfaceHeight: controlSurface?.height ?? 0,
+      };
+    });
+    return { subgroupWidth: bounds.width, controlBounds };
+  });
+
+  const toggle = layout.controlBounds.find(({ kind }) => kind === 'boolean');
+  const selector = layout.controlBounds.find(({ kind }) => kind === 'enum');
+  const knobs = layout.controlBounds.filter(({ kind }) => kind === 'number');
+  expect(toggle?.width).toBeGreaterThan(layout.subgroupWidth * 0.9);
+  expect(selector?.width).toBeGreaterThan(layout.subgroupWidth * 0.9);
+  expect(toggle?.top).toBeLessThan(selector?.top ?? 0);
+  expect(selector?.top).toBeLessThan(knobs[0]?.top ?? 0);
+  expect(new Set(knobs.map(({ top }) => Math.round(top))).size).toBe(1);
+  expect(
+    Math.max(...knobs.map(({ surfaceHeight }) => surfaceHeight)) -
+      Math.min(...knobs.map(({ surfaceHeight }) => surfaceHeight)),
+  ).toBeLessThan(1);
+});
+
 test('restores the selected factory preset across reload', async ({ page }) => {
   await page.goto('/');
 
