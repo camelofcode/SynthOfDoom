@@ -7,9 +7,14 @@
 }
 
 .header {
+  position: relative;
+  z-index: 10;
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.75rem;
   align-items: center;
-  padding: 0.35rem 0 0.65rem;
+  margin-bottom: 0.65rem;
+  padding: 0.35rem 0 0.6rem;
   border-bottom: 1px solid var(--colour-border);
 
   h1 {
@@ -20,27 +25,60 @@
   }
 }
 
-.audioPanel {
+.accentPicker {
   display: flex;
+  gap: 0.35rem;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.65rem;
-  padding: 0.65rem 0.8rem;
-  border: 1px solid var(--colour-border);
-  border-radius: var(--radius-panel);
-  background: var(--colour-panel);
+  color: var(--colour-text-muted);
+  font-size: 0.7rem;
 
-  h2 {
-    margin: 0;
-    font-size: 0.95rem;
+  input {
+    width: 2.25rem;
+    height: 2rem;
+    padding: 0.15rem;
+    border: 1px solid var(--colour-border);
+    border-radius: 0.4rem;
+    background: var(--colour-panel);
+    cursor: pointer;
+
+    &:focus-visible {
+      @include mixins.focus-ring;
+    }
   }
 }
 
+.audioControl {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-left: auto;
+  padding: 0.3rem;
+  border: 1px solid var(--colour-border);
+  border-radius: 0.5rem;
+  background: var(--colour-panel);
+
+  &[data-needs-action] {
+    border-color: var(--colour-accent);
+    box-shadow: 0 0 0 1px
+      color-mix(in srgb, var(--colour-accent), transparent 70%);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+}
+
+.audioStatus {
+  padding-left: 0.35rem;
+}
+
 .audioError {
-  margin: 0.3rem 0 0;
+  max-width: 16rem;
+  margin: 0.2rem 0 0;
   color: #ffd166;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
 }
 
 .inputPanel {
@@ -110,8 +148,8 @@
 
 .startButton {
   flex: 0 0 auto;
-  min-width: 7.5rem;
-  padding: 0.55rem 0.75rem;
+  min-width: 6.5rem;
+  padding: 0.5rem 0.7rem;
   border: 1px solid var(--colour-accent);
   border-radius: 0.45rem;
   background: var(--colour-accent);
@@ -136,9 +174,15 @@
 }
 
 @include mixins.below(34rem) {
-  .audioPanel {
-    align-items: stretch;
-    flex-direction: column;
+  .header h1 {
+    flex: 1;
+  }
+
+  .audioControl {
+    order: 2;
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
   }
 
   .inputHeader,

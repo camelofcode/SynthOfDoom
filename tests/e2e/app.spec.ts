@@ -35,11 +35,18 @@ test('starts audio and routes computer keyboard notes to the piano', async ({
   await expect(
     page.getByRole('heading', { name: 'Audio: Ready to start' }),
   ).toBeVisible();
+  const piano = page.getByRole('group', { name: 'Piano keyboard' });
+  await expect(piano.getByRole('button')).toHaveCount(25);
+  await expect(page.getByRole('button', { name: 'C6' })).toBeDisabled();
+  await page.getByText('Preset actions', { exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Initialise' })).toBeVisible();
+  await page.getByText('Preset actions', { exact: true }).click();
 
   await page.getByRole('button', { name: 'Start audio' }).click();
   await expect(
     page.getByRole('heading', { name: 'Audio: Running' }),
   ).toBeVisible();
+  await expect(page.getByRole('button', { name: 'C6' })).toBeEnabled();
 
   const noiseEnabled = page.getByRole('button', {
     name: 'Noise mixer Enabled: On',
@@ -252,8 +259,11 @@ test('restores the selected factory preset across reload', async ({ page }) => {
   await page.goto('/');
 
   const preset = page.getByRole('combobox', { name: 'Preset', exact: true });
+  const accent = page.getByLabel('Synth accent colour');
   await preset.selectOption('factory:cathedral-lead');
+  await accent.fill('#23b89a');
   await expect(preset).toHaveValue('factory:cathedral-lead');
+  await expect(accent).toHaveValue('#23b89a');
   await expect(page.getByRole('slider', { name: 'Delay Mix' })).toHaveValue(
     '0.32',
   );
@@ -262,6 +272,7 @@ test('restores the selected factory preset across reload', async ({ page }) => {
   await expect(
     page.getByRole('combobox', { name: 'Preset', exact: true }),
   ).toHaveValue('factory:cathedral-lead');
+  await expect(page.getByLabel('Synth accent colour')).toHaveValue('#23b89a');
   await expect(page.getByRole('slider', { name: 'Delay Mix' })).toHaveValue(
     '0.32',
   );

@@ -9,10 +9,12 @@ function confirmDiscard(): boolean {
 export function PresetBar() {
   const presets = usePresets();
   const fileInput = useRef<HTMLInputElement>(null);
+  const actions = useRef<HTMLDetailsElement>(null);
   const selected = presets.presets.find(
     (preset) => preset.id === presets.selectedId,
   );
   const isUserPreset = selected?.kind === 'user';
+  const closeActions = () => actions.current?.removeAttribute('open');
 
   const selectPreset = (id: string) => {
     if (id === presets.selectedId) return;
@@ -66,7 +68,7 @@ export function PresetBar() {
 
   return (
     <section className={styles.presetBar} aria-label="Preset controls">
-      <label>
+      <label className={styles.presetPicker}>
         <span>Preset</span>
         <select
           aria-label="Preset"
@@ -98,38 +100,77 @@ export function PresetBar() {
       <span className={styles.dirtyState} aria-live="polite">
         {presets.dirty ? 'Unsaved changes' : 'Saved'}
       </span>
-      <div className={styles.actions}>
-        <button
-          type="button"
-          onClick={() => {
-            if (!presets.dirty || confirmDiscard())
-              presets.manager.initialise();
-          }}
-        >
-          Initialise
-        </button>
-        <button type="button" onClick={saveAs}>
-          Save as
-        </button>
-        <button type="button" onClick={rename} disabled={!isUserPreset}>
-          Rename
-        </button>
-        <button
-          type="button"
-          onClick={() => presets.manager.duplicate(presets.selectedId)}
-        >
-          Duplicate
-        </button>
-        <button type="button" onClick={deletePreset} disabled={!isUserPreset}>
-          Delete
-        </button>
-        <button type="button" onClick={() => fileInput.current?.click()}>
-          Import
-        </button>
-        <button type="button" onClick={exportPreset}>
-          Export
-        </button>
-      </div>
+      <details ref={actions} className={styles.actions}>
+        <summary>Preset actions</summary>
+        <div className={styles.actionMenu}>
+          <button
+            type="button"
+            onClick={() => {
+              if (!presets.dirty || confirmDiscard())
+                presets.manager.initialise();
+              closeActions();
+            }}
+          >
+            Initialise
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              saveAs();
+              closeActions();
+            }}
+          >
+            Save as
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              rename();
+              closeActions();
+            }}
+            disabled={!isUserPreset}
+          >
+            Rename
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              presets.manager.duplicate(presets.selectedId);
+              closeActions();
+            }}
+          >
+            Duplicate
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              deletePreset();
+              closeActions();
+            }}
+            disabled={!isUserPreset}
+          >
+            Delete
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              fileInput.current?.click();
+              closeActions();
+            }}
+          >
+            Import
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              exportPreset();
+              closeActions();
+            }}
+          >
+            Export
+          </button>
+        </div>
+      </details>
       <input
         ref={fileInput}
         className={styles.fileInput}

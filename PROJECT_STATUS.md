@@ -88,6 +88,10 @@
 - Combined each oscillator/noise source with its enable, level, and dual-filter routing controls in four visible and accessible channel strips; filters, LFOs, voice/glide, amplitude, and delay retain their own labelled subgroups.
 - Separated every toggle and selector into a full-width subgroup row ahead of its numeric controls, with evenly stretched knob cards on each row to prevent mixed-size controls from overlapping.
 - Replaced automatic mixed-control placement with explicit semantic rows, keeping filter ADSR controls together and centring sparse and dense knob groups consistently.
+- Consolidated the title, preset selector/actions, persistent accent-colour picker, and prominent browser-required audio activation into one compact command header.
+- Removed the redundant global MIDI-learn target selector while retaining per-control learn actions, mapping status, and clear-mappings control.
+- Expanded the pointer instrument to a two-octave C4–C6 keyboard with fifteen white keys and ten overlaid black keys, contained horizontal scrolling, active state, and unchanged shared note routing.
+- Made the interface accent themeable through the existing CSS custom-property system, with green as the default and the selected colour persisted locally.
 
 ## Next actions
 

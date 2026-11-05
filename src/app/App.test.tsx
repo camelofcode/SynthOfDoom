@@ -14,6 +14,8 @@ describe('App', () => {
       screen.getByRole('region', { name: 'Preset controls' }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText('Preset')).toHaveValue('factory:init');
+    expect(screen.getByText('Preset actions')).toBeInTheDocument();
+    expect(screen.getByLabelText('Synth accent colour')).toHaveValue('#76d04b');
     expect(screen.getByLabelText('Performance Voice mode')).toHaveValue('poly');
     expect(screen.getByRole('button', { name: 'Start audio' })).toBeEnabled();
     expect(
@@ -23,6 +25,10 @@ describe('App', () => {
       screen.getByRole('group', { name: 'Piano keyboard' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'C4' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'C6' })).toBeDisabled();
+    expect(
+      screen.queryByLabelText('MIDI learn target'),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole('region', { name: 'Sources & mixer' }),
     ).toBeInTheDocument();

@@ -19,7 +19,7 @@ body {
   background:
     radial-gradient(
       circle at 50% -20%,
-      rgb(230 107 46 / 12%),
+      color-mix(in srgb, var(--colour-accent), transparent 88%),
       transparent 42rem
     ),
     var(--colour-background);
@@ -42,20 +42,31 @@ textarea {
 }
 
 .pianoKeyboard {
-  display: grid;
-  grid-template-columns: repeat(13, minmax(2.5rem, 1fr));
-  gap: 0.25rem;
   overflow-x: auto;
   margin-top: 1rem;
   padding-bottom: 0.5rem;
 }
 
+.pianoKeyboardKeys {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(15, minmax(3rem, 1fr));
+  min-width: 48rem;
+  height: 8.5rem;
+}
+
 .pianoKey {
-  min-height: 5.5rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  padding: 0 0.2rem 0.6rem;
   border: 1px solid #aaa39a;
-  border-radius: 0 0 0.35rem 0.35rem;
+  border-radius: 0 0 0.3rem 0.3rem;
   background: #eee8dd;
   color: #24211e;
+  font-size: 0.7rem;
   cursor: pointer;
   touch-action: none;
 
@@ -76,6 +87,19 @@ textarea {
 }
 
 .pianoKeySharp {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: calc(var(--piano-key-position) * 100% / 15);
+  width: calc(100% / 15 * 0.62);
+  height: 61%;
+  transform: translateX(-50%);
+  border-color: #514e49;
+  border-radius: 0 0 0.25rem 0.25rem;
   background: #292724;
   color: var(--colour-text);
+
+  &[aria-pressed='true'] {
+    background: color-mix(in srgb, var(--colour-accent), #292724 35%);
+  }
 }
