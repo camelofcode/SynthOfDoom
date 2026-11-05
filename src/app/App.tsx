@@ -19,15 +19,16 @@ export function App() {
           <p className={styles.eyebrow}>React · TypeScript · Web Audio</p>
           <h1>SynthOfDoom</h1>
         </div>
-        <span className={styles.phaseBadge}>Phase 1 · Foundation</span>
+        <span className={styles.phaseBadge}>Phase 2 · Domain model</span>
       </header>
 
       <main>
         <section className={styles.intro} aria-labelledby="foundation-title">
-          <p className={styles.kicker}>Modernisation in progress</p>
-          <h2 id="foundation-title">The signal path starts here.</h2>
+          <p className={styles.kicker}>Domain contracts ready</p>
+          <h2 id="foundation-title">The signal path has a contract.</h2>
           <p>
-            The modern application shell is running. Audio remains deliberately
+            Every parameter now has a stable identity, safe range, display
+            format, and versioned patch value. Audio remains deliberately
             disconnected until the framework-independent synth engine is built.
           </p>
         </section>
@@ -49,7 +50,7 @@ export function App() {
       </main>
 
       <footer className={styles.footer}>
-        <span>Static build ready</span>
+        <span>Domain model ready</span>
         <span aria-hidden="true">·</span>
         <span>Audio engine pending</span>
       </footer>

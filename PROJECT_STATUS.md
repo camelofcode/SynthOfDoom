@@ -4,11 +4,11 @@
 
 ## Current position
 
-- Last updated: 4 November 2026
+- Last updated: 5 November 2026
 - Current branch: `modernisation`
 - Baseline commit: `4479d07`
-- Current phase: Phase 1 complete
-- Overall status: modern project foundation is verified; ready to begin Phase 2 domain and parameter contracts
+- Current phase: Phase 2 complete
+- Overall status: typed domain and parameter contracts are verified; ready to begin Phase 3 framework-independent audio engine
 
 ## Completed
 
@@ -29,13 +29,19 @@
 - Added ESLint, accessibility/React rules, Prettier, Vitest, React Testing Library, and Playwright Chromium foundations.
 - Added a complete local `npm run verify` gate covering formatting, type-checking, linting, component tests, browser smoke tests, and the production build.
 - Confirmed the Vite production build emits a static, hosting-agnostic `dist` directory.
+- Added strict types for oscillator waveforms, filter types, noise colours, note events, MIDI messages, stable parameter IDs, and LFO targets.
+- Added a central 63-entry parameter registry covering the legacy signal path, with defaults, safe ranges, steps, units, scaling curves, formatting, modulation eligibility, and MIDI-learn eligibility.
+- Added a versioned `SynthPatch` schema with JSON-safe defaults, validation, version-zero migration, clamping, and safe fallback for malformed or unsupported data.
+- Added pure MIDI note/frequency, octave transpose, velocity, percentage, MIDI CC, linear, logarithmic, exponential, and bipolar conversion helpers.
+- Added immutable last-note-priority state transitions with duplicate note-on protection, ordered fallback, and all-notes-off behaviour.
+- Added focused unit tests for registry integrity, formatting, conversion boundaries, patch round trips/migration, malformed data, and note-priority ordering.
 
 ## Next actions
 
-1. Begin Phase 2 by defining strict types for notes, MIDI messages, waveforms, filter types, noise colours, parameter IDs, and LFO targets.
-2. Build the central parameter registry with stable IDs, ranges, defaults, scaling curves, units, formatting, modulation eligibility, and MIDI-learn eligibility.
-3. Define the versioned `SynthPatch` schema plus validation and migration helpers.
-4. Implement and unit-test pure note-frequency, parameter-scaling, MIDI-normalisation, formatting, and note-priority functions.
+1. Begin Phase 3 with lazy `AudioContext` creation and explicit running, suspended, interrupted, closed, and failure states.
+2. Add the `SynthEngine` lifecycle API (`start`, `noteOn`, `noteOff`, `setParameter`, `loadPatch`, and `dispose`) without coupling it to React.
+3. Build the first audible vertical slice: one oscillator, amplitude control, conservative master output, and deterministic fake-context tests.
+4. Extend the graph incrementally through the oscillator bank, noise, mixer, filters, envelopes, modulation, delay, analyser, and complete disposal.
 
 ## Current blocker or required decision
 
@@ -68,8 +74,8 @@ No current blocker or naming decision is outstanding.
 - Documentation whitespace check: passed.
 - Legacy tag: `legacy-angular` exists locally and on `origin` at commit `4479d07`.
 - Clean install: `npm ci --no-audit --no-fund` passed with Node 24/npm 11.
-- Full gate: `npm run verify` passed on 4 November 2026.
-- Component tests: 2 passed with Vitest/React Testing Library.
+- Full gate: `npm run verify` passed on 5 November 2026.
+- Unit/component tests: 25 passed with Vitest/React Testing Library.
 - Browser tests: 1 passed in Playwright Chromium.
 - Production build: Vite emitted `dist/index.html` plus hashed CSS/JavaScript assets.
 - Production dependency audit: zero vulnerabilities.
