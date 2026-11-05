@@ -83,8 +83,7 @@
   }
 }
 
-.valueReadout,
-.standaloneReadout output {
+.valueReadout {
   color: var(--colour-accent-soft);
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -186,29 +185,6 @@
     color: var(--colour-accent);
     font-size: 0.68rem;
     text-transform: uppercase;
-  }
-}
-
-.standaloneReadout {
-  display: inline-flex;
-  gap: 0.75rem;
-  align-items: baseline;
-  color: var(--colour-text-muted);
-  font-size: 0.75rem;
-}
-
-.statusIndicator {
-  display: inline-flex;
-  gap: 0.4rem;
-  align-items: center;
-  font-size: 0.75rem;
-
-  &[data-status='active'] span {
-    color: var(--colour-accent);
-  }
-
-  &[data-status='warning'] span {
-    color: #ffd166;
   }
 }
 

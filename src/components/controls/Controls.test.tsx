@@ -11,7 +11,6 @@ import { Knob } from './Knob';
 import { Panel } from './Panel';
 import { Select } from './Select';
 import { Toggle } from './Toggle';
-import { StatusIndicator, ValueReadout } from './ValueReadout';
 
 const cutoff = getParameterDefinition(
   'filter.1.cutoff',
@@ -120,7 +119,7 @@ describe('control primitives', () => {
     expect(onChange).toHaveBeenCalledWith(true);
   });
 
-  it('renders labelled selects, panels, readouts, and textual statuses', async () => {
+  it('renders labelled selects inside accessible panels', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
@@ -134,8 +133,6 @@ describe('control primitives', () => {
           ]}
           onChange={onChange}
         />
-        <ValueReadout label="Level" value="80%" />
-        <StatusIndicator label="Signal" status="active" />
       </Panel>,
     );
     expect(
@@ -143,9 +140,5 @@ describe('control primitives', () => {
     ).toBeInTheDocument();
     await user.selectOptions(screen.getByLabelText('Waveform'), 'square');
     expect(onChange).toHaveBeenCalledWith('square');
-    expect(screen.getByText('80%')).toBeVisible();
-    expect(
-      screen.getByRole('status', { name: 'Signal: active' }),
-    ).toHaveTextContent('Signal: active');
   });
 });

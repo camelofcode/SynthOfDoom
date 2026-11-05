@@ -1,3 +1,0 @@
-C:\Git\Angular2Audio\Angular2Audio\bin\Microsoft.NodejsTools.WebRole.dll
-C:\Git\Angular2Audio\Angular2Audio\obj\Debug\Angular2Audio.njsproj.CoreCompileInputs.cache
-C:\Git\Angular2Audio\Angular2Audio\obj\Debug\Angular2Audio.njsprojAssemblyReference.cache

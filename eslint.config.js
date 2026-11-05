@@ -9,7 +9,6 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
   {
     ignores: [
-      'Angular2Audio/**',
       'coverage/**',
       'dist/**',
       'playwright-report/**',

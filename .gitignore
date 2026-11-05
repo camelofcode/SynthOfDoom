@@ -24,7 +24,3 @@ Thumbs.db
 .vscode/
 *.swp
 *~
-
-# Legacy IDE build output (tracked historical files remain tracked)
-Angular2Audio/bin/
-Angular2Audio/obj/
